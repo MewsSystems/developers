@@ -20,7 +20,9 @@ public static class UserSoapConverters
             FirstName = dto.FirstName,
             LastName = dto.LastName,
             FullName = dto.FullName,
-            Role = dto.Role
+            Role = dto.Role,
+            IsActive = true, // Default: users are active
+            CreatedAt = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ss.fffZ") // ISO 8601 format
         };
     }
 
@@ -36,7 +38,9 @@ public static class UserSoapConverters
             FirstName = dto.FirstName,
             LastName = dto.LastName,
             FullName = dto.FullName,
-            Role = dto.Role
+            Role = dto.Role,
+            IsActive = true, // Default: users are active
+            CreatedAt = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ss.fffZ") // ISO 8601 format
         };
     }
 

@@ -16,6 +16,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using RomanianNationalBank;
 using SoapCore;
+using Microsoft.IdentityModel.JsonWebTokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -80,6 +81,9 @@ builder.Services.AddSingleton<IExchangeRateProvider>(sp =>
 // ============================================================
 // AUTHENTICATION & AUTHORIZATION
 // ============================================================
+// Clear default claim mappings to prevent JWT claims from being transformed
+JsonWebTokenHandler.DefaultInboundClaimTypeMap.Clear();
+
 // Configure JWT authentication
 var jwtSettings = builder.Configuration.GetSection(JwtSettings.SectionName).Get<JwtSettings>()
     ?? throw new InvalidOperationException("JWT settings not found in configuration");
@@ -101,8 +105,13 @@ builder.Services.AddAuthentication(options =>
         ValidIssuer = jwtSettings.Issuer,
         ValidAudience = jwtSettings.Audience,
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.SecretKey)),
-        ClockSkew = TimeSpan.Zero // Remove default 5-minute clock skew
+        ClockSkew = TimeSpan.Zero, // Remove default 5-minute clock skew
+        RoleClaimType = "role", // Match the simple "role" claim in the token
+        NameClaimType = "email"  // Match the "email" claim in the token
     };
+
+    // IMPORTANT: Configure claim types for the authentication handler
+    options.MapInboundClaims = false; // Prevent claim type mapping
 
     // Allow SignalR to receive JWT token from query string
     options.Events = new JwtBearerEvents
@@ -124,7 +133,11 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
-builder.Services.AddAuthorization();
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("Admin", policy => policy.RequireRole("Admin"));
+    options.AddPolicy("Consumer", policy => policy.RequireRole("Consumer"));
+});
 
 // ============================================================
 // SIGNALR
@@ -144,6 +157,7 @@ builder.Services.AddScoped<SOAP.Services.IAuthenticationService, SOAP.Services.A
 builder.Services.AddScoped<SOAP.Services.ICurrencyService, SOAP.Services.CurrencyService>();
 builder.Services.AddScoped<SOAP.Services.IProviderService, SOAP.Services.ProviderService>();
 builder.Services.AddScoped<SOAP.Services.IUserService, SOAP.Services.UserService>();
+builder.Services.AddScoped<SOAP.Services.ISystemHealthService, SOAP.Services.SystemHealthService>();
 
 builder.Services.AddSoapCore();
 
@@ -222,7 +236,8 @@ app.UseEndpoints(endpoints =>
         "/ExchangeRateService.asmx",
         soapEncoderOptions,
         SoapSerializer.DataContractSerializer,
-        caseInsensitivePath: true);
+        caseInsensitivePath: true)
+        .RequireAuthorization();
 
     // Authentication Service
     // Access WSDL at: http://localhost:5002/AuthenticationService.asmx?wsdl
@@ -238,7 +253,8 @@ app.UseEndpoints(endpoints =>
         "/CurrencyService.asmx",
         soapEncoderOptions,
         SoapSerializer.DataContractSerializer,
-        caseInsensitivePath: true);
+        caseInsensitivePath: true)
+        .RequireAuthorization();
 
     // Provider Service
     // Access WSDL at: http://localhost:5002/ProviderService.asmx?wsdl
@@ -246,7 +262,8 @@ app.UseEndpoints(endpoints =>
         "/ProviderService.asmx",
         soapEncoderOptions,
         SoapSerializer.DataContractSerializer,
-        caseInsensitivePath: true);
+        caseInsensitivePath: true)
+        .RequireAuthorization();
 
     // User Service
     // Access WSDL at: http://localhost:5002/UserService.asmx?wsdl
@@ -254,7 +271,17 @@ app.UseEndpoints(endpoints =>
         "/UserService.asmx",
         soapEncoderOptions,
         SoapSerializer.DataContractSerializer,
-        caseInsensitivePath: true);
+        caseInsensitivePath: true)
+        .RequireAuthorization();
+
+    // System Health Service
+    // Access WSDL at: http://localhost:5002/SystemHealthService.asmx?wsdl
+    endpoints.UseSoapEndpoint<SOAP.Services.ISystemHealthService>(
+        "/SystemHealthService.asmx",
+        soapEncoderOptions,
+        SoapSerializer.DataContractSerializer,
+        caseInsensitivePath: true)
+        .RequireAuthorization();
 
     // Map SignalR hub for real-time exchange rate updates
     // Access at: /hubs/exchange-rates

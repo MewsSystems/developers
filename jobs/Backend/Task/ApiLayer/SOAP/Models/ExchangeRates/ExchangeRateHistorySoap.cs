@@ -5,7 +5,7 @@ namespace SOAP.Models.ExchangeRates;
 /// <summary>
 /// SOAP model for exchange rate history over time.
 /// </summary>
-[DataContract]
+[DataContract(Namespace = "")]
 public class ExchangeRateHistorySoap
 {
     [DataMember]
@@ -49,7 +49,7 @@ public class ExchangeRateHistorySoap
 /// SOAP model for grouped exchange rate history.
 /// Structure: Provider → Base Currencies → Target Currencies with historical data
 /// </summary>
-[DataContract]
+[DataContract(Namespace = "")]
 public class ExchangeRateHistoryGroupedSoap
 {
     [DataMember]
@@ -65,7 +65,7 @@ public class ExchangeRateHistoryGroupedSoap
     public HistoryBaseCurrencyGroupSoap[] BaseCurrencies { get; set; } = Array.Empty<HistoryBaseCurrencyGroupSoap>();
 }
 
-[DataContract]
+[DataContract(Namespace = "")]
 public class HistoryBaseCurrencyGroupSoap
 {
     [DataMember]
@@ -75,7 +75,7 @@ public class HistoryBaseCurrencyGroupSoap
     public HistoryTargetCurrencyRateSoap[] TargetCurrencies { get; set; } = Array.Empty<HistoryTargetCurrencyRateSoap>();
 }
 
-[DataContract]
+[DataContract(Namespace = "")]
 public class HistoryTargetCurrencyRateSoap
 {
     [DataMember]
@@ -85,7 +85,7 @@ public class HistoryTargetCurrencyRateSoap
     public HistoryDataPointSoap[] History { get; set; } = Array.Empty<HistoryDataPointSoap>();
 }
 
-[DataContract]
+[DataContract(Namespace = "")]
 public class HistoryDataPointSoap
 {
     [DataMember]

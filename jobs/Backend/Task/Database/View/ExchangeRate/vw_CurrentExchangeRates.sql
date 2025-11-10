@@ -1,7 +1,8 @@
 ﻿CREATE VIEW [dbo].[vw_CurrentExchangeRates]
 AS
-SELECT 
+SELECT
     er.Id,
+    p.Id AS ProviderId,
     p.Code AS ProviderCode,
     p.Name AS ProviderName,
     bc.Code AS BaseCurrencyCode,

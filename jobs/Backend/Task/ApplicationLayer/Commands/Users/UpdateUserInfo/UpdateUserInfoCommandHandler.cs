@@ -36,7 +36,9 @@ public class UpdateUserInfoCommandHandler : ICommandHandler<UpdateUserInfoComman
             }
 
             // Check if email is changing and if new email already exists
-            if (!user.Email.Equals(request.Email, StringComparison.OrdinalIgnoreCase))
+            var emailToUpdate = request.Email;
+            if (!string.IsNullOrWhiteSpace(request.Email) &&
+                !user.Email.Equals(request.Email, StringComparison.OrdinalIgnoreCase))
             {
                 var existingUser = await _unitOfWork.Users
                     .GetByEmailAsync(request.Email, cancellationToken);
@@ -49,9 +51,14 @@ public class UpdateUserInfoCommandHandler : ICommandHandler<UpdateUserInfoComman
                     return Result.Failure($"Email '{request.Email}' is already in use.");
                 }
             }
+            else if (string.IsNullOrWhiteSpace(request.Email))
+            {
+                // If no email provided, keep the existing email
+                emailToUpdate = user.Email;
+            }
 
             // Update user info
-            user.UpdateInfo(request.FirstName, request.LastName, request.Email);
+            user.UpdateInfo(request.FirstName, request.LastName, emailToUpdate!);
 
             await _unitOfWork.Users.UpdateAsync(user, cancellationToken);
             await _unitOfWork.SaveChangesAsync(cancellationToken);

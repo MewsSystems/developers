@@ -4,6 +4,7 @@ namespace DomainLayer.Models.Views;
 public class CurrentExchangeRateView
 {
     public int Id { get; set; }
+    public int ProviderId { get; set; }
     public string ProviderCode { get; set; } = string.Empty;
     public string ProviderName { get; set; } = string.Empty;
     public string BaseCurrencyCode { get; set; } = string.Empty;

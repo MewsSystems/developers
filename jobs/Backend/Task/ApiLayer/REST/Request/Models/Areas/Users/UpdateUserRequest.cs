@@ -16,7 +16,7 @@ public class UpdateUserRequest
     public string LastName { get; set; } = string.Empty;
 
     /// <summary>
-    /// User email address.
+    /// User email address (optional - if not provided, email remains unchanged).
     /// </summary>
-    public string Email { get; set; } = string.Empty;
+    public string? Email { get; set; }
 }

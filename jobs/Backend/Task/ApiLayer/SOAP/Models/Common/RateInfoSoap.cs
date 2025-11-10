@@ -5,7 +5,7 @@ namespace SOAP.Models.Common;
 /// <summary>
 /// SOAP model for rate information.
 /// </summary>
-[DataContract]
+[DataContract(Namespace = "")]
 public class RateInfoSoap
 {
     [DataMember]

@@ -81,9 +81,9 @@ public static class ExchangeRateMappers
     {
         return new CurrentExchangeRate
         {
-            ProviderId = 0, // Not available in CurrentExchangeRateDto
+            ProviderId = dto.ProviderId,
             ProviderCode = dto.ProviderCode,
-            ProviderName = dto.ProviderCode, // Use code as name fallback
+            ProviderName = dto.ProviderName,
             SourceCurrencyCode = dto.BaseCurrencyCode,
             TargetCurrencyCode = dto.TargetCurrencyCode,
             Rate = dto.Rate.ToString("G29"), // Raw rate from provider

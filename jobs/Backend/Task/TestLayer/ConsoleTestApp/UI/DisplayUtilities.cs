@@ -34,13 +34,23 @@ public static class DisplayUtilities
         table.AddRow("[bold yellow]═══ AUTHENTICATION ═══[/]", "", "");
         table.AddRow(
             "[cyan1]login[/]",
-            "Login with email and password",
-            "login\nlogin admin@example.com simple"
+            "Login to a specific protocol",
+            "login rest\nlogin grpc admin@example.com Pass123!"
+        );
+        table.AddRow(
+            "[cyan1]login-all[/]",
+            "Login to all protocols at once",
+            "login-all\nlogin-all user@example.com Pass123!"
         );
         table.AddRow(
             "[cyan1]logout[/]",
-            "Logout from current session",
-            "logout"
+            "Logout from a specific protocol",
+            "logout rest\nlogout grpc"
+        );
+        table.AddRow(
+            "[cyan1]logout-all[/]",
+            "Logout from all protocols",
+            "logout-all"
         );
 
         table.AddEmptyRow();
@@ -157,6 +167,11 @@ public static class DisplayUtilities
             "Test a single API in solo mode",
             "solo rest\nsolo soap\nsolo grpc"
         );
+        table.AddRow(
+            "[magenta1]exit-solo[/]",
+            "Exit solo mode and return to normal mode (alias: normal)",
+            "exit-solo\nnormal"
+        );
 
         table.AddEmptyRow();
 
@@ -186,8 +201,11 @@ public static class DisplayUtilities
         AnsiConsole.Write(table);
         AnsiConsole.WriteLine();
 
-        AnsiConsole.MarkupLine("[dim]Note: All commands require <protocol> argument (rest, soap, or grpc)[/]");
-        AnsiConsole.MarkupLine("[dim]For solo mode, use 'solo <protocol>' first, then commands work without protocol argument[/]");
+        AnsiConsole.MarkupLine("[bold cyan1]Command Pattern:[/] [yellow]<command> <protocol> [[arguments]][/]");
+        AnsiConsole.MarkupLine("[dim]• Protocol can be: [cyan1]rest[/], [yellow]soap[/], or [green]grpc[/][/]");
+        AnsiConsole.MarkupLine("[dim]• Most commands follow the pattern above with protocol as first argument[/]");
+        AnsiConsole.MarkupLine("[dim]• Use [cyan1]login-all[/] and [cyan1]logout-all[/] to manage all protocols at once[/]");
+        AnsiConsole.MarkupLine("[dim]• Use [blue]status[/] to see authentication status for all protocols[/]");
         AnsiConsole.WriteLine();
     }
 
@@ -211,13 +229,13 @@ public static class DisplayUtilities
         {
             foreach (var baseCurrency in provider.BaseCurrencies)
             {
-                foreach (var rate in baseCurrency.TargetRates.Take(5)) // Show first 5 rates per base
+                foreach (var rate in baseCurrency.TargetRates) // Show all rates
                 {
                     table.AddRow(
-                        provider.ProviderName,
-                        $"{baseCurrency.CurrencyCode} → {rate.CurrencyCode}",
+                        Markup.Escape(provider.ProviderName),
+                        Markup.Escape($"{baseCurrency.CurrencyCode} → {rate.CurrencyCode}"),
                         $"[green]{rate.Rate:F4}[/] (×{rate.Multiplier})",
-                        rate.ValidDate.ToString("yyyy-MM-dd")
+                        Markup.Escape(rate.ValidDate.ToString("yyyy-MM-dd"))
                     );
                 }
             }

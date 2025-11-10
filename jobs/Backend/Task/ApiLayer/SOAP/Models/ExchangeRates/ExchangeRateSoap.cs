@@ -5,7 +5,7 @@ namespace SOAP.Models.ExchangeRates;
 /// <summary>
 /// SOAP model for a single exchange rate.
 /// </summary>
-[DataContract]
+[DataContract(Namespace = "")]
 public class ExchangeRateSoap
 {
     [DataMember]

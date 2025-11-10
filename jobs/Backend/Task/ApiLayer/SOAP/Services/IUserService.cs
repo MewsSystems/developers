@@ -6,7 +6,7 @@ namespace SOAP.Services;
 /// <summary>
 /// SOAP service contract for user operations.
 /// </summary>
-[ServiceContract]
+[ServiceContract(Namespace = "")]
 public interface IUserService
 {
     /// <summary>
@@ -77,7 +77,7 @@ public interface IUserService
 /// <summary>
 /// Request for getting all users.
 /// </summary>
-[System.Runtime.Serialization.DataContract]
+[System.Runtime.Serialization.DataContract(Namespace = "")]
 public class GetAllUsersRequest
 {
     [System.Runtime.Serialization.DataMember]
@@ -87,7 +87,7 @@ public class GetAllUsersRequest
 /// <summary>
 /// Response containing all users.
 /// </summary>
-[System.Runtime.Serialization.DataContract]
+[System.Runtime.Serialization.DataContract(Namespace = "")]
 public class GetAllUsersResponse
 {
     [System.Runtime.Serialization.DataMember]
@@ -106,7 +106,7 @@ public class GetAllUsersResponse
 /// <summary>
 /// Request for getting a user by ID.
 /// </summary>
-[System.Runtime.Serialization.DataContract]
+[System.Runtime.Serialization.DataContract(Namespace = "")]
 public class GetUserByIdRequest
 {
     [System.Runtime.Serialization.DataMember]
@@ -116,7 +116,7 @@ public class GetUserByIdRequest
 /// <summary>
 /// Response containing a single user.
 /// </summary>
-[System.Runtime.Serialization.DataContract]
+[System.Runtime.Serialization.DataContract(Namespace = "")]
 public class GetUserByIdResponse
 {
     [System.Runtime.Serialization.DataMember]
@@ -135,7 +135,7 @@ public class GetUserByIdResponse
 /// <summary>
 /// Request for getting a user by email.
 /// </summary>
-[System.Runtime.Serialization.DataContract]
+[System.Runtime.Serialization.DataContract(Namespace = "")]
 public class GetUserByEmailRequest
 {
     [System.Runtime.Serialization.DataMember]
@@ -145,7 +145,7 @@ public class GetUserByEmailRequest
 /// <summary>
 /// Response containing a single user.
 /// </summary>
-[System.Runtime.Serialization.DataContract]
+[System.Runtime.Serialization.DataContract(Namespace = "")]
 public class GetUserByEmailResponse
 {
     [System.Runtime.Serialization.DataMember]
@@ -164,7 +164,7 @@ public class GetUserByEmailResponse
 /// <summary>
 /// Request for creating a new user.
 /// </summary>
-[System.Runtime.Serialization.DataContract]
+[System.Runtime.Serialization.DataContract(Namespace = "")]
 public class CreateUserRequest
 {
     [System.Runtime.Serialization.DataMember]
@@ -186,7 +186,7 @@ public class CreateUserRequest
 /// <summary>
 /// Response for user creation.
 /// </summary>
-[System.Runtime.Serialization.DataContract]
+[System.Runtime.Serialization.DataContract(Namespace = "")]
 public class CreateUserResponse
 {
     [System.Runtime.Serialization.DataMember]
@@ -205,7 +205,7 @@ public class CreateUserResponse
 /// <summary>
 /// Request for deleting a user.
 /// </summary>
-[System.Runtime.Serialization.DataContract]
+[System.Runtime.Serialization.DataContract(Namespace = "")]
 public class DeleteUserRequest
 {
     [System.Runtime.Serialization.DataMember]
@@ -215,7 +215,7 @@ public class DeleteUserRequest
 /// <summary>
 /// Response for user deletion.
 /// </summary>
-[System.Runtime.Serialization.DataContract]
+[System.Runtime.Serialization.DataContract(Namespace = "")]
 public class DeleteUserResponse
 {
     [System.Runtime.Serialization.DataMember]
@@ -231,7 +231,7 @@ public class DeleteUserResponse
 /// <summary>
 /// Request for changing user role.
 /// </summary>
-[System.Runtime.Serialization.DataContract]
+[System.Runtime.Serialization.DataContract(Namespace = "")]
 public class ChangeUserRoleRequest
 {
     [System.Runtime.Serialization.DataMember]
@@ -244,7 +244,7 @@ public class ChangeUserRoleRequest
 /// <summary>
 /// Response for role change.
 /// </summary>
-[System.Runtime.Serialization.DataContract]
+[System.Runtime.Serialization.DataContract(Namespace = "")]
 public class ChangeUserRoleResponse
 {
     [System.Runtime.Serialization.DataMember]
@@ -260,7 +260,7 @@ public class ChangeUserRoleResponse
 /// <summary>
 /// Request for updating user information.
 /// </summary>
-[System.Runtime.Serialization.DataContract]
+[System.Runtime.Serialization.DataContract(Namespace = "")]
 public class UpdateUserRequest
 {
     [System.Runtime.Serialization.DataMember]
@@ -279,7 +279,7 @@ public class UpdateUserRequest
 /// <summary>
 /// Response for user update.
 /// </summary>
-[System.Runtime.Serialization.DataContract]
+[System.Runtime.Serialization.DataContract(Namespace = "")]
 public class UpdateUserResponse
 {
     [System.Runtime.Serialization.DataMember]
@@ -295,7 +295,7 @@ public class UpdateUserResponse
 /// <summary>
 /// Request for changing user password.
 /// </summary>
-[System.Runtime.Serialization.DataContract]
+[System.Runtime.Serialization.DataContract(Namespace = "")]
 public class ChangePasswordRequest
 {
     [System.Runtime.Serialization.DataMember]
@@ -311,7 +311,7 @@ public class ChangePasswordRequest
 /// <summary>
 /// Response for password change.
 /// </summary>
-[System.Runtime.Serialization.DataContract]
+[System.Runtime.Serialization.DataContract(Namespace = "")]
 public class ChangePasswordResponse
 {
     [System.Runtime.Serialization.DataMember]
@@ -327,7 +327,7 @@ public class ChangePasswordResponse
 /// <summary>
 /// Request for checking if email exists.
 /// </summary>
-[System.Runtime.Serialization.DataContract]
+[System.Runtime.Serialization.DataContract(Namespace = "")]
 public class CheckEmailExistsRequest
 {
     [System.Runtime.Serialization.DataMember]
@@ -337,7 +337,7 @@ public class CheckEmailExistsRequest
 /// <summary>
 /// Response for email existence check.
 /// </summary>
-[System.Runtime.Serialization.DataContract]
+[System.Runtime.Serialization.DataContract(Namespace = "")]
 public class CheckEmailExistsResponse
 {
     [System.Runtime.Serialization.DataMember]
@@ -356,7 +356,7 @@ public class CheckEmailExistsResponse
 /// <summary>
 /// Request for getting users by role.
 /// </summary>
-[System.Runtime.Serialization.DataContract]
+[System.Runtime.Serialization.DataContract(Namespace = "")]
 public class GetUsersByRoleRequest
 {
     [System.Runtime.Serialization.DataMember]
@@ -366,7 +366,7 @@ public class GetUsersByRoleRequest
 /// <summary>
 /// Response containing users filtered by role.
 /// </summary>
-[System.Runtime.Serialization.DataContract]
+[System.Runtime.Serialization.DataContract(Namespace = "")]
 public class GetUsersByRoleResponse
 {
     [System.Runtime.Serialization.DataMember]

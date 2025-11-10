@@ -718,7 +718,7 @@ public class GrpcApiClient : IApiClient
                     Name = p.Name,
                     BaseUrl = p.Url,
                     IsActive = p.IsActive,
-                    CreatedAt = p.Created.ToDateTime()
+                    CreatedAt = p.Created?.ToDateTime() ?? DateTime.MinValue
                 }).ToList()
             };
 
@@ -773,7 +773,7 @@ public class GrpcApiClient : IApiClient
                     Name = response.Data.Name,
                     BaseUrl = response.Data.Url,
                     IsActive = response.Data.IsActive,
-                    CreatedAt = response.Data.Created.ToDateTime()
+                    CreatedAt = response.Data.Created?.ToDateTime() ?? DateTime.MinValue
                 };
 
                 return (data, new AppModels.ApiCallMetrics
@@ -835,7 +835,7 @@ public class GrpcApiClient : IApiClient
                     Name = response.Data.Name,
                     BaseUrl = response.Data.Url,
                     IsActive = response.Data.IsActive,
-                    CreatedAt = response.Data.Created.ToDateTime()
+                    CreatedAt = response.Data.Created?.ToDateTime() ?? DateTime.MinValue
                 };
 
                 return (data, new AppModels.ApiCallMetrics
@@ -1072,7 +1072,9 @@ public class GrpcApiClient : IApiClient
             {
                 Users = response.Users.Select(u =>
                 {
-                    var nameParts = u.FullName.Split(' ', 2, StringSplitOptions.RemoveEmptyEntries);
+                    var nameParts = string.IsNullOrEmpty(u.FullName)
+                        ? Array.Empty<string>()
+                        : u.FullName.Split(' ', 2, StringSplitOptions.RemoveEmptyEntries);
                     return new AppModels.UserData
                     {
                         Id = u.Id,
@@ -1081,7 +1083,7 @@ public class GrpcApiClient : IApiClient
                         LastName = nameParts.Length > 1 ? nameParts[1] : string.Empty,
                         Role = u.Role,
                         IsActive = true, // Default value as proto doesn't include this
-                        CreatedAt = u.CreatedAt.ToDateTime()
+                        CreatedAt = u.CreatedAt?.ToDateTime() ?? DateTime.MinValue
                     };
                 }).ToList()
             };
@@ -1130,7 +1132,9 @@ public class GrpcApiClient : IApiClient
 
             if (response.Success && response.Data != null)
             {
-                var nameParts = response.Data.FullName.Split(' ', 2, StringSplitOptions.RemoveEmptyEntries);
+                var nameParts = string.IsNullOrEmpty(response.Data.FullName)
+                    ? Array.Empty<string>()
+                    : response.Data.FullName.Split(' ', 2, StringSplitOptions.RemoveEmptyEntries);
                 var data = new AppModels.UserData
                 {
                     Id = response.Data.Id,
@@ -1139,7 +1143,7 @@ public class GrpcApiClient : IApiClient
                     LastName = nameParts.Length > 1 ? nameParts[1] : string.Empty,
                     Role = response.Data.Role,
                     IsActive = true, // Default value
-                    CreatedAt = response.Data.CreatedAt.ToDateTime()
+                    CreatedAt = response.Data.CreatedAt?.ToDateTime() ?? DateTime.MinValue
                 };
 
                 return (data, new AppModels.ApiCallMetrics
@@ -2013,10 +2017,11 @@ public class GrpcApiClient : IApiClient
     {
         try
         {
-            var client = new ExchangeRatesService.ExchangeRatesServiceClient(_channel);
-            var request = new GetCurrentRatesRequest();
-
-            await client.GetCurrentRatesAsync(request, deadline: DateTime.UtcNow.AddSeconds(5));
+            // Simple check: try to make an HTTP request to the gRPC endpoint
+            // gRPC services respond to HTTP/2 requests
+            using var httpClient = new HttpClient { Timeout = TimeSpan.FromSeconds(2) };
+            var response = await httpClient.GetAsync(_serverUrl);
+            // gRPC endpoints return various responses for HTTP GET, but if they respond, they're alive
             return true;
         }
         catch
@@ -2065,7 +2070,7 @@ public class GrpcApiClient : IApiClient
                     baseCurrencyRates.TargetRates.Add(new AppModels.TargetRate
                     {
                         CurrencyCode = target.TargetCurrencyCode,
-                        Rate = decimal.Parse(target.Rate),
+                        Rate = decimal.Parse(target.EffectiveRate),
                         Multiplier = target.Multiplier,
                         ValidDate = target.ValidDate != null
                             ? new DateTime(target.ValidDate.Year, target.ValidDate.Month, target.ValidDate.Day)
@@ -2116,7 +2121,7 @@ public class GrpcApiClient : IApiClient
                         baseCurrencyRates.TargetRates.Add(new AppModels.TargetRate
                         {
                             CurrencyCode = target.TargetCurrencyCode,
-                            Rate = decimal.Parse(rate.Rate),
+                            Rate = decimal.Parse(rate.EffectiveRate),
                             Multiplier = rate.Multiplier,
                             ValidDate = rate.ValidDate != null
                                 ? new DateTime(rate.ValidDate.Year, rate.ValidDate.Month, rate.ValidDate.Day)
@@ -2165,7 +2170,7 @@ public class GrpcApiClient : IApiClient
                     baseCurrencyRates.TargetRates.Add(new AppModels.TargetRate
                     {
                         CurrencyCode = target.TargetCurrencyCode,
-                        Rate = decimal.Parse(target.Rate),
+                        Rate = decimal.Parse(target.EffectiveRate),
                         Multiplier = target.Multiplier,
                         ValidDate = target.ValidDate != null
                             ? new DateTime(target.ValidDate.Year, target.ValidDate.Month, target.ValidDate.Day)

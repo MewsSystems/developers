@@ -6,7 +6,7 @@ namespace SOAP.Services;
 /// <summary>
 /// SOAP service contract for provider operations.
 /// </summary>
-[ServiceContract]
+[ServiceContract(Namespace = "")]
 public interface IProviderService
 {
     /// <summary>
@@ -101,7 +101,7 @@ public interface IProviderService
 /// <summary>
 /// Request for getting all providers.
 /// </summary>
-[System.Runtime.Serialization.DataContract]
+[System.Runtime.Serialization.DataContract(Namespace = "")]
 public class GetAllProvidersRequest
 {
     // Empty request - retrieves all providers
@@ -110,7 +110,7 @@ public class GetAllProvidersRequest
 /// <summary>
 /// Response containing all providers.
 /// </summary>
-[System.Runtime.Serialization.DataContract]
+[System.Runtime.Serialization.DataContract(Namespace = "")]
 public class GetAllProvidersResponse
 {
     [System.Runtime.Serialization.DataMember]
@@ -129,7 +129,7 @@ public class GetAllProvidersResponse
 /// <summary>
 /// Request for getting a provider by ID.
 /// </summary>
-[System.Runtime.Serialization.DataContract]
+[System.Runtime.Serialization.DataContract(Namespace = "")]
 public class GetProviderByIdRequest
 {
     [System.Runtime.Serialization.DataMember]
@@ -139,7 +139,7 @@ public class GetProviderByIdRequest
 /// <summary>
 /// Response containing a single provider.
 /// </summary>
-[System.Runtime.Serialization.DataContract]
+[System.Runtime.Serialization.DataContract(Namespace = "")]
 public class GetProviderByIdResponse
 {
     [System.Runtime.Serialization.DataMember]
@@ -158,17 +158,17 @@ public class GetProviderByIdResponse
 /// <summary>
 /// Request for getting provider health status.
 /// </summary>
-[System.Runtime.Serialization.DataContract]
+[System.Runtime.Serialization.DataContract(Namespace = "")]
 public class GetProviderHealthRequest
 {
     [System.Runtime.Serialization.DataMember]
-    public int ProviderId { get; set; }
+    public string Code { get; set; } = string.Empty;
 }
 
 /// <summary>
 /// Response containing provider health status.
 /// </summary>
-[System.Runtime.Serialization.DataContract]
+[System.Runtime.Serialization.DataContract(Namespace = "")]
 public class GetProviderHealthResponse
 {
     [System.Runtime.Serialization.DataMember]
@@ -187,17 +187,17 @@ public class GetProviderHealthResponse
 /// <summary>
 /// Request for getting provider statistics.
 /// </summary>
-[System.Runtime.Serialization.DataContract]
+[System.Runtime.Serialization.DataContract(Namespace = "")]
 public class GetProviderStatisticsRequest
 {
     [System.Runtime.Serialization.DataMember]
-    public int ProviderId { get; set; }
+    public string Code { get; set; } = string.Empty;
 }
 
 /// <summary>
 /// Response containing provider statistics.
 /// </summary>
-[System.Runtime.Serialization.DataContract]
+[System.Runtime.Serialization.DataContract(Namespace = "")]
 public class GetProviderStatisticsResponse
 {
     [System.Runtime.Serialization.DataMember]
@@ -216,7 +216,7 @@ public class GetProviderStatisticsResponse
 /// <summary>
 /// Request for rescheduling a provider's job.
 /// </summary>
-[System.Runtime.Serialization.DataContract]
+[System.Runtime.Serialization.DataContract(Namespace = "")]
 public class RescheduleProviderRequest
 {
     [System.Runtime.Serialization.DataMember]
@@ -232,7 +232,7 @@ public class RescheduleProviderRequest
 /// <summary>
 /// Response for rescheduling a provider's job.
 /// </summary>
-[System.Runtime.Serialization.DataContract]
+[System.Runtime.Serialization.DataContract(Namespace = "")]
 public class RescheduleProviderResponse
 {
     [System.Runtime.Serialization.DataMember]
@@ -248,7 +248,7 @@ public class RescheduleProviderResponse
 /// <summary>
 /// Request for getting a provider by code.
 /// </summary>
-[System.Runtime.Serialization.DataContract]
+[System.Runtime.Serialization.DataContract(Namespace = "")]
 public class GetProviderByCodeRequest
 {
     [System.Runtime.Serialization.DataMember]
@@ -258,7 +258,7 @@ public class GetProviderByCodeRequest
 /// <summary>
 /// Response containing a provider by code.
 /// </summary>
-[System.Runtime.Serialization.DataContract]
+[System.Runtime.Serialization.DataContract(Namespace = "")]
 public class GetProviderByCodeResponse
 {
     [System.Runtime.Serialization.DataMember]
@@ -277,7 +277,7 @@ public class GetProviderByCodeResponse
 /// <summary>
 /// Request for getting provider configuration.
 /// </summary>
-[System.Runtime.Serialization.DataContract]
+[System.Runtime.Serialization.DataContract(Namespace = "")]
 public class GetProviderConfigurationRequest
 {
     [System.Runtime.Serialization.DataMember]
@@ -287,7 +287,7 @@ public class GetProviderConfigurationRequest
 /// <summary>
 /// Response containing provider configuration.
 /// </summary>
-[System.Runtime.Serialization.DataContract]
+[System.Runtime.Serialization.DataContract(Namespace = "")]
 public class GetProviderConfigurationResponse
 {
     [System.Runtime.Serialization.DataMember]
@@ -306,7 +306,7 @@ public class GetProviderConfigurationResponse
 /// <summary>
 /// Request for activating a provider.
 /// </summary>
-[System.Runtime.Serialization.DataContract]
+[System.Runtime.Serialization.DataContract(Namespace = "")]
 public class ActivateProviderRequest
 {
     [System.Runtime.Serialization.DataMember]
@@ -316,7 +316,7 @@ public class ActivateProviderRequest
 /// <summary>
 /// Response for activating a provider.
 /// </summary>
-[System.Runtime.Serialization.DataContract]
+[System.Runtime.Serialization.DataContract(Namespace = "")]
 public class ActivateProviderResponse
 {
     [System.Runtime.Serialization.DataMember]
@@ -332,7 +332,7 @@ public class ActivateProviderResponse
 /// <summary>
 /// Request for deactivating a provider.
 /// </summary>
-[System.Runtime.Serialization.DataContract]
+[System.Runtime.Serialization.DataContract(Namespace = "")]
 public class DeactivateProviderRequest
 {
     [System.Runtime.Serialization.DataMember]
@@ -342,7 +342,7 @@ public class DeactivateProviderRequest
 /// <summary>
 /// Response for deactivating a provider.
 /// </summary>
-[System.Runtime.Serialization.DataContract]
+[System.Runtime.Serialization.DataContract(Namespace = "")]
 public class DeactivateProviderResponse
 {
     [System.Runtime.Serialization.DataMember]
@@ -358,7 +358,7 @@ public class DeactivateProviderResponse
 /// <summary>
 /// Request for resetting provider health.
 /// </summary>
-[System.Runtime.Serialization.DataContract]
+[System.Runtime.Serialization.DataContract(Namespace = "")]
 public class ResetProviderHealthRequest
 {
     [System.Runtime.Serialization.DataMember]
@@ -368,7 +368,7 @@ public class ResetProviderHealthRequest
 /// <summary>
 /// Response for resetting provider health.
 /// </summary>
-[System.Runtime.Serialization.DataContract]
+[System.Runtime.Serialization.DataContract(Namespace = "")]
 public class ResetProviderHealthResponse
 {
     [System.Runtime.Serialization.DataMember]
@@ -384,7 +384,7 @@ public class ResetProviderHealthResponse
 /// <summary>
 /// Request for triggering manual fetch.
 /// </summary>
-[System.Runtime.Serialization.DataContract]
+[System.Runtime.Serialization.DataContract(Namespace = "")]
 public class TriggerManualFetchRequest
 {
     [System.Runtime.Serialization.DataMember]
@@ -394,7 +394,7 @@ public class TriggerManualFetchRequest
 /// <summary>
 /// Response for triggering manual fetch.
 /// </summary>
-[System.Runtime.Serialization.DataContract]
+[System.Runtime.Serialization.DataContract(Namespace = "")]
 public class TriggerManualFetchResponse
 {
     [System.Runtime.Serialization.DataMember]
@@ -413,7 +413,7 @@ public class TriggerManualFetchResponse
 /// <summary>
 /// Request for creating a provider.
 /// </summary>
-[System.Runtime.Serialization.DataContract]
+[System.Runtime.Serialization.DataContract(Namespace = "")]
 public class CreateProviderRequest
 {
     [System.Runtime.Serialization.DataMember]
@@ -438,7 +438,7 @@ public class CreateProviderRequest
 /// <summary>
 /// Response for creating a provider.
 /// </summary>
-[System.Runtime.Serialization.DataContract]
+[System.Runtime.Serialization.DataContract(Namespace = "")]
 public class CreateProviderResponse
 {
     [System.Runtime.Serialization.DataMember]
@@ -457,7 +457,7 @@ public class CreateProviderResponse
 /// <summary>
 /// Request for updating provider configuration.
 /// </summary>
-[System.Runtime.Serialization.DataContract]
+[System.Runtime.Serialization.DataContract(Namespace = "")]
 public class UpdateProviderConfigurationRequest
 {
     [System.Runtime.Serialization.DataMember]
@@ -479,7 +479,7 @@ public class UpdateProviderConfigurationRequest
 /// <summary>
 /// Response for updating provider configuration.
 /// </summary>
-[System.Runtime.Serialization.DataContract]
+[System.Runtime.Serialization.DataContract(Namespace = "")]
 public class UpdateProviderConfigurationResponse
 {
     [System.Runtime.Serialization.DataMember]
@@ -495,7 +495,7 @@ public class UpdateProviderConfigurationResponse
 /// <summary>
 /// Request for deleting a provider.
 /// </summary>
-[System.Runtime.Serialization.DataContract]
+[System.Runtime.Serialization.DataContract(Namespace = "")]
 public class DeleteProviderRequest
 {
     [System.Runtime.Serialization.DataMember]
@@ -508,7 +508,7 @@ public class DeleteProviderRequest
 /// <summary>
 /// Response for deleting a provider.
 /// </summary>
-[System.Runtime.Serialization.DataContract]
+[System.Runtime.Serialization.DataContract(Namespace = "")]
 public class DeleteProviderResponse
 {
     [System.Runtime.Serialization.DataMember]

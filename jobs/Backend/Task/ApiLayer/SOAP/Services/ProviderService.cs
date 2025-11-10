@@ -42,7 +42,7 @@ public class ProviderService : IProviderService
             _logger.LogInformation("SOAP: GetAllProviders called");
 
             // Reuse existing ApplicationLayer query with large page size to get all
-            var query = new GetAllProvidersQuery(PageNumber: 1, PageSize: 1000);
+            var query = new GetAllProvidersQuery(PageNumber: 1, PageSize: 100);
             var pagedResult = await _mediator.Send(query);
 
             return new GetAllProvidersResponse
@@ -125,10 +125,31 @@ public class ProviderService : IProviderService
     {
         try
         {
-            _logger.LogInformation("SOAP: GetProviderHealth called for Provider ID: {ProviderId}", request.ProviderId);
+            _logger.LogInformation("SOAP: GetProviderHealth called for Provider Code: {Code}", request.Code);
 
-            // Reuse existing ApplicationLayer query
-            var query = new GetProviderHealthQuery(request.ProviderId);
+            // Look up provider by code to get ID
+            var providersQuery = new GetAllProvidersQuery(1, 100, null, request.Code);
+            var pagedResult = await _mediator.Send(providersQuery);
+            var provider = pagedResult.Items.FirstOrDefault(p =>
+                p.Code.Equals(request.Code, StringComparison.OrdinalIgnoreCase));
+
+            if (provider == null)
+            {
+                return new GetProviderHealthResponse
+                {
+                    Success = false,
+                    Message = $"Provider with code '{request.Code}' not found",
+                    Fault = new SoapFault
+                    {
+                        FaultCode = "Client",
+                        FaultString = "NotFound",
+                        Detail = $"Provider with code '{request.Code}' not found"
+                    }
+                };
+            }
+
+            // Get health status using provider ID
+            var query = new GetProviderHealthQuery(provider.Id);
             var healthDto = await _mediator.Send(query);
 
             if (healthDto != null)
@@ -136,7 +157,7 @@ public class ProviderService : IProviderService
                 return new GetProviderHealthResponse
                 {
                     Success = true,
-                    Message = $"Health status for provider {request.ProviderId} retrieved successfully",
+                    Message = $"Health status for provider {request.Code} retrieved successfully",
                     Data = healthDto.ToSoap()
                 };
             }
@@ -144,12 +165,12 @@ public class ProviderService : IProviderService
             return new GetProviderHealthResponse
             {
                 Success = false,
-                Message = $"Health status for provider {request.ProviderId} not found",
+                Message = $"Health status for provider {request.Code} not found",
                 Fault = new SoapFault
                 {
                     FaultCode = "Client",
                     FaultString = "NotFound",
-                    Detail = $"Health status for provider with ID {request.ProviderId} not found"
+                    Detail = $"Health status for provider with code '{request.Code}' not found"
                 }
             };
         }
@@ -175,10 +196,31 @@ public class ProviderService : IProviderService
     {
         try
         {
-            _logger.LogInformation("SOAP: GetProviderStatistics called for Provider ID: {ProviderId}", request.ProviderId);
+            _logger.LogInformation("SOAP: GetProviderStatistics called for Provider Code: {Code}", request.Code);
 
-            // Reuse existing ApplicationLayer query
-            var query = new GetProviderStatisticsQuery(request.ProviderId);
+            // Look up provider by code to get ID
+            var providersQuery = new GetAllProvidersQuery(1, 100, null, request.Code);
+            var pagedResult = await _mediator.Send(providersQuery);
+            var provider = pagedResult.Items.FirstOrDefault(p =>
+                p.Code.Equals(request.Code, StringComparison.OrdinalIgnoreCase));
+
+            if (provider == null)
+            {
+                return new GetProviderStatisticsResponse
+                {
+                    Success = false,
+                    Message = $"Provider with code '{request.Code}' not found",
+                    Fault = new SoapFault
+                    {
+                        FaultCode = "Client",
+                        FaultString = "NotFound",
+                        Detail = $"Provider with code '{request.Code}' not found"
+                    }
+                };
+            }
+
+            // Get statistics using provider ID
+            var query = new GetProviderStatisticsQuery(provider.Id);
             var statsDto = await _mediator.Send(query);
 
             if (statsDto != null)
@@ -186,7 +228,7 @@ public class ProviderService : IProviderService
                 return new GetProviderStatisticsResponse
                 {
                     Success = true,
-                    Message = $"Statistics for provider {request.ProviderId} retrieved successfully",
+                    Message = $"Statistics for provider {request.Code} retrieved successfully",
                     Data = statsDto.ToSoap()
                 };
             }
@@ -194,12 +236,12 @@ public class ProviderService : IProviderService
             return new GetProviderStatisticsResponse
             {
                 Success = false,
-                Message = $"Statistics for provider {request.ProviderId} not found",
+                Message = $"Statistics for provider {request.Code} not found",
                 Fault = new SoapFault
                 {
                     FaultCode = "Client",
                     FaultString = "NotFound",
-                    Detail = $"Statistics for provider with ID {request.ProviderId} not found"
+                    Detail = $"Statistics for provider with code '{request.Code}' not found"
                 }
             };
         }

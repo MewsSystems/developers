@@ -8,27 +8,27 @@ public class ConvertCurrencyResponse
     /// <summary>
     /// Source currency code (e.g., "USD").
     /// </summary>
-    public string FromCurrency { get; set; } = string.Empty;
+    public string SourceCurrencyCode { get; set; } = string.Empty;
 
     /// <summary>
     /// Target currency code (e.g., "CZK").
     /// </summary>
-    public string ToCurrency { get; set; } = string.Empty;
+    public string TargetCurrencyCode { get; set; } = string.Empty;
 
     /// <summary>
     /// Original amount in source currency.
     /// </summary>
-    public decimal Amount { get; set; }
+    public decimal SourceAmount { get; set; }
 
     /// <summary>
     /// Converted amount in target currency.
     /// </summary>
-    public decimal ConvertedAmount { get; set; }
+    public decimal TargetAmount { get; set; }
 
     /// <summary>
-    /// Exchange rate used for conversion.
+    /// Exchange rate used for conversion (effective rate per single unit).
     /// </summary>
-    public decimal ExchangeRate { get; set; }
+    public decimal EffectiveRate { get; set; }
 
     /// <summary>
     /// Date for which the exchange rate is valid (YYYY-MM-DD).
@@ -48,5 +48,5 @@ public class ConvertCurrencyResponse
     /// <summary>
     /// Formatted conversion string (e.g., "100.00 USD = 2,433.50 CZK").
     /// </summary>
-    public string FormattedConversion => $"{Amount:N2} {FromCurrency} = {ConvertedAmount:N2} {ToCurrency}";
+    public string FormattedConversion => $"{SourceAmount:N2} {SourceCurrencyCode} = {TargetAmount:N2} {TargetCurrencyCode}";
 }

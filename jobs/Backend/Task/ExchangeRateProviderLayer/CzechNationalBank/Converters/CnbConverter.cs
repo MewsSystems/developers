@@ -52,6 +52,8 @@ public class CnbConverter : IExchangeRateConverter<CnbExchangeRates>
 
         var exchangeRates = new List<ExchangeRateDTO>();
 
+        var czechCulture = new CultureInfo("cs-CZ");
+
         foreach (var rate in response.Table.Rates)
         {
             // Validate rate data
@@ -64,12 +66,14 @@ public class CnbConverter : IExchangeRateConverter<CnbExchangeRates>
             if (rate.Amount <= 0)
                 continue;
 
-            // Parse the rate value (CNB uses comma as decimal separator in Czech locale)
-            if (!decimal.TryParse(rate.RateValue, NumberStyles.Any, CultureInfo.InvariantCulture, out var rateValue))
+            // Parse using Czech culture (comma as decimal separator)
+            if (!decimal.TryParse(rate.RateValue?.Trim(), NumberStyles.Number, czechCulture, out var rateValue))
             {
-                // Try parsing with Czech culture (comma as decimal separator)
-                if (!decimal.TryParse(rate.RateValue.Replace(',', '.'), NumberStyles.Any, CultureInfo.InvariantCulture, out rateValue))
+                // They changed the style?
+                if (!decimal.TryParse(rate.RateValue?.Trim(), NumberStyles.Number, CultureInfo.InvariantCulture, out rateValue))
+                {
                     continue;
+                }
             }
 
             if (rateValue <= 0)

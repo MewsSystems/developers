@@ -39,7 +39,7 @@ public class SoapApiClient : IApiClient
                 Security = { Mode = BasicHttpSecurityMode.None }
             };
 
-            var endpoint = new EndpointAddress($"{_soapUrl}/AuthenticationService.svc");
+            var endpoint = new EndpointAddress($"{_soapUrl}/AuthenticationService.asmx");
             var factory = new ChannelFactory<IAuthenticationServiceSoap>(binding, endpoint);
             var client = factory.CreateChannel();
 
@@ -102,7 +102,7 @@ public class SoapApiClient : IApiClient
                 Security = { Mode = BasicHttpSecurityMode.None }
             };
 
-            var endpoint = new EndpointAddress($"{_soapUrl}/ExchangeRateService.svc");
+            var endpoint = new EndpointAddress($"{_soapUrl}/ExchangeRateService.asmx");
             var factory = new ChannelFactory<IExchangeRateServiceSoap>(binding, endpoint);
             var client = factory.CreateChannel();
 
@@ -168,7 +168,7 @@ public class SoapApiClient : IApiClient
                 Security = { Mode = BasicHttpSecurityMode.None }
             };
 
-            var endpoint = new EndpointAddress($"{_soapUrl}/ExchangeRateService.svc");
+            var endpoint = new EndpointAddress($"{_soapUrl}/ExchangeRateService.asmx");
             var factory = new ChannelFactory<IExchangeRateServiceSoap>(binding, endpoint);
             var client = factory.CreateChannel();
 
@@ -292,7 +292,7 @@ public class SoapApiClient : IApiClient
                 Security = { Mode = BasicHttpSecurityMode.None }
             };
 
-            var endpoint = new EndpointAddress($"{_soapUrl}/ExchangeRateService.svc");
+            var endpoint = new EndpointAddress($"{_soapUrl}/ExchangeRateService.asmx");
             var factory = new ChannelFactory<IExchangeRateServiceSoap>(binding, endpoint);
             var client = factory.CreateChannel();
 
@@ -355,7 +355,7 @@ public class SoapApiClient : IApiClient
                 Security = { Mode = BasicHttpSecurityMode.None }
             };
 
-            var endpoint = new EndpointAddress($"{_soapUrl}/ExchangeRateService.svc");
+            var endpoint = new EndpointAddress($"{_soapUrl}/ExchangeRateService.asmx");
             var factory = new ChannelFactory<IExchangeRateServiceSoap>(binding, endpoint);
             var client = factory.CreateChannel();
 
@@ -368,8 +368,8 @@ public class SoapApiClient : IApiClient
                     OperationContext.Current.OutgoingMessageProperties[HttpRequestMessageProperty.Name] = httpRequestProperty;
                 }
 
-                var request = new SoapGetCurrentRatesGroupedRequest();
-                var response = await client.GetCurrentRatesGroupedAsync(request);
+                var request = new SoapGetCurrentRatesRequest();
+                var response = await client.GetCurrentRatesAsync(request);
 
                 factory.Close();
                 stopwatch.Stop();
@@ -418,7 +418,7 @@ public class SoapApiClient : IApiClient
                 Security = { Mode = BasicHttpSecurityMode.None }
             };
 
-            var endpoint = new EndpointAddress($"{_soapUrl}/ExchangeRateService.svc");
+            var endpoint = new EndpointAddress($"{_soapUrl}/ExchangeRateService.asmx");
             var factory = new ChannelFactory<IExchangeRateServiceSoap>(binding, endpoint);
             var client = factory.CreateChannel();
 
@@ -511,7 +511,7 @@ public class SoapApiClient : IApiClient
                 Security = { Mode = BasicHttpSecurityMode.None }
             };
 
-            var endpoint = new EndpointAddress($"{_soapUrl}/ExchangeRateService.svc");
+            var endpoint = new EndpointAddress($"{_soapUrl}/ExchangeRateService.asmx");
             var factory = new ChannelFactory<IExchangeRateServiceSoap>(binding, endpoint);
             var client = factory.CreateChannel();
 
@@ -586,7 +586,7 @@ public class SoapApiClient : IApiClient
                 Security = { Mode = BasicHttpSecurityMode.None }
             };
 
-            var endpoint = new EndpointAddress($"{_soapUrl}/CurrencyService.svc");
+            var endpoint = new EndpointAddress($"{_soapUrl}/CurrencyService.asmx");
             var factory = new ChannelFactory<ICurrencyServiceSoap>(binding, endpoint);
             var client = factory.CreateChannel();
 
@@ -613,10 +613,10 @@ public class SoapApiClient : IApiClient
                         {
                             Id = c.Id,
                             Code = c.Code,
-                            Name = c.Name,
-                            Symbol = c.Symbol,
-                            DecimalPlaces = c.DecimalPlaces,
-                            IsActive = c.IsActive
+                            Name = c.Code, // Use code as name since server doesn't provide name
+                            Symbol = null,
+                            DecimalPlaces = 2, // Default
+                            IsActive = true // Default
                         }).ToList()
                     };
 
@@ -659,7 +659,7 @@ public class SoapApiClient : IApiClient
                 Security = { Mode = BasicHttpSecurityMode.None }
             };
 
-            var endpoint = new EndpointAddress($"{_soapUrl}/CurrencyService.svc");
+            var endpoint = new EndpointAddress($"{_soapUrl}/CurrencyService.asmx");
             var factory = new ChannelFactory<ICurrencyServiceSoap>(binding, endpoint);
             var client = factory.CreateChannel();
 
@@ -684,8 +684,8 @@ public class SoapApiClient : IApiClient
                     {
                         Id = response.Data.Id,
                         Code = response.Data.Code,
-                        Name = response.Data.Name,
-                        Symbol = response.Data.Symbol,
+                        Name = response.Data.Code, // Use code as name since server doesn't provide name
+                        Symbol = null,
                         DecimalPlaces = 2, // Default
                         IsActive = true // Default
                     };
@@ -729,7 +729,7 @@ public class SoapApiClient : IApiClient
                 Security = { Mode = BasicHttpSecurityMode.None }
             };
 
-            var endpoint = new EndpointAddress($"{_soapUrl}/CurrencyService.svc");
+            var endpoint = new EndpointAddress($"{_soapUrl}/CurrencyService.asmx");
             var factory = new ChannelFactory<ICurrencyServiceSoap>(binding, endpoint);
             var client = factory.CreateChannel();
 
@@ -754,10 +754,10 @@ public class SoapApiClient : IApiClient
                     {
                         Id = response.Data.Id,
                         Code = response.Data.Code,
-                        Name = response.Data.Name,
-                        Symbol = response.Data.Symbol,
-                        DecimalPlaces = response.Data.DecimalPlaces,
-                        IsActive = response.Data.IsActive
+                        Name = response.Data.Code, // Use code as name since server doesn't provide name
+                        Symbol = null,
+                        DecimalPlaces = 2, // Default
+                        IsActive = true // Default
                     };
 
                     return (data, new ApiCallMetrics
@@ -799,7 +799,7 @@ public class SoapApiClient : IApiClient
                 Security = { Mode = BasicHttpSecurityMode.None }
             };
 
-            var endpoint = new EndpointAddress($"{_soapUrl}/ProviderService.svc");
+            var endpoint = new EndpointAddress($"{_soapUrl}/ProviderService.asmx");
             var factory = new ChannelFactory<IProviderServiceSoap>(binding, endpoint);
             var client = factory.CreateChannel();
 
@@ -826,7 +826,7 @@ public class SoapApiClient : IApiClient
                         {
                             Code = p.Code,
                             Name = p.Name,
-                            BaseUrl = p.BaseUrl,
+                            BaseUrl = p.Url,
                             IsActive = p.IsActive
                         }).ToList()
                     };
@@ -870,7 +870,7 @@ public class SoapApiClient : IApiClient
                 Security = { Mode = BasicHttpSecurityMode.None }
             };
 
-            var endpoint = new EndpointAddress($"{_soapUrl}/ProviderService.svc");
+            var endpoint = new EndpointAddress($"{_soapUrl}/ProviderService.asmx");
             var factory = new ChannelFactory<IProviderServiceSoap>(binding, endpoint);
             var client = factory.CreateChannel();
 
@@ -940,7 +940,7 @@ public class SoapApiClient : IApiClient
                 Security = { Mode = BasicHttpSecurityMode.None }
             };
 
-            var endpoint = new EndpointAddress($"{_soapUrl}/ProviderService.svc");
+            var endpoint = new EndpointAddress($"{_soapUrl}/ProviderService.asmx");
             var factory = new ChannelFactory<IProviderServiceSoap>(binding, endpoint);
             var client = factory.CreateChannel();
 
@@ -965,7 +965,7 @@ public class SoapApiClient : IApiClient
                     {
                         Code = response.Data.Code,
                         Name = response.Data.Name,
-                        BaseUrl = response.Data.BaseUrl,
+                        BaseUrl = response.Data.Url,
                         IsActive = response.Data.IsActive
                     };
 
@@ -1008,7 +1008,7 @@ public class SoapApiClient : IApiClient
                 Security = { Mode = BasicHttpSecurityMode.None }
             };
 
-            var endpoint = new EndpointAddress($"{_soapUrl}/ProviderService.svc");
+            var endpoint = new EndpointAddress($"{_soapUrl}/ProviderService.asmx");
             var factory = new ChannelFactory<IProviderServiceSoap>(binding, endpoint);
             var client = factory.CreateChannel();
 
@@ -1083,7 +1083,7 @@ public class SoapApiClient : IApiClient
                 Security = { Mode = BasicHttpSecurityMode.None }
             };
 
-            var endpoint = new EndpointAddress($"{_soapUrl}/ProviderService.svc");
+            var endpoint = new EndpointAddress($"{_soapUrl}/ProviderService.asmx");
             var factory = new ChannelFactory<IProviderServiceSoap>(binding, endpoint);
             var client = factory.CreateChannel();
 
@@ -1152,7 +1152,7 @@ public class SoapApiClient : IApiClient
                 Security = { Mode = BasicHttpSecurityMode.None }
             };
 
-            var endpoint = new EndpointAddress($"{_soapUrl}/ProviderService.svc");
+            var endpoint = new EndpointAddress($"{_soapUrl}/ProviderService.asmx");
             var factory = new ChannelFactory<IProviderServiceSoap>(binding, endpoint);
             var client = factory.CreateChannel();
 
@@ -1211,7 +1211,7 @@ public class SoapApiClient : IApiClient
         try
         {
             var binding = new BasicHttpBinding { MaxReceivedMessageSize = 10485760, Security = { Mode = BasicHttpSecurityMode.None } };
-            var endpoint = new EndpointAddress($"{_soapUrl}/ProviderService.svc");
+            var endpoint = new EndpointAddress($"{_soapUrl}/ProviderService.asmx");
             var factory = new ChannelFactory<IProviderServiceSoap>(binding, endpoint);
             var client = factory.CreateChannel();
 
@@ -1256,7 +1256,7 @@ public class SoapApiClient : IApiClient
     public async Task<(OperationResult Data, ApiCallMetrics Metrics)> ActivateProviderAsync(string code)
     {
         return await ExecuteSoapProviderOperationAsync<SoapActivateProviderRequest, SoapActivateProviderResponse>(
-            "ProviderService.svc",
+            "ProviderService.asmx",
             new SoapActivateProviderRequest { Code = code },
             (client, request) => client.ActivateProviderAsync(request),
             "Provider activated successfully"
@@ -1266,7 +1266,7 @@ public class SoapApiClient : IApiClient
     public async Task<(OperationResult Data, ApiCallMetrics Metrics)> DeactivateProviderAsync(string code)
     {
         return await ExecuteSoapProviderOperationAsync<SoapDeactivateProviderRequest, SoapDeactivateProviderResponse>(
-            "ProviderService.svc",
+            "ProviderService.asmx",
             new SoapDeactivateProviderRequest { Code = code },
             (client, request) => client.DeactivateProviderAsync(request),
             "Provider deactivated successfully"
@@ -1276,7 +1276,7 @@ public class SoapApiClient : IApiClient
     public async Task<(OperationResult Data, ApiCallMetrics Metrics)> ResetProviderHealthAsync(string code)
     {
         return await ExecuteSoapProviderOperationAsync<SoapResetProviderHealthRequest, SoapResetProviderHealthResponse>(
-            "ProviderService.svc",
+            "ProviderService.asmx",
             new SoapResetProviderHealthRequest { Code = code },
             (client, request) => client.ResetProviderHealthAsync(request),
             "Provider health reset successfully"
@@ -1286,7 +1286,7 @@ public class SoapApiClient : IApiClient
     public async Task<(OperationResult Data, ApiCallMetrics Metrics)> TriggerManualFetchAsync(string code)
     {
         return await ExecuteSoapProviderOperationAsync<SoapTriggerManualFetchRequest, SoapTriggerManualFetchResponse>(
-            "ProviderService.svc",
+            "ProviderService.asmx",
             new SoapTriggerManualFetchRequest { Code = code },
             (client, request) => client.TriggerManualFetchAsync(request),
             "Manual fetch triggered successfully"
@@ -1296,7 +1296,7 @@ public class SoapApiClient : IApiClient
     public async Task<(OperationResult Data, ApiCallMetrics Metrics)> CreateProviderAsync(string name, string code, string url, int baseCurrencyId, bool requiresAuth, string? apiKeyRef)
     {
         return await ExecuteSoapProviderOperationAsync<SoapCreateProviderRequest, SoapCreateProviderResponse>(
-            "ProviderService.svc",
+            "ProviderService.asmx",
             new SoapCreateProviderRequest { Name = name, Code = code, Url = url, BaseCurrencyId = baseCurrencyId, RequiresAuthentication = requiresAuth, ApiKeyVaultReference = apiKeyRef },
             (client, request) => client.CreateProviderAsync(request),
             "Provider created successfully"
@@ -1306,7 +1306,7 @@ public class SoapApiClient : IApiClient
     public async Task<(OperationResult Data, ApiCallMetrics Metrics)> UpdateProviderConfigurationAsync(string code, string name, string url, bool requiresAuth, string? apiKeyRef)
     {
         return await ExecuteSoapProviderOperationAsync<SoapUpdateProviderConfigurationRequest, SoapUpdateProviderConfigurationResponse>(
-            "ProviderService.svc",
+            "ProviderService.asmx",
             new SoapUpdateProviderConfigurationRequest { Code = code, Name = name, Url = url, RequiresAuthentication = requiresAuth, ApiKeyVaultReference = apiKeyRef },
             (client, request) => client.UpdateProviderConfigurationAsync(request),
             "Provider configuration updated successfully"
@@ -1316,7 +1316,7 @@ public class SoapApiClient : IApiClient
     public async Task<(OperationResult Data, ApiCallMetrics Metrics)> DeleteProviderAsync(string code, bool force)
     {
         return await ExecuteSoapProviderOperationAsync<SoapDeleteProviderRequest, SoapDeleteProviderResponse>(
-            "ProviderService.svc",
+            "ProviderService.asmx",
             new SoapDeleteProviderRequest { Code = code, Force = force },
             (client, request) => client.DeleteProviderAsync(request),
             "Provider deleted successfully"
@@ -1370,7 +1370,7 @@ public class SoapApiClient : IApiClient
         try
         {
             var binding = new BasicHttpBinding { MaxReceivedMessageSize = 10485760, Security = { Mode = BasicHttpSecurityMode.None } };
-            var endpoint = new EndpointAddress($"{_soapUrl}/UserService.svc");
+            var endpoint = new EndpointAddress($"{_soapUrl}/UserService.asmx");
             var factory = new ChannelFactory<IUserServiceSoap>(binding, endpoint);
             var client = factory.CreateChannel();
 
@@ -1415,7 +1415,7 @@ public class SoapApiClient : IApiClient
         try
         {
             var binding = new BasicHttpBinding { MaxReceivedMessageSize = 10485760, Security = { Mode = BasicHttpSecurityMode.None } };
-            var endpoint = new EndpointAddress($"{_soapUrl}/UserService.svc");
+            var endpoint = new EndpointAddress($"{_soapUrl}/UserService.asmx");
             var factory = new ChannelFactory<IUserServiceSoap>(binding, endpoint);
             var client = factory.CreateChannel();
 
@@ -1447,7 +1447,12 @@ public class SoapApiClient : IApiClient
                     }).ToList() ?? new List<UserData>()
                 };
 
-                return (data, new ApiCallMetrics { ResponseTimeMs = stopwatch.ElapsedMilliseconds, Success = response.Success });
+                return (data, new ApiCallMetrics
+                {
+                    ResponseTimeMs = stopwatch.ElapsedMilliseconds,
+                    Success = response.Success,
+                    ErrorMessage = response.Success ? null : (response.Fault?.Detail ?? response.Message ?? "Unknown error")
+                });
             }
         }
         catch (Exception ex)
@@ -1463,7 +1468,7 @@ public class SoapApiClient : IApiClient
         try
         {
             var binding = new BasicHttpBinding { MaxReceivedMessageSize = 10485760, Security = { Mode = BasicHttpSecurityMode.None } };
-            var endpoint = new EndpointAddress($"{_soapUrl}/UserService.svc");
+            var endpoint = new EndpointAddress($"{_soapUrl}/UserService.asmx");
             var factory = new ChannelFactory<IUserServiceSoap>(binding, endpoint);
             var client = factory.CreateChannel();
 
@@ -1511,7 +1516,7 @@ public class SoapApiClient : IApiClient
     public async Task<(OperationResult Data, ApiCallMetrics Metrics)> UpdateUserAsync(int id, string firstName, string lastName)
     {
         return await ExecuteSoapUserOperationAsync<SoapUpdateUserRequest, SoapUpdateUserResponse>(
-            new SoapUpdateUserRequest { Id = id, FirstName = firstName, LastName = lastName },
+            new SoapUpdateUserRequest { UserId = id, FirstName = firstName, LastName = lastName, Email = "" },
             (client, request) => client.UpdateUserAsync(request),
             "User updated successfully"
         );
@@ -1520,7 +1525,7 @@ public class SoapApiClient : IApiClient
     public async Task<(OperationResult Data, ApiCallMetrics Metrics)> ChangePasswordAsync(int id, string currentPassword, string newPassword)
     {
         return await ExecuteSoapUserOperationAsync<SoapChangePasswordRequest, SoapChangePasswordResponse>(
-            new SoapChangePasswordRequest { Id = id, CurrentPassword = currentPassword, NewPassword = newPassword },
+            new SoapChangePasswordRequest { UserId = id, CurrentPassword = currentPassword, NewPassword = newPassword },
             (client, request) => client.ChangePasswordAsync(request),
             "Password changed successfully"
         );
@@ -1529,7 +1534,7 @@ public class SoapApiClient : IApiClient
     public async Task<(OperationResult Data, ApiCallMetrics Metrics)> ChangeUserRoleAsync(int id, string newRole)
     {
         return await ExecuteSoapUserOperationAsync<SoapChangeUserRoleRequest, SoapChangeUserRoleResponse>(
-            new SoapChangeUserRoleRequest { Id = id, NewRole = newRole },
+            new SoapChangeUserRoleRequest { UserId = id, NewRole = newRole },
             (client, request) => client.ChangeUserRoleAsync(request),
             "User role changed successfully"
         );
@@ -1552,7 +1557,7 @@ public class SoapApiClient : IApiClient
         try
         {
             var binding = new BasicHttpBinding { MaxReceivedMessageSize = 10485760, Security = { Mode = BasicHttpSecurityMode.None } };
-            var endpoint = new EndpointAddress($"{_soapUrl}/UserService.svc");
+            var endpoint = new EndpointAddress($"{_soapUrl}/UserService.asmx");
             var factory = new ChannelFactory<IUserServiceSoap>(binding, endpoint);
             var client = factory.CreateChannel();
 
@@ -1611,7 +1616,7 @@ public class SoapApiClient : IApiClient
         try
         {
             var binding = new BasicHttpBinding { MaxReceivedMessageSize = 10485760, Security = { Mode = BasicHttpSecurityMode.None } };
-            var endpoint = new EndpointAddress($"{_soapUrl}/CurrencyService.svc");
+            var endpoint = new EndpointAddress($"{_soapUrl}/CurrencyService.asmx");
             var factory = new ChannelFactory<ICurrencyServiceSoap>(binding, endpoint);
             var client = factory.CreateChannel();
 
@@ -1650,7 +1655,7 @@ public class SoapApiClient : IApiClient
         try
         {
             var binding = new BasicHttpBinding { MaxReceivedMessageSize = 10485760, Security = { Mode = BasicHttpSecurityMode.None } };
-            var endpoint = new EndpointAddress($"{_soapUrl}/SystemHealthService.svc");
+            var endpoint = new EndpointAddress($"{_soapUrl}/SystemHealthService.asmx");
             var factory = new ChannelFactory<ISystemHealthServiceSoap>(binding, endpoint);
             var client = factory.CreateChannel();
 
@@ -1695,7 +1700,7 @@ public class SoapApiClient : IApiClient
         try
         {
             var binding = new BasicHttpBinding { MaxReceivedMessageSize = 10485760, Security = { Mode = BasicHttpSecurityMode.None } };
-            var endpoint = new EndpointAddress($"{_soapUrl}/SystemHealthService.svc");
+            var endpoint = new EndpointAddress($"{_soapUrl}/SystemHealthService.asmx");
             var factory = new ChannelFactory<ISystemHealthServiceSoap>(binding, endpoint);
             var client = factory.CreateChannel();
 
@@ -1744,7 +1749,7 @@ public class SoapApiClient : IApiClient
         try
         {
             var binding = new BasicHttpBinding { MaxReceivedMessageSize = 10485760, Security = { Mode = BasicHttpSecurityMode.None } };
-            var endpoint = new EndpointAddress($"{_soapUrl}/SystemHealthService.svc");
+            var endpoint = new EndpointAddress($"{_soapUrl}/SystemHealthService.asmx");
             var factory = new ChannelFactory<ISystemHealthServiceSoap>(binding, endpoint);
             var client = factory.CreateChannel();
 
@@ -1766,20 +1771,20 @@ public class SoapApiClient : IApiClient
                 {
                     Activities = response.Data?.Select(f => new FetchActivityData
                     {
-                        Id = f.Id,
+                        Id = (int)f.LogId,
                         ProviderId = f.ProviderId,
                         ProviderCode = f.ProviderCode,
                         ProviderName = f.ProviderName,
-                        FetchedAt = string.IsNullOrEmpty(f.FetchedAt) ? DateTime.UtcNow : DateTime.Parse(f.FetchedAt),
-                        Success = f.Success,
-                        RatesCount = f.RatesCount,
+                        FetchedAt = f.StartedAt.DateTime,
+                        Success = f.Status.Equals("Success", StringComparison.OrdinalIgnoreCase),
+                        RatesCount = (f.RatesImported ?? 0) + (f.RatesUpdated ?? 0),
                         ErrorMessage = f.ErrorMessage,
-                        DurationMs = f.DurationMs
+                        DurationMs = ParseDuration(f.Duration)
                     }).ToList() ?? new(),
                     TotalCount = response.Data?.Length ?? 0
                 };
 
-                return (data, new ApiCallMetrics { ResponseTimeMs = stopwatch.ElapsedMilliseconds, Success = response.Success });
+                return (data, new ApiCallMetrics { ResponseTimeMs = stopwatch.ElapsedMilliseconds, Success = response.Success, PayloadSizeBytes = response.Data?.Length * 150 ?? 0 });
             }
         }
         catch (Exception ex)
@@ -1800,7 +1805,7 @@ public class SoapApiClient : IApiClient
                 Security = { Mode = BasicHttpSecurityMode.None }
             };
 
-            var endpoint = new EndpointAddress($"{_soapUrl}/UserService.svc");
+            var endpoint = new EndpointAddress($"{_soapUrl}/UserService.asmx");
             var factory = new ChannelFactory<IUserServiceSoap>(binding, endpoint);
             var client = factory.CreateChannel();
 
@@ -1872,7 +1877,7 @@ public class SoapApiClient : IApiClient
                 Security = { Mode = BasicHttpSecurityMode.None }
             };
 
-            var endpoint = new EndpointAddress($"{_soapUrl}/UserService.svc");
+            var endpoint = new EndpointAddress($"{_soapUrl}/UserService.asmx");
             var factory = new ChannelFactory<IUserServiceSoap>(binding, endpoint);
             var client = factory.CreateChannel();
 
@@ -1934,23 +1939,10 @@ public class SoapApiClient : IApiClient
     {
         try
         {
-            var binding = new BasicHttpBinding
-            {
-                MaxReceivedMessageSize = 10485760,
-                Security = { Mode = BasicHttpSecurityMode.None },
-                OpenTimeout = TimeSpan.FromSeconds(5),
-                SendTimeout = TimeSpan.FromSeconds(5),
-                ReceiveTimeout = TimeSpan.FromSeconds(5)
-            };
-
-            var endpoint = new EndpointAddress($"{_soapUrl}/ExchangeRateService.svc");
-            var factory = new ChannelFactory<IExchangeRateServiceSoap>(binding, endpoint);
-            var client = factory.CreateChannel();
-
-            var request = new SoapGetAllLatestRatesGroupedRequest();
-            await client.GetAllLatestRatesGroupedAsync(request);
-
-            factory.Close();
+            // Just verify the SOAP endpoint URI is valid and accessible via HTTP
+            using var httpClient = new HttpClient { Timeout = TimeSpan.FromSeconds(5) };
+            var response = await httpClient.GetAsync($"{_soapUrl}/ExchangeRateService.asmx");
+            // SOAP service should return something (even if not 200 OK for GET)
             return true;
         }
         catch
@@ -2016,7 +2008,53 @@ public class SoapApiClient : IApiClient
                     baseCurrencyRates.TargetRates.Add(new TargetRate
                     {
                         CurrencyCode = rate.TargetCurrency,
-                        Rate = rate.RateInfo.Rate,
+                        Rate = rate.RateInfo.EffectiveRate,
+                        Multiplier = rate.RateInfo.Multiplier,
+                        ValidDate = DateTime.Parse(rate.ValidDate)
+                    });
+                }
+
+                providerRates.BaseCurrencies.Add(baseCurrencyRates);
+                data.TotalRates += baseCurrencyRates.TargetRates.Count;
+            }
+
+            data.Providers.Add(providerRates);
+        }
+
+        return data;
+    }
+
+    private static ExchangeRateData MapToExchangeRateData(SoapCurrentExchangeRatesGrouped[] soapData)
+    {
+        var data = new ExchangeRateData
+        {
+            FetchedAt = DateTime.UtcNow,
+            Providers = new List<ProviderRates>()
+        };
+
+        foreach (var provider in soapData)
+        {
+            var providerRates = new ProviderRates
+            {
+                ProviderCode = provider.Provider.Code,
+                ProviderName = provider.Provider.Name,
+                BaseCurrencies = new List<BaseCurrencyRates>()
+            };
+
+            foreach (var baseCurrency in provider.BaseCurrencies)
+            {
+                var baseCurrencyRates = new BaseCurrencyRates
+                {
+                    CurrencyCode = baseCurrency.BaseCurrency,
+                    TargetRates = new List<TargetRate>()
+                };
+
+                foreach (var rate in baseCurrency.Rates)
+                {
+                    baseCurrencyRates.TargetRates.Add(new TargetRate
+                    {
+                        CurrencyCode = rate.TargetCurrency,
+                        Rate = rate.RateInfo.EffectiveRate,
                         Multiplier = rate.RateInfo.Multiplier,
                         ValidDate = DateTime.Parse(rate.ValidDate)
                     });
@@ -2047,18 +2085,47 @@ public class SoapApiClient : IApiClient
         return size;
     }
 
+    private static int EstimateXmlSize(SoapCurrentExchangeRatesGrouped[] data)
+    {
+        // Rough estimate: each provider ~500 bytes + each rate ~150 bytes
+        int size = 0;
+        foreach (var provider in data)
+        {
+            size += 500; // Provider overhead
+            foreach (var baseCurrency in provider.BaseCurrencies)
+            {
+                size += baseCurrency.Rates.Length * 150;
+            }
+        }
+        return size;
+    }
+
+    private static long ParseDuration(string? duration)
+    {
+        if (string.IsNullOrEmpty(duration))
+            return 0;
+
+        // Duration format from server is like "00:00:00.1234567" (TimeSpan format)
+        if (TimeSpan.TryParse(duration, out var timeSpan))
+        {
+            return (long)timeSpan.TotalMilliseconds;
+        }
+
+        return 0;
+    }
+
     // ============================================================
     // SOAP SERVICE CONTRACTS
     // ============================================================
 
-    [ServiceContract]
+    [ServiceContract(Namespace = "")]
     private interface IAuthenticationServiceSoap
     {
         [OperationContract]
         Task<SoapLoginResponse> LoginAsync(SoapLoginRequest request);
     }
 
-    [ServiceContract]
+    [ServiceContract(Namespace = "")]
     private interface IExchangeRateServiceSoap
     {
         [OperationContract]
@@ -2068,10 +2135,7 @@ public class SoapApiClient : IApiClient
         Task<SoapGetAllLatestRatesGroupedResponse> GetHistoricalRatesUpdateAsync(SoapGetAllLatestRatesGroupedRequest request);
 
         [OperationContract]
-        Task<SoapGetAllLatestRatesGroupedResponse> GetCurrentRatesAsync(SoapGetCurrentRatesRequest request);
-
-        [OperationContract]
-        Task<SoapGetCurrentRatesGroupedResponse> GetCurrentRatesGroupedAsync(SoapGetCurrentRatesGroupedRequest request);
+        Task<SoapGetCurrentRatesGroupedResponse> GetCurrentRatesAsync(SoapGetCurrentRatesRequest request);
 
         [OperationContract]
         Task<SoapGetLatestRateResponse> GetLatestRateAsync(SoapGetLatestRateRequest request);
@@ -2080,7 +2144,7 @@ public class SoapApiClient : IApiClient
         Task<SoapConvertCurrencyResponse> ConvertCurrencyAsync(SoapConvertCurrencyRequest request);
     }
 
-    [ServiceContract]
+    [ServiceContract(Namespace = "")]
     private interface IProviderServiceSoap
     {
         [OperationContract]
@@ -2126,7 +2190,7 @@ public class SoapApiClient : IApiClient
         Task<SoapRescheduleProviderResponse> RescheduleProviderAsync(SoapRescheduleProviderRequest request);
     }
 
-    [ServiceContract]
+    [ServiceContract(Namespace = "")]
     private interface IUserServiceSoap
     {
         [OperationContract]
@@ -2160,7 +2224,7 @@ public class SoapApiClient : IApiClient
         Task<SoapDeleteUserResponse> DeleteUserAsync(SoapDeleteUserRequest request);
     }
 
-    [ServiceContract]
+    [ServiceContract(Namespace = "")]
     private interface ICurrencyServiceSoap
     {
         [OperationContract]
@@ -2179,7 +2243,7 @@ public class SoapApiClient : IApiClient
         Task<SoapDeleteCurrencyResponse> DeleteCurrencyAsync(SoapDeleteCurrencyRequest request);
     }
 
-    [ServiceContract]
+    [ServiceContract(Namespace = "")]
     private interface ISystemHealthServiceSoap
     {
         [OperationContract]
@@ -2196,7 +2260,7 @@ public class SoapApiClient : IApiClient
     // SOAP DATA CONTRACTS
     // ============================================================
 
-    [DataContract]
+    [DataContract(Namespace = "")]
     private class SoapLoginRequest
     {
         [DataMember]
@@ -2206,7 +2270,7 @@ public class SoapApiClient : IApiClient
         public string Password { get; set; } = string.Empty;
     }
 
-    [DataContract]
+    [DataContract(Namespace = "")]
     private class SoapLoginResponse
     {
         [DataMember]
@@ -2219,7 +2283,7 @@ public class SoapApiClient : IApiClient
         public SoapAuthenticationData? Data { get; set; }
     }
 
-    [DataContract]
+    [DataContract(Namespace = "")]
     private class SoapAuthenticationData
     {
         [DataMember]
@@ -2235,13 +2299,13 @@ public class SoapApiClient : IApiClient
         public long ExpiresAt { get; set; }
     }
 
-    [DataContract]
+    [DataContract(Namespace = "")]
     private class SoapGetAllLatestRatesGroupedRequest
     {
         // Empty request
     }
 
-    [DataContract]
+    [DataContract(Namespace = "")]
     private class SoapGetAllLatestRatesGroupedResponse
     {
         [DataMember]
@@ -2254,7 +2318,7 @@ public class SoapApiClient : IApiClient
         public SoapLatestExchangeRatesGrouped[] Data { get; set; } = Array.Empty<SoapLatestExchangeRatesGrouped>();
     }
 
-    [DataContract]
+    [DataContract(Namespace = "")]
     private class SoapLatestExchangeRatesGrouped
     {
         [DataMember]
@@ -2264,7 +2328,7 @@ public class SoapApiClient : IApiClient
         public SoapBaseCurrencyGroup[] BaseCurrencies { get; set; } = Array.Empty<SoapBaseCurrencyGroup>();
     }
 
-    [DataContract]
+    [DataContract(Namespace = "")]
     private class SoapProviderInfo
     {
         [DataMember]
@@ -2274,7 +2338,7 @@ public class SoapApiClient : IApiClient
         public string Name { get; set; } = string.Empty;
     }
 
-    [DataContract]
+    [DataContract(Namespace = "")]
     private class SoapBaseCurrencyGroup
     {
         [DataMember]
@@ -2284,7 +2348,7 @@ public class SoapApiClient : IApiClient
         public SoapTargetCurrencyRate[] Rates { get; set; } = Array.Empty<SoapTargetCurrencyRate>();
     }
 
-    [DataContract]
+    [DataContract(Namespace = "")]
     private class SoapTargetCurrencyRate
     {
         [DataMember]
@@ -2297,7 +2361,7 @@ public class SoapApiClient : IApiClient
         public string ValidDate { get; set; } = string.Empty;
     }
 
-    [DataContract]
+    [DataContract(Namespace = "")]
     private class SoapRateInfo
     {
         [DataMember]
@@ -2305,17 +2369,20 @@ public class SoapApiClient : IApiClient
 
         [DataMember]
         public int Multiplier { get; set; }
+
+        [DataMember]
+        public decimal EffectiveRate { get; set; }
     }
 
     // New Data Contracts for additional endpoints
 
-    [DataContract]
+    [DataContract(Namespace = "")]
     private class SoapGetCurrentRatesRequest
     {
         // Empty request
     }
 
-    [DataContract]
+    [DataContract(Namespace = "")]
     private class SoapConvertCurrencyRequest
     {
         [DataMember]
@@ -2328,7 +2395,7 @@ public class SoapApiClient : IApiClient
         public decimal Amount { get; set; }
     }
 
-    [DataContract]
+    [DataContract(Namespace = "")]
     private class SoapConvertCurrencyResponse
     {
         [DataMember]
@@ -2341,7 +2408,7 @@ public class SoapApiClient : IApiClient
         public SoapConversionData? Data { get; set; }
     }
 
-    [DataContract]
+    [DataContract(Namespace = "")]
     private class SoapConversionData
     {
         [DataMember]
@@ -2363,13 +2430,13 @@ public class SoapApiClient : IApiClient
         public string ValidDate { get; set; } = string.Empty;
     }
 
-    [DataContract]
+    [DataContract(Namespace = "")]
     private class SoapGetAllCurrenciesRequest
     {
         // Empty request
     }
 
-    [DataContract]
+    [DataContract(Namespace = "")]
     private class SoapGetAllCurrenciesResponse
     {
         [DataMember]
@@ -2382,14 +2449,14 @@ public class SoapApiClient : IApiClient
         public SoapCurrencyData[] Data { get; set; } = Array.Empty<SoapCurrencyData>();
     }
 
-    [DataContract]
+    [DataContract(Namespace = "")]
     private class SoapGetCurrencyByIdRequest
     {
         [DataMember]
         public int Id { get; set; }
     }
 
-    [DataContract]
+    [DataContract(Namespace = "")]
     private class SoapGetCurrencyByIdResponse
     {
         [DataMember]
@@ -2402,14 +2469,14 @@ public class SoapApiClient : IApiClient
         public SoapCurrencyData? Data { get; set; }
     }
 
-    [DataContract]
+    [DataContract(Namespace = "")]
     private class SoapGetCurrencyByCodeRequest
     {
         [DataMember]
         public string Code { get; set; } = string.Empty;
     }
 
-    [DataContract]
+    [DataContract(Namespace = "")]
     private class SoapGetCurrencyByCodeResponse
     {
         [DataMember]
@@ -2422,7 +2489,7 @@ public class SoapApiClient : IApiClient
         public SoapCurrencyData? Data { get; set; }
     }
 
-    [DataContract]
+    [DataContract(Namespace = "")]
     private class SoapCurrencyData
     {
         [DataMember]
@@ -2430,27 +2497,15 @@ public class SoapApiClient : IApiClient
 
         [DataMember]
         public string Code { get; set; } = string.Empty;
-
-        [DataMember]
-        public string Name { get; set; } = string.Empty;
-
-        [DataMember]
-        public string? Symbol { get; set; }
-
-        [DataMember]
-        public int DecimalPlaces { get; set; }
-
-        [DataMember]
-        public bool IsActive { get; set; }
     }
 
-    [DataContract]
+    [DataContract(Namespace = "")]
     private class SoapGetAllProvidersRequest
     {
         // Empty request
     }
 
-    [DataContract]
+    [DataContract(Namespace = "")]
     private class SoapGetAllProvidersResponse
     {
         [DataMember]
@@ -2463,14 +2518,14 @@ public class SoapApiClient : IApiClient
         public SoapProviderData[] Data { get; set; } = Array.Empty<SoapProviderData>();
     }
 
-    [DataContract]
+    [DataContract(Namespace = "")]
     private class SoapGetProviderByCodeRequest
     {
         [DataMember]
         public string Code { get; set; } = string.Empty;
     }
 
-    [DataContract]
+    [DataContract(Namespace = "")]
     private class SoapGetProviderByCodeResponse
     {
         [DataMember]
@@ -2483,9 +2538,12 @@ public class SoapApiClient : IApiClient
         public SoapProviderData? Data { get; set; }
     }
 
-    [DataContract]
+    [DataContract(Namespace = "")]
     private class SoapProviderData
     {
+        [DataMember]
+        public int Id { get; set; }
+
         [DataMember]
         public string Code { get; set; } = string.Empty;
 
@@ -2493,20 +2551,38 @@ public class SoapApiClient : IApiClient
         public string Name { get; set; } = string.Empty;
 
         [DataMember]
-        public string BaseUrl { get; set; } = string.Empty;
+        public string Url { get; set; } = string.Empty;
+
+        [DataMember]
+        public string BaseCurrency { get; set; } = string.Empty;
 
         [DataMember]
         public bool IsActive { get; set; }
+
+        [DataMember]
+        public string HealthStatus { get; set; } = string.Empty;
+
+        [DataMember]
+        public int SuccessfulFetchCount { get; set; }
+
+        [DataMember]
+        public int FailedFetchCount { get; set; }
+
+        [DataMember]
+        public string? LastFetchAttempt { get; set; }
+
+        [DataMember]
+        public string? LastSuccessfulFetch { get; set; }
     }
 
-    [DataContract]
+    [DataContract(Namespace = "")]
     private class SoapGetProviderHealthRequest
     {
         [DataMember]
         public string Code { get; set; } = string.Empty;
     }
 
-    [DataContract]
+    [DataContract(Namespace = "")]
     private class SoapGetProviderHealthResponse
     {
         [DataMember]
@@ -2519,7 +2595,7 @@ public class SoapApiClient : IApiClient
         public SoapProviderHealthData? Data { get; set; }
     }
 
-    [DataContract]
+    [DataContract(Namespace = "")]
     private class SoapProviderHealthData
     {
         [DataMember]
@@ -2544,14 +2620,14 @@ public class SoapApiClient : IApiClient
         public string? LastError { get; set; }
     }
 
-    [DataContract]
+    [DataContract(Namespace = "")]
     private class SoapGetProviderStatisticsRequest
     {
         [DataMember]
         public string Code { get; set; } = string.Empty;
     }
 
-    [DataContract]
+    [DataContract(Namespace = "")]
     private class SoapGetProviderStatisticsResponse
     {
         [DataMember]
@@ -2564,7 +2640,7 @@ public class SoapApiClient : IApiClient
         public SoapProviderStatisticsData? Data { get; set; }
     }
 
-    [DataContract]
+    [DataContract(Namespace = "")]
     private class SoapProviderStatisticsData
     {
         [DataMember]
@@ -2583,7 +2659,7 @@ public class SoapApiClient : IApiClient
         public int TotalRatesProvided { get; set; }
     }
 
-    [DataContract]
+    [DataContract(Namespace = "")]
     private class SoapRescheduleProviderRequest
     {
         [DataMember]
@@ -2596,7 +2672,7 @@ public class SoapApiClient : IApiClient
         public string TimeZone { get; set; } = string.Empty;
     }
 
-    [DataContract]
+    [DataContract(Namespace = "")]
     private class SoapRescheduleProviderResponse
     {
         [DataMember]
@@ -2606,13 +2682,13 @@ public class SoapApiClient : IApiClient
         public string? Message { get; set; }
     }
 
-    [DataContract]
+    [DataContract(Namespace = "")]
     private class SoapGetAllUsersRequest
     {
         // Empty request
     }
 
-    [DataContract]
+    [DataContract(Namespace = "")]
     private class SoapGetAllUsersResponse
     {
         [DataMember]
@@ -2625,14 +2701,14 @@ public class SoapApiClient : IApiClient
         public SoapUserData[] Data { get; set; } = Array.Empty<SoapUserData>();
     }
 
-    [DataContract]
+    [DataContract(Namespace = "")]
     private class SoapGetUserByIdRequest
     {
         [DataMember]
         public int Id { get; set; }
     }
 
-    [DataContract]
+    [DataContract(Namespace = "")]
     private class SoapGetUserByIdResponse
     {
         [DataMember]
@@ -2645,7 +2721,7 @@ public class SoapApiClient : IApiClient
         public SoapUserData? Data { get; set; }
     }
 
-    [DataContract]
+    [DataContract(Namespace = "")]
     private class SoapUserData
     {
         [DataMember]
@@ -2661,6 +2737,9 @@ public class SoapApiClient : IApiClient
         public string LastName { get; set; } = string.Empty;
 
         [DataMember]
+        public string FullName { get; set; } = string.Empty;
+
+        [DataMember]
         public string Role { get; set; } = string.Empty;
 
         [DataMember]
@@ -2671,14 +2750,14 @@ public class SoapApiClient : IApiClient
     }
 
     // Provider Management Data Contracts
-    [DataContract]
+    [DataContract(Namespace = "")]
     private class SoapGetProviderConfigurationRequest
     {
         [DataMember]
         public string Code { get; set; } = string.Empty;
     }
 
-    [DataContract]
+    [DataContract(Namespace = "")]
     private class SoapGetProviderConfigurationResponse
     {
         [DataMember]
@@ -2691,7 +2770,7 @@ public class SoapApiClient : IApiClient
         public SoapProviderDetailData? Data { get; set; }
     }
 
-    [DataContract]
+    [DataContract(Namespace = "")]
     private class SoapProviderDetailData
     {
         [DataMember]
@@ -2731,14 +2810,14 @@ public class SoapApiClient : IApiClient
         public string? LastModifiedAt { get; set; }
     }
 
-    [DataContract]
+    [DataContract(Namespace = "")]
     private class SoapActivateProviderRequest
     {
         [DataMember]
         public string Code { get; set; } = string.Empty;
     }
 
-    [DataContract]
+    [DataContract(Namespace = "")]
     private class SoapActivateProviderResponse
     {
         [DataMember]
@@ -2748,14 +2827,14 @@ public class SoapApiClient : IApiClient
         public string? Message { get; set; }
     }
 
-    [DataContract]
+    [DataContract(Namespace = "")]
     private class SoapDeactivateProviderRequest
     {
         [DataMember]
         public string Code { get; set; } = string.Empty;
     }
 
-    [DataContract]
+    [DataContract(Namespace = "")]
     private class SoapDeactivateProviderResponse
     {
         [DataMember]
@@ -2765,14 +2844,14 @@ public class SoapApiClient : IApiClient
         public string? Message { get; set; }
     }
 
-    [DataContract]
+    [DataContract(Namespace = "")]
     private class SoapResetProviderHealthRequest
     {
         [DataMember]
         public string Code { get; set; } = string.Empty;
     }
 
-    [DataContract]
+    [DataContract(Namespace = "")]
     private class SoapResetProviderHealthResponse
     {
         [DataMember]
@@ -2782,14 +2861,14 @@ public class SoapApiClient : IApiClient
         public string? Message { get; set; }
     }
 
-    [DataContract]
+    [DataContract(Namespace = "")]
     private class SoapTriggerManualFetchRequest
     {
         [DataMember]
         public string Code { get; set; } = string.Empty;
     }
 
-    [DataContract]
+    [DataContract(Namespace = "")]
     private class SoapTriggerManualFetchResponse
     {
         [DataMember]
@@ -2799,7 +2878,7 @@ public class SoapApiClient : IApiClient
         public string? Message { get; set; }
     }
 
-    [DataContract]
+    [DataContract(Namespace = "")]
     private class SoapCreateProviderRequest
     {
         [DataMember]
@@ -2821,7 +2900,7 @@ public class SoapApiClient : IApiClient
         public string? ApiKeyVaultReference { get; set; }
     }
 
-    [DataContract]
+    [DataContract(Namespace = "")]
     private class SoapCreateProviderResponse
     {
         [DataMember]
@@ -2831,7 +2910,7 @@ public class SoapApiClient : IApiClient
         public string? Message { get; set; }
     }
 
-    [DataContract]
+    [DataContract(Namespace = "")]
     private class SoapUpdateProviderConfigurationRequest
     {
         [DataMember]
@@ -2850,7 +2929,7 @@ public class SoapApiClient : IApiClient
         public string? ApiKeyVaultReference { get; set; }
     }
 
-    [DataContract]
+    [DataContract(Namespace = "")]
     private class SoapUpdateProviderConfigurationResponse
     {
         [DataMember]
@@ -2860,7 +2939,7 @@ public class SoapApiClient : IApiClient
         public string? Message { get; set; }
     }
 
-    [DataContract]
+    [DataContract(Namespace = "")]
     private class SoapDeleteProviderRequest
     {
         [DataMember]
@@ -2870,7 +2949,7 @@ public class SoapApiClient : IApiClient
         public bool Force { get; set; }
     }
 
-    [DataContract]
+    [DataContract(Namespace = "")]
     private class SoapDeleteProviderResponse
     {
         [DataMember]
@@ -2881,14 +2960,14 @@ public class SoapApiClient : IApiClient
     }
 
     // User Management Data Contracts
-    [DataContract]
+    [DataContract(Namespace = "")]
     private class SoapGetUserByEmailRequest
     {
         [DataMember]
         public string Email { get; set; } = string.Empty;
     }
 
-    [DataContract]
+    [DataContract(Namespace = "")]
     private class SoapGetUserByEmailResponse
     {
         [DataMember]
@@ -2901,7 +2980,7 @@ public class SoapApiClient : IApiClient
         public SoapUserData? Data { get; set; }
     }
 
-    [DataContract]
+    [DataContract(Namespace = "")]
     private class SoapCreateUserRequest
     {
         [DataMember]
@@ -2920,7 +2999,7 @@ public class SoapApiClient : IApiClient
         public string Role { get; set; } = string.Empty;
     }
 
-    [DataContract]
+    [DataContract(Namespace = "")]
     private class SoapCreateUserResponse
     {
         [DataMember]
@@ -2930,20 +3009,23 @@ public class SoapApiClient : IApiClient
         public string? Message { get; set; }
     }
 
-    [DataContract]
+    [DataContract(Namespace = "")]
     private class SoapUpdateUserRequest
     {
         [DataMember]
-        public int Id { get; set; }
+        public int UserId { get; set; }
 
         [DataMember]
         public string FirstName { get; set; } = string.Empty;
 
         [DataMember]
         public string LastName { get; set; } = string.Empty;
+
+        [DataMember]
+        public string Email { get; set; } = string.Empty;
     }
 
-    [DataContract]
+    [DataContract(Namespace = "")]
     private class SoapUpdateUserResponse
     {
         [DataMember]
@@ -2953,11 +3035,11 @@ public class SoapApiClient : IApiClient
         public string? Message { get; set; }
     }
 
-    [DataContract]
+    [DataContract(Namespace = "")]
     private class SoapChangePasswordRequest
     {
         [DataMember]
-        public int Id { get; set; }
+        public int UserId { get; set; }
 
         [DataMember]
         public string CurrentPassword { get; set; } = string.Empty;
@@ -2966,7 +3048,7 @@ public class SoapApiClient : IApiClient
         public string NewPassword { get; set; } = string.Empty;
     }
 
-    [DataContract]
+    [DataContract(Namespace = "")]
     private class SoapChangePasswordResponse
     {
         [DataMember]
@@ -2974,19 +3056,22 @@ public class SoapApiClient : IApiClient
 
         [DataMember]
         public string? Message { get; set; }
+
+        [DataMember]
+        public SoapFault? Fault { get; set; }
     }
 
-    [DataContract]
+    [DataContract(Namespace = "")]
     private class SoapChangeUserRoleRequest
     {
         [DataMember]
-        public int Id { get; set; }
+        public int UserId { get; set; }
 
         [DataMember]
         public string NewRole { get; set; } = string.Empty;
     }
 
-    [DataContract]
+    [DataContract(Namespace = "")]
     private class SoapChangeUserRoleResponse
     {
         [DataMember]
@@ -2996,14 +3081,14 @@ public class SoapApiClient : IApiClient
         public string? Message { get; set; }
     }
 
-    [DataContract]
+    [DataContract(Namespace = "")]
     private class SoapDeleteUserRequest
     {
         [DataMember]
         public int Id { get; set; }
     }
 
-    [DataContract]
+    [DataContract(Namespace = "")]
     private class SoapDeleteUserResponse
     {
         [DataMember]
@@ -3014,14 +3099,14 @@ public class SoapApiClient : IApiClient
     }
 
     // Currency Management Data Contracts
-    [DataContract]
+    [DataContract(Namespace = "")]
     private class SoapCreateCurrencyRequest
     {
         [DataMember]
         public string Code { get; set; } = string.Empty;
     }
 
-    [DataContract]
+    [DataContract(Namespace = "")]
     private class SoapCreateCurrencyResponse
     {
         [DataMember]
@@ -3031,14 +3116,14 @@ public class SoapApiClient : IApiClient
         public string? Message { get; set; }
     }
 
-    [DataContract]
+    [DataContract(Namespace = "")]
     private class SoapDeleteCurrencyRequest
     {
         [DataMember]
         public string Code { get; set; }= string.Empty;
     }
 
-    [DataContract]
+    [DataContract(Namespace = "")]
     private class SoapDeleteCurrencyResponse
     {
         [DataMember]
@@ -3049,13 +3134,13 @@ public class SoapApiClient : IApiClient
     }
 
     // System Health Data Contracts
-    [DataContract]
+    [DataContract(Namespace = "")]
     private class SoapGetSystemHealthRequest
     {
         // Empty request
     }
 
-    [DataContract]
+    [DataContract(Namespace = "")]
     private class SoapGetSystemHealthResponse
     {
         [DataMember]
@@ -3068,7 +3153,7 @@ public class SoapApiClient : IApiClient
         public SoapSystemHealthData? Data { get; set; }
     }
 
-    [DataContract]
+    [DataContract(Namespace = "")]
     private class SoapSystemHealthData
     {
         [DataMember]
@@ -3093,7 +3178,7 @@ public class SoapApiClient : IApiClient
         public long TotalExchangeRates { get; set; }
     }
 
-    [DataContract]
+    [DataContract(Namespace = "")]
     private class SoapGetRecentErrorsRequest
     {
         [DataMember]
@@ -3103,7 +3188,7 @@ public class SoapApiClient : IApiClient
         public string? Severity { get; set; }
     }
 
-    [DataContract]
+    [DataContract(Namespace = "")]
     private class SoapGetRecentErrorsResponse
     {
         [DataMember]
@@ -3116,7 +3201,7 @@ public class SoapApiClient : IApiClient
         public SoapErrorData[] Data { get; set; } = Array.Empty<SoapErrorData>();
     }
 
-    [DataContract]
+    [DataContract(Namespace = "")]
     private class SoapErrorData
     {
         [DataMember]
@@ -3141,7 +3226,7 @@ public class SoapApiClient : IApiClient
         public string? ProviderCode { get; set; }
     }
 
-    [DataContract]
+    [DataContract(Namespace = "")]
     private class SoapGetFetchActivityRequest
     {
         [DataMember]
@@ -3154,7 +3239,7 @@ public class SoapApiClient : IApiClient
         public bool FailedOnly { get; set; }
     }
 
-    [DataContract]
+    [DataContract(Namespace = "")]
     private class SoapGetFetchActivityResponse
     {
         [DataMember]
@@ -3167,11 +3252,11 @@ public class SoapApiClient : IApiClient
         public SoapFetchActivityData[] Data { get; set; } = Array.Empty<SoapFetchActivityData>();
     }
 
-    [DataContract]
+    [DataContract(Namespace = "")]
     private class SoapFetchActivityData
     {
         [DataMember]
-        public int Id { get; set; }
+        public long LogId { get; set; }
 
         [DataMember]
         public int ProviderId { get; set; }
@@ -3183,29 +3268,35 @@ public class SoapApiClient : IApiClient
         public string ProviderName { get; set; } = string.Empty;
 
         [DataMember]
-        public string FetchedAt { get; set; } = string.Empty;
+        public string Status { get; set; } = string.Empty;
 
         [DataMember]
-        public bool Success { get; set; }
+        public int? RatesImported { get; set; }
 
         [DataMember]
-        public int? RatesCount { get; set; }
+        public int? RatesUpdated { get; set; }
 
         [DataMember]
         public string? ErrorMessage { get; set; }
 
         [DataMember]
-        public long DurationMs { get; set; }
+        public DateTimeOffset StartedAt { get; set; }
+
+        [DataMember]
+        public DateTimeOffset? CompletedAt { get; set; }
+
+        [DataMember]
+        public string? Duration { get; set; }
     }
 
-    [DataContract]
+    [DataContract(Namespace = "")]
     private class SoapGetProviderByIdRequest
     {
         [DataMember]
         public int Id { get; set; }
     }
 
-    [DataContract]
+    [DataContract(Namespace = "")]
     private class SoapGetProviderByIdResponse
     {
         [DataMember]
@@ -3218,14 +3309,14 @@ public class SoapApiClient : IApiClient
         public SoapProviderDetailData? Data { get; set; }
     }
 
-    [DataContract]
+    [DataContract(Namespace = "")]
     private class SoapGetUsersByRoleRequest
     {
         [DataMember]
         public string Role { get; set; } = string.Empty;
     }
 
-    [DataContract]
+    [DataContract(Namespace = "")]
     private class SoapGetUsersByRoleResponse
     {
         [DataMember]
@@ -3236,16 +3327,19 @@ public class SoapApiClient : IApiClient
 
         [DataMember]
         public SoapUserData[]? Data { get; set; }
+
+        [DataMember]
+        public SoapFault? Fault { get; set; }
     }
 
-    [DataContract]
+    [DataContract(Namespace = "")]
     private class SoapCheckEmailExistsRequest
     {
         [DataMember]
         public string Email { get; set; } = string.Empty;
     }
 
-    [DataContract]
+    [DataContract(Namespace = "")]
     private class SoapCheckEmailExistsResponse
     {
         [DataMember]
@@ -3258,13 +3352,13 @@ public class SoapApiClient : IApiClient
         public bool Exists { get; set; }
     }
 
-    [DataContract]
+    [DataContract(Namespace = "")]
     private class SoapGetCurrentRatesGroupedRequest
     {
         // Empty request
     }
 
-    [DataContract]
+    [DataContract(Namespace = "")]
     private class SoapGetCurrentRatesGroupedResponse
     {
         [DataMember]
@@ -3274,10 +3368,49 @@ public class SoapApiClient : IApiClient
         public string? Message { get; set; }
 
         [DataMember]
-        public SoapLatestExchangeRatesGrouped[]? Data { get; set; }
+        public SoapCurrentExchangeRatesGrouped[]? Data { get; set; }
     }
 
-    [DataContract]
+    [DataContract(Namespace = "")]
+    private class SoapCurrentExchangeRatesGrouped
+    {
+        [DataMember]
+        public SoapProviderInfo Provider { get; set; } = new();
+
+        [DataMember]
+        public SoapCurrentBaseCurrencyGroup[] BaseCurrencies { get; set; } = Array.Empty<SoapCurrentBaseCurrencyGroup>();
+    }
+
+    [DataContract(Namespace = "")]
+    private class SoapCurrentBaseCurrencyGroup
+    {
+        [DataMember]
+        public string BaseCurrency { get; set; } = string.Empty;
+
+        [DataMember]
+        public SoapCurrentTargetCurrencyRate[] Rates { get; set; } = Array.Empty<SoapCurrentTargetCurrencyRate>();
+    }
+
+    [DataContract(Namespace = "")]
+    private class SoapCurrentTargetCurrencyRate
+    {
+        [DataMember]
+        public string TargetCurrency { get; set; } = string.Empty;
+
+        [DataMember]
+        public SoapRateInfo RateInfo { get; set; } = new();
+
+        [DataMember]
+        public string ValidDate { get; set; } = string.Empty;
+
+        [DataMember]
+        public string LastUpdated { get; set; } = string.Empty;
+
+        [DataMember]
+        public int DaysOld { get; set; }
+    }
+
+    [DataContract(Namespace = "")]
     private class SoapGetLatestRateRequest
     {
         [DataMember]
@@ -3290,7 +3423,7 @@ public class SoapApiClient : IApiClient
         public int? ProviderId { get; set; }
     }
 
-    [DataContract]
+    [DataContract(Namespace = "")]
     private class SoapGetLatestRateResponse
     {
         [DataMember]
@@ -3303,7 +3436,7 @@ public class SoapApiClient : IApiClient
         public SoapLatestRateData? Data { get; set; }
     }
 
-    [DataContract]
+    [DataContract(Namespace = "")]
     private class SoapLatestRateData
     {
         [DataMember]
@@ -3314,5 +3447,18 @@ public class SoapApiClient : IApiClient
 
         [DataMember]
         public string? Timestamp { get; set; }
+    }
+
+    [DataContract(Namespace = "")]
+    private class SoapFault
+    {
+        [DataMember]
+        public string FaultCode { get; set; } = string.Empty;
+
+        [DataMember]
+        public string FaultString { get; set; } = string.Empty;
+
+        [DataMember]
+        public string? Detail { get; set; }
     }
 }

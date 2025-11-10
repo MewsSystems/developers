@@ -6,7 +6,7 @@ namespace SOAP.Models.ExchangeRates;
 /// <summary>
 /// SOAP model for currency conversion result.
 /// </summary>
-[DataContract]
+[DataContract(Namespace = "")]
 public class CurrencyConversionSoap
 {
     [DataMember]

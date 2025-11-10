@@ -6,7 +6,7 @@ namespace SOAP.Models.Currencies;
 /// SOAP model for currency information.
 /// Currency is a value object with minimal properties (Id, Code).
 /// </summary>
-[DataContract]
+[DataContract(Namespace = "")]
 public class CurrencySoap
 {
     [DataMember]

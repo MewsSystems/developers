@@ -5,7 +5,7 @@ namespace SOAP.Models.Users;
 /// <summary>
 /// SOAP model for user information.
 /// </summary>
-[DataContract]
+[DataContract(Namespace = "")]
 public class UserSoap
 {
     [DataMember]
@@ -25,4 +25,10 @@ public class UserSoap
 
     [DataMember]
     public string Role { get; set; } = string.Empty;
+
+    [DataMember]
+    public bool IsActive { get; set; }
+
+    [DataMember]
+    public string CreatedAt { get; set; } = string.Empty;
 }

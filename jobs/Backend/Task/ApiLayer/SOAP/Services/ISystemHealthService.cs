@@ -6,7 +6,7 @@ namespace SOAP.Services;
 /// <summary>
 /// SOAP service contract for system health operations.
 /// </summary>
-[ServiceContract]
+[ServiceContract(Namespace = "")]
 public interface ISystemHealthService
 {
     /// <summary>
@@ -35,7 +35,7 @@ public interface ISystemHealthService
 /// <summary>
 /// Request for getting system health.
 /// </summary>
-[System.Runtime.Serialization.DataContract]
+[System.Runtime.Serialization.DataContract(Namespace = "")]
 public class GetSystemHealthRequest
 {
     // Empty request - retrieves system health
@@ -44,7 +44,7 @@ public class GetSystemHealthRequest
 /// <summary>
 /// Response containing system health information.
 /// </summary>
-[System.Runtime.Serialization.DataContract]
+[System.Runtime.Serialization.DataContract(Namespace = "")]
 public class GetSystemHealthResponse
 {
     [System.Runtime.Serialization.DataMember]
@@ -63,7 +63,7 @@ public class GetSystemHealthResponse
 /// <summary>
 /// Request for getting recent errors.
 /// </summary>
-[System.Runtime.Serialization.DataContract]
+[System.Runtime.Serialization.DataContract(Namespace = "")]
 public class GetRecentErrorsRequest
 {
     [System.Runtime.Serialization.DataMember]
@@ -76,7 +76,7 @@ public class GetRecentErrorsRequest
 /// <summary>
 /// Response containing recent errors.
 /// </summary>
-[System.Runtime.Serialization.DataContract]
+[System.Runtime.Serialization.DataContract(Namespace = "")]
 public class GetRecentErrorsResponse
 {
     [System.Runtime.Serialization.DataMember]
@@ -95,7 +95,7 @@ public class GetRecentErrorsResponse
 /// <summary>
 /// Request for getting fetch activity.
 /// </summary>
-[System.Runtime.Serialization.DataContract]
+[System.Runtime.Serialization.DataContract(Namespace = "")]
 public class GetFetchActivityRequest
 {
     [System.Runtime.Serialization.DataMember]
@@ -111,7 +111,7 @@ public class GetFetchActivityRequest
 /// <summary>
 /// Response containing fetch activity logs.
 /// </summary>
-[System.Runtime.Serialization.DataContract]
+[System.Runtime.Serialization.DataContract(Namespace = "")]
 public class GetFetchActivityResponse
 {
     [System.Runtime.Serialization.DataMember]

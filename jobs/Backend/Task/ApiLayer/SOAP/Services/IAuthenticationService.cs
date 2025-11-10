@@ -5,7 +5,7 @@ namespace SOAP.Services;
 /// <summary>
 /// SOAP service contract for authentication operations.
 /// </summary>
-[ServiceContract]
+[ServiceContract(Namespace = "")]
 public interface IAuthenticationService
 {
     /// <summary>
@@ -22,7 +22,7 @@ public interface IAuthenticationService
 /// <summary>
 /// Request for user login.
 /// </summary>
-[System.Runtime.Serialization.DataContract]
+[System.Runtime.Serialization.DataContract(Namespace = "")]
 public class LoginRequest
 {
     [System.Runtime.Serialization.DataMember]
@@ -35,7 +35,7 @@ public class LoginRequest
 /// <summary>
 /// Response containing authentication result with JWT tokens.
 /// </summary>
-[System.Runtime.Serialization.DataContract]
+[System.Runtime.Serialization.DataContract(Namespace = "")]
 public class LoginResponse
 {
     [System.Runtime.Serialization.DataMember]
@@ -54,7 +54,7 @@ public class LoginResponse
 /// <summary>
 /// SOAP model for authentication data.
 /// </summary>
-[System.Runtime.Serialization.DataContract]
+[System.Runtime.Serialization.DataContract(Namespace = "")]
 public class AuthenticationDataSoap
 {
     [System.Runtime.Serialization.DataMember]

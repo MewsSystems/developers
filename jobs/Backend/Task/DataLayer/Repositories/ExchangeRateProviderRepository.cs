@@ -13,6 +13,7 @@ public class ExchangeRateProviderRepository : Repository<ExchangeRateProvider>, 
     {
         return await _dbSet
             .Include(p => p.BaseCurrency)
+            .Include(p => p.Configurations)
             .FirstOrDefaultAsync(p => p.Code == code, cancellationToken);
     }
 

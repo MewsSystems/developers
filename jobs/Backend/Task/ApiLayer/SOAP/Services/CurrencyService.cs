@@ -2,6 +2,7 @@ using ApplicationLayer.Commands.Currencies.CreateCurrency;
 using ApplicationLayer.Commands.Currencies.DeleteCurrency;
 using ApplicationLayer.Queries.Currencies.GetAllCurrencies;
 using ApplicationLayer.Queries.Currencies.GetCurrencyByCode;
+using ApplicationLayer.Queries.Currencies.GetCurrencyById;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using SOAP.Converters;
@@ -33,7 +34,7 @@ public class CurrencyService : ICurrencyService
             _logger.LogInformation("SOAP: GetAllCurrencies called");
 
             // Reuse existing ApplicationLayer query
-            var query = new GetAllCurrenciesQuery(PageNumber: 1, PageSize: 1000, IncludePagination: false);
+            var query = new GetAllCurrenciesQuery(PageNumber: 1, PageSize: 100, IncludePagination: false);
             var pagedResult = await _mediator.Send(query);
 
             return new GetAllCurrenciesResponse
@@ -52,6 +53,56 @@ public class CurrencyService : ICurrencyService
                 Success = false,
                 Message = "An error occurred while retrieving currencies",
                 Data = Array.Empty<Models.Currencies.CurrencySoap>(),
+                Fault = new SoapFault
+                {
+                    FaultCode = "Server",
+                    FaultString = "Internal server error",
+                    Detail = ex.Message
+                }
+            };
+        }
+    }
+
+    public async Task<GetCurrencyByIdResponse> GetCurrencyByIdAsync(GetCurrencyByIdRequest request)
+    {
+        try
+        {
+            _logger.LogInformation("SOAP: GetCurrencyById called for ID: {Id}", request.Id);
+
+            // Reuse existing ApplicationLayer query
+            var query = new GetCurrencyByIdQuery(request.Id);
+            var currency = await _mediator.Send(query);
+
+            if (currency != null)
+            {
+                return new GetCurrencyByIdResponse
+                {
+                    Success = true,
+                    Message = $"Currency with ID {request.Id} retrieved successfully",
+                    Data = currency.ToSoap()
+                };
+            }
+
+            return new GetCurrencyByIdResponse
+            {
+                Success = false,
+                Message = $"Currency with ID {request.Id} not found",
+                Fault = new SoapFault
+                {
+                    FaultCode = "Client",
+                    FaultString = "NotFound",
+                    Detail = $"Currency with ID {request.Id} not found"
+                }
+            };
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error in GetCurrencyById SOAP operation");
+
+            return new GetCurrencyByIdResponse
+            {
+                Success = false,
+                Message = "An error occurred while retrieving currency",
                 Fault = new SoapFault
                 {
                     FaultCode = "Server",

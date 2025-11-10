@@ -10,9 +10,9 @@ public class UpdateUserInfoCommandValidator : AbstractValidator<UpdateUserInfoCo
             .GreaterThan(0).WithMessage("User ID must be positive.");
 
         RuleFor(x => x.Email)
-            .NotEmpty().WithMessage("Email is required.")
             .MaximumLength(256).WithMessage("Email must not exceed 256 characters.")
-            .EmailAddress().WithMessage("Email must be a valid email address.");
+            .EmailAddress().WithMessage("Email must be a valid email address.")
+            .When(x => !string.IsNullOrWhiteSpace(x.Email));
 
         RuleFor(x => x.FirstName)
             .NotEmpty().WithMessage("First name is required.")

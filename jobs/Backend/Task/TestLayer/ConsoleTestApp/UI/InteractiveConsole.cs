@@ -13,6 +13,7 @@ public class InteractiveConsole
     private readonly ApiClientFactory _factory;
     private readonly TestCredentials _credentials;
     private readonly CancellationTokenSource _cts = new();
+    private readonly SmartConsoleInput _inputHandler;
 
     private IApiClient? _currentClient;
     private ApiProtocol? _currentProtocol;
@@ -22,6 +23,9 @@ public class InteractiveConsole
     {
         _factory = new ApiClientFactory(settings.ApiEndpoints);
         _credentials = settings.TestCredentials;
+
+        var autocomplete = new AutoCompleteEngine(CommandParser.GetAutoCompleteOptions());
+        _inputHandler = new SmartConsoleInput(autocomplete);
     }
 
     public async Task RunAsync()
@@ -32,12 +36,7 @@ public class InteractiveConsole
         {
             try
             {
-                var input = AnsiConsole.Prompt(
-                    new TextPrompt<string>("[bold cyan1]>[/]")
-                        .AllowEmpty()
-                        .AddChoices(CommandParser.GetAutoCompleteOptions())
-                        .ShowChoices(false)
-                );
+                var input = _inputHandler.ReadLine();
 
                 if (string.IsNullOrWhiteSpace(input))
                     continue;
@@ -68,8 +67,16 @@ public class InteractiveConsole
                 await HandleLoginAsync(command.Arguments);
                 break;
 
+            case CommandType.LoginAll:
+                await HandleLoginAllAsync(command.Arguments);
+                break;
+
             case CommandType.Logout:
-                await HandleLogoutAsync();
+                await HandleLogoutAsync(command.Arguments);
+                break;
+
+            case CommandType.LogoutAll:
+                await HandleLogoutAllAsync();
                 break;
 
             case CommandType.GetLatest:
@@ -94,6 +101,10 @@ public class InteractiveConsole
 
             case CommandType.Solo:
                 await HandleSoloAsync(command.Arguments);
+                break;
+
+            case CommandType.ExitSolo:
+                HandleExitSolo();
                 break;
 
             case CommandType.Status:
@@ -146,6 +157,10 @@ public class InteractiveConsole
 
             case CommandType.GetUser:
                 await HandleGetUserAsync(command.Arguments);
+                break;
+
+            case CommandType.Test:
+                await HandleTestAsync(command.Arguments);
                 break;
 
             case CommandType.TestAll:
@@ -265,12 +280,82 @@ public class InteractiveConsole
 
     private async Task HandleLoginAsync(string[] args)
     {
-        if (_currentClient == null)
+        // In solo mode, use current client; otherwise require protocol argument
+        IApiClient client;
+        ApiProtocol protocol;
+        string email, password;
+
+        if (_currentClient != null && _currentProtocol.HasValue)
         {
-            DisplayUtilities.ShowError("No protocol selected. Use 'solo <protocol>' first");
-            return;
+            // Solo mode: protocol is already set, args are [email] [password]
+            client = _currentClient;
+            protocol = _currentProtocol.Value;
+
+            if (args.Length >= 2)
+            {
+                email = args[0];
+                password = args[1];
+            }
+            else
+            {
+                // Use default admin credentials
+                email = _credentials.Admin.Email;
+                password = _credentials.Admin.Password;
+                DisplayUtilities.ShowInfo($"Using default admin credentials: {email}");
+            }
+        }
+        else
+        {
+            // Normal mode: args are <protocol> [email] [password]
+            if (args.Length == 0)
+            {
+                DisplayUtilities.ShowError("Usage: login <protocol> [email] [password]");
+                DisplayUtilities.ShowInfo("Example: login rest admin@example.com simple");
+                DisplayUtilities.ShowInfo("Example: login grpc (uses default admin credentials)");
+                return;
+            }
+
+            if (!TryParseProtocol(args[0], out protocol))
+            {
+                DisplayUtilities.ShowError("Invalid protocol. Use: rest, soap, or grpc");
+                return;
+            }
+
+            if (args.Length >= 3)
+            {
+                email = args[1];
+                password = args[2];
+            }
+            else
+            {
+                // Use default admin credentials
+                email = _credentials.Admin.Email;
+                password = _credentials.Admin.Password;
+                DisplayUtilities.ShowInfo($"Using default admin credentials: {email}");
+            }
+
+            client = _factory.CreateClient(protocol);
         }
 
+        await AnsiConsole.Status()
+            .StartAsync($"Logging in to {protocol.ToString().ToUpper()}...", async ctx =>
+            {
+                var result = await client.LoginAsync(email, password);
+
+                if (result.Success)
+                {
+                    DisplayUtilities.ShowSuccess($"[{protocol.ToString().ToUpper()}] Logged in as {result.Email} ({result.Role})");
+                    DisplayUtilities.ShowInfo($"Token expires at: {result.ExpiresAt:yyyy-MM-dd HH:mm:ss}");
+                }
+                else
+                {
+                    DisplayUtilities.ShowError($"[{protocol.ToString().ToUpper()}] Login failed: {result.ErrorMessage}");
+                }
+            });
+    }
+
+    private async Task HandleLoginAllAsync(string[] args)
+    {
         string email, password;
 
         if (args.Length >= 2)
@@ -286,40 +371,71 @@ public class InteractiveConsole
             DisplayUtilities.ShowInfo($"Using default admin credentials: {email}");
         }
 
-        await AnsiConsole.Status()
-            .StartAsync("Logging in...", async ctx =>
+        var protocols = new[] { ApiProtocol.Rest, ApiProtocol.Soap, ApiProtocol.Grpc };
+        var results = new Dictionary<string, (bool Success, string Message)>();
+
+        await AnsiConsole.Progress()
+            .StartAsync(async ctx =>
             {
-                var result = await _currentClient.LoginAsync(email, password);
+                var restTask = ctx.AddTask("[cyan1]REST[/]");
+                var soapTask = ctx.AddTask("[yellow]SOAP[/]");
+                var grpcTask = ctx.AddTask("[green]gRPC[/]");
 
-                if (result.Success)
-                {
-                    DisplayUtilities.ShowSuccess($"Logged in as {result.Email} ({result.Role})");
-                    DisplayUtilities.ShowInfo($"Token expires at: {result.ExpiresAt:yyyy-MM-dd HH:mm:ss}");
-                }
-                else
-                {
-                    DisplayUtilities.ShowError($"Login failed: {result.ErrorMessage}");
-                }
+                // Login to REST
+                var restClient = _factory.CreateClient(ApiProtocol.Rest);
+                var restResult = await restClient.LoginAsync(email, password);
+                results["REST"] = (restResult.Success, restResult.Success ? $"{restResult.Email} ({restResult.Role})" : restResult.ErrorMessage ?? "Login failed");
+                restTask.Value = 100;
+
+                // Login to SOAP
+                var soapClient = _factory.CreateClient(ApiProtocol.Soap);
+                var soapResult = await soapClient.LoginAsync(email, password);
+                results["SOAP"] = (soapResult.Success, soapResult.Success ? $"{soapResult.Email} ({soapResult.Role})" : soapResult.ErrorMessage ?? "Login failed");
+                soapTask.Value = 100;
+
+                // Login to gRPC
+                var grpcClient = _factory.CreateClient(ApiProtocol.Grpc);
+                var grpcResult = await grpcClient.LoginAsync(email, password);
+                results["gRPC"] = (grpcResult.Success, grpcResult.Success ? $"{grpcResult.Email} ({grpcResult.Role})" : grpcResult.ErrorMessage ?? "Login failed");
+                grpcTask.Value = 100;
             });
-    }
 
-    private async Task HandleLogoutAsync()
-    {
-        if (_currentClient == null)
+        var table = new Table()
+            .Border(TableBorder.Rounded)
+            .Title("[bold]Login Results[/]")
+            .AddColumn("[bold]Protocol[/]")
+            .AddColumn("[bold]Status[/]")
+            .AddColumn("[bold]Details[/]");
+
+        foreach (var result in results)
         {
-            DisplayUtilities.ShowWarning("No active session");
-            return;
+            table.AddRow(
+                result.Key,
+                result.Value.Success ? "[green]✓ Success[/]" : "[red]✗ Failed[/]",
+                result.Value.Message
+            );
         }
 
-        await _currentClient.LogoutAsync();
-        DisplayUtilities.ShowSuccess("Logged out successfully");
+        AnsiConsole.Write(table);
+
+        var successCount = results.Count(r => r.Value.Success);
+        if (successCount == 3)
+        {
+            DisplayUtilities.ShowSuccess("Successfully logged in to all protocols");
+        }
+        else
+        {
+            DisplayUtilities.ShowWarning($"Logged in to {successCount}/3 protocols");
+        }
     }
 
-    private async Task HandleGetLatestAsync(string[] args)
+    private async Task HandleLogoutAsync(string[] args)
     {
         if (args.Length == 0)
         {
-            DisplayUtilities.ShowError("Please specify protocol: latest <rest|soap|grpc>");
+            DisplayUtilities.ShowError("Usage: logout <protocol>");
+            DisplayUtilities.ShowInfo("Example: logout rest");
+            DisplayUtilities.ShowInfo("Use 'logout-all' to logout from all protocols");
             return;
         }
 
@@ -330,6 +446,50 @@ public class InteractiveConsole
         }
 
         var client = _factory.CreateClient(protocol);
+        await client.LogoutAsync();
+        DisplayUtilities.ShowSuccess($"[{protocol.ToString().ToUpper()}] Logged out successfully");
+    }
+
+    private async Task HandleLogoutAllAsync()
+    {
+        var protocols = new[] { ApiProtocol.Rest, ApiProtocol.Soap, ApiProtocol.Grpc };
+
+        foreach (var protocol in protocols)
+        {
+            var client = _factory.CreateClient(protocol);
+            await client.LogoutAsync();
+        }
+
+        DisplayUtilities.ShowSuccess("Logged out from all protocols");
+    }
+
+    private async Task HandleGetLatestAsync(string[] args)
+    {
+        // In solo mode, use current client; otherwise require protocol argument
+        IApiClient client;
+        ApiProtocol protocol;
+
+        if (_currentClient != null && _currentProtocol.HasValue)
+        {
+            client = _currentClient;
+            protocol = _currentProtocol.Value;
+        }
+        else
+        {
+            if (args.Length == 0)
+            {
+                DisplayUtilities.ShowError("Please specify protocol: latest <rest|soap|grpc>");
+                return;
+            }
+
+            if (!TryParseProtocol(args[0], out protocol))
+            {
+                DisplayUtilities.ShowError("Invalid protocol. Use: rest, soap, or grpc");
+                return;
+            }
+
+            client = _factory.CreateClient(protocol);
+        }
 
         await AnsiConsole.Status()
             .StartAsync($"Fetching latest rates from {protocol}...", async ctx =>
@@ -347,19 +507,31 @@ public class InteractiveConsole
 
     private async Task HandleGetHistoricalAsync(string[] args)
     {
-        if (args.Length == 0)
-        {
-            DisplayUtilities.ShowError("Please specify protocol: historical <rest|soap|grpc>");
-            return;
-        }
+        // In solo mode, use current client; otherwise require protocol argument
+        IApiClient client;
+        ApiProtocol protocol;
 
-        if (!TryParseProtocol(args[0], out var protocol))
+        if (_currentClient != null && _currentProtocol.HasValue)
         {
-            DisplayUtilities.ShowError("Invalid protocol. Use: rest, soap, or grpc");
-            return;
+            client = _currentClient;
+            protocol = _currentProtocol.Value;
         }
+        else
+        {
+            if (args.Length == 0)
+            {
+                DisplayUtilities.ShowError("Please specify protocol: historical <rest|soap|grpc>");
+                return;
+            }
 
-        var client = _factory.CreateClient(protocol);
+            if (!TryParseProtocol(args[0], out protocol))
+            {
+                DisplayUtilities.ShowError("Invalid protocol. Use: rest, soap, or grpc");
+                return;
+            }
+
+            client = _factory.CreateClient(protocol);
+        }
         var from = DateTime.UtcNow.AddDays(-7);
         var to = DateTime.UtcNow;
 
@@ -379,16 +551,26 @@ public class InteractiveConsole
 
     private async Task HandleStartStreamingAsync(string[] args)
     {
-        if (args.Length == 0)
-        {
-            DisplayUtilities.ShowError("Please specify protocol: stream <rest|soap|grpc>");
-            return;
-        }
+        ApiProtocol protocol;
 
-        if (!TryParseProtocol(args[0], out var protocol))
+        // In solo mode, use current protocol; otherwise require protocol argument
+        if (_currentClient != null && _currentProtocol.HasValue)
         {
-            DisplayUtilities.ShowError("Invalid protocol. Use: rest, soap, or grpc");
-            return;
+            protocol = _currentProtocol.Value;
+        }
+        else
+        {
+            if (args.Length == 0)
+            {
+                DisplayUtilities.ShowError("Please specify protocol: stream <rest|soap|grpc>");
+                return;
+            }
+
+            if (!TryParseProtocol(args[0], out protocol))
+            {
+                DisplayUtilities.ShowError("Invalid protocol. Use: rest, soap, or grpc");
+                return;
+            }
         }
 
         if (_isStreaming)
@@ -516,19 +698,45 @@ public class InteractiveConsole
         DisplayUtilities.ShowInfo("You can now use login, latest, historical, and stream commands");
     }
 
-    private void HandleStatus()
+    private void HandleExitSolo()
     {
-        if (_currentClient == null || _currentProtocol == null)
+        if (_currentClient == null && _currentProtocol == null)
         {
-            DisplayUtilities.ShowWarning("No protocol selected. Use 'solo <protocol>' to select one");
+            DisplayUtilities.ShowWarning("You are not in solo mode");
             return;
         }
 
-        DisplayUtilities.ShowStatus(
-            _currentProtocol.Value.ToString().ToUpper(),
-            _currentClient.IsAuthenticated,
-            _isStreaming
-        );
+        _currentClient = null;
+        _currentProtocol = null;
+
+        DisplayUtilities.ShowSuccess("Exited solo mode");
+        DisplayUtilities.ShowInfo("You can now use commands with explicit protocol arguments");
+    }
+
+    private void HandleStatus()
+    {
+        var table = new Table()
+            .Border(TableBorder.Rounded)
+            .Title("[bold]System Status[/]")
+            .AddColumn("[bold]Protocol[/]")
+            .AddColumn("[bold]Authenticated[/]")
+            .AddColumn("[bold]Streaming[/]");
+
+        var protocols = new[] { ApiProtocol.Rest, ApiProtocol.Soap, ApiProtocol.Grpc };
+
+        foreach (var protocol in protocols)
+        {
+            var client = _factory.CreateClient(protocol);
+            var isStreaming = _isStreaming && _currentProtocol == protocol;
+
+            table.AddRow(
+                protocol.ToString().ToUpper(),
+                client.IsAuthenticated ? "[green]✓ Yes[/]" : "[red]✗ No[/]",
+                isStreaming ? "[green]✓ Active[/]" : "[grey]○ Inactive[/]"
+            );
+        }
+
+        AnsiConsole.Write(table);
     }
 
     private async Task HandleGetCurrentAsync(string[] args)
@@ -693,10 +901,10 @@ public class InteractiveConsole
                         .AddColumn("[bold]Property[/]")
                         .AddColumn("[bold]Value[/]");
 
-                    table.AddRow("Code", data.Code);
-                    table.AddRow("Name", data.Name);
-                    table.AddRow("Symbol", data.Symbol ?? "-");
-                    table.AddRow("Decimal Places", data.DecimalPlaces.ToString());
+                    table.AddRow("Code", Markup.Escape(data.Code ?? "-"));
+                    table.AddRow("Name", Markup.Escape(data.Name ?? data.Code ?? "-"));
+                    table.AddRow("Symbol", Markup.Escape(data.Symbol ?? "-"));
+                    table.AddRow("Decimal Places", Markup.Escape(data.DecimalPlaces.ToString()));
                     table.AddRow("Active", data.IsActive ? "[green]Yes[/]" : "[red]No[/]");
 
                     AnsiConsole.Write(table);
@@ -784,9 +992,9 @@ public class InteractiveConsole
                         .AddColumn("[bold]Property[/]")
                         .AddColumn("[bold]Value[/]");
 
-                    table.AddRow("Code", data.Code);
-                    table.AddRow("Name", data.Name);
-                    table.AddRow("Base URL", data.BaseUrl);
+                    table.AddRow("Code", Markup.Escape(data.Code ?? ""));
+                    table.AddRow("Name", Markup.Escape(data.Name ?? ""));
+                    table.AddRow("Base URL", Markup.Escape(data.BaseUrl ?? "N/A"));
                     table.AddRow("Active", data.IsActive ? "[green]Yes[/]" : "[red]No[/]");
 
                     AnsiConsole.Write(table);
@@ -1019,13 +1227,13 @@ public class InteractiveConsole
             });
     }
 
-    private async Task HandleTestAllAsync(string[] args)
+    private async Task HandleTestAsync(string[] args)
     {
         var protocol = args.Length > 0 && TryParseProtocol(args[0], out var p) ? p : (ApiProtocol?)null;
 
         if (protocol == null)
         {
-            DisplayUtilities.ShowError("Usage: test-all <rest|soap|grpc>");
+            DisplayUtilities.ShowError("Usage: test <rest|soap|grpc>");
             DisplayUtilities.ShowInfo("This will test all endpoints for the specified protocol");
             return;
         }
@@ -1141,6 +1349,159 @@ public class InteractiveConsole
         var failedTests = totalTests - passedTests;
 
         DisplayUtilities.ShowInfo($"Tests completed: {passedTests}/{totalTests} passed, {failedTests} failed");
+    }
+
+    private async Task HandleTestAllAsync(string[] args)
+    {
+        DisplayUtilities.ShowInfo("Starting comprehensive test of all protocols (REST, SOAP, gRPC)...");
+
+        var protocols = new[] { ApiProtocol.Rest, ApiProtocol.Soap, ApiProtocol.Grpc };
+        var allResults = new Dictionary<ApiProtocol, Dictionary<string, (bool Success, long ResponseTimeMs, string Error)>>();
+
+        foreach (var protocol in protocols)
+        {
+            DisplayUtilities.ShowInfo($"\nTesting {protocol.ToString().ToUpper()} endpoints...");
+
+            var client = _factory.CreateClient(protocol);
+            var results = new Dictionary<string, (bool Success, long ResponseTimeMs, string Error)>();
+
+            await AnsiConsole.Progress()
+                .StartAsync(async ctx =>
+                {
+                    var tasks = new[]
+                    {
+                        ("Current Rates", ctx.AddTask("[cyan1]Current Rates[/]")),
+                        ("Latest Rates", ctx.AddTask("[cyan1]Latest Rates[/]")),
+                        ("Historical Rates", ctx.AddTask("[cyan1]Historical Rates[/]")),
+                        ("Convert Currency", ctx.AddTask("[cyan1]Convert Currency[/]")),
+                        ("Get Currencies", ctx.AddTask("[cyan1]Get Currencies[/]")),
+                        ("Get Currency", ctx.AddTask("[cyan1]Get Currency[/]")),
+                        ("Get Providers", ctx.AddTask("[cyan1]Get Providers[/]")),
+                        ("Get Provider", ctx.AddTask("[cyan1]Get Provider[/]")),
+                        ("Provider Health", ctx.AddTask("[cyan1]Provider Health[/]")),
+                        ("Provider Stats", ctx.AddTask("[cyan1]Provider Stats[/]")),
+                        ("Get Users", ctx.AddTask("[cyan1]Get Users[/]")),
+                        ("Get User", ctx.AddTask("[cyan1]Get User[/]"))
+                    };
+
+                    // Test Current Rates
+                    var (_, currentMetrics) = await client.GetCurrentRatesAsync();
+                    results["Current Rates"] = (currentMetrics.Success, currentMetrics.ResponseTimeMs, currentMetrics.ErrorMessage ?? "");
+                    tasks[0].Item2.Value = 100;
+
+                    // Test Latest Rates
+                    var (_, latestMetrics) = await client.GetLatestRatesAsync();
+                    results["Latest Rates"] = (latestMetrics.Success, latestMetrics.ResponseTimeMs, latestMetrics.ErrorMessage ?? "");
+                    tasks[1].Item2.Value = 100;
+
+                    // Test Historical Rates
+                    var (_, historicalMetrics) = await client.GetHistoricalRatesAsync(DateTime.UtcNow.AddDays(-7), DateTime.UtcNow);
+                    results["Historical Rates"] = (historicalMetrics.Success, historicalMetrics.ResponseTimeMs, historicalMetrics.ErrorMessage ?? "");
+                    tasks[2].Item2.Value = 100;
+
+                    // Test Convert Currency
+                    var (_, convertMetrics) = await client.ConvertCurrencyAsync("EUR", "USD", 100);
+                    results["Convert Currency"] = (convertMetrics.Success, convertMetrics.ResponseTimeMs, convertMetrics.ErrorMessage ?? "");
+                    tasks[3].Item2.Value = 100;
+
+                    // Test Get Currencies
+                    var (_, currenciesMetrics) = await client.GetCurrenciesAsync();
+                    results["Get Currencies"] = (currenciesMetrics.Success, currenciesMetrics.ResponseTimeMs, currenciesMetrics.ErrorMessage ?? "");
+                    tasks[4].Item2.Value = 100;
+
+                    // Test Get Currency
+                    var (_, currencyMetrics) = await client.GetCurrencyByCodeAsync("EUR");
+                    results["Get Currency"] = (currencyMetrics.Success, currencyMetrics.ResponseTimeMs, currencyMetrics.ErrorMessage ?? "");
+                    tasks[5].Item2.Value = 100;
+
+                    // Test Get Providers
+                    var (_, providersMetrics) = await client.GetProvidersAsync();
+                    results["Get Providers"] = (providersMetrics.Success, providersMetrics.ResponseTimeMs, providersMetrics.ErrorMessage ?? "");
+                    tasks[6].Item2.Value = 100;
+
+                    // Test Get Provider
+                    var (_, providerMetrics) = await client.GetProviderByCodeAsync("ECB");
+                    results["Get Provider"] = (providerMetrics.Success, providerMetrics.ResponseTimeMs, providerMetrics.ErrorMessage ?? "");
+                    tasks[7].Item2.Value = 100;
+
+                    // Test Provider Health
+                    var (_, healthMetrics) = await client.GetProviderHealthAsync("ECB");
+                    results["Provider Health"] = (healthMetrics.Success, healthMetrics.ResponseTimeMs, healthMetrics.ErrorMessage ?? "");
+                    tasks[8].Item2.Value = 100;
+
+                    // Test Provider Stats
+                    var (_, statsMetrics) = await client.GetProviderStatisticsAsync("ECB");
+                    results["Provider Stats"] = (statsMetrics.Success, statsMetrics.ResponseTimeMs, statsMetrics.ErrorMessage ?? "");
+                    tasks[9].Item2.Value = 100;
+
+                    // Test Get Users
+                    var (_, usersMetrics) = await client.GetUsersAsync();
+                    results["Get Users"] = (usersMetrics.Success, usersMetrics.ResponseTimeMs, usersMetrics.ErrorMessage ?? "");
+                    tasks[10].Item2.Value = 100;
+
+                    // Test Get User
+                    var (_, userMetrics) = await client.GetUserAsync(1);
+                    results["Get User"] = (userMetrics.Success, userMetrics.ResponseTimeMs, userMetrics.ErrorMessage ?? "");
+                    tasks[11].Item2.Value = 100;
+                });
+
+            allResults[protocol] = results;
+        }
+
+        // Display comprehensive results for all protocols
+        var table = new Table()
+            .Border(TableBorder.Rounded)
+            .Title("[bold]Complete Endpoint Test Results - All Protocols[/]")
+            .AddColumn("[bold]Endpoint[/]")
+            .AddColumn("[bold]REST[/]")
+            .AddColumn("[bold]SOAP[/]")
+            .AddColumn("[bold]gRPC[/]");
+
+        // Get all unique endpoint names
+        var endpointNames = allResults[ApiProtocol.Rest].Keys;
+
+        foreach (var endpoint in endpointNames)
+        {
+            var restResult = allResults[ApiProtocol.Rest][endpoint];
+            var soapResult = allResults[ApiProtocol.Soap][endpoint];
+            var grpcResult = allResults[ApiProtocol.Grpc][endpoint];
+
+            table.AddRow(
+                endpoint,
+                FormatResult(restResult),
+                FormatResult(soapResult),
+                FormatResult(grpcResult)
+            );
+        }
+
+        AnsiConsole.Write(table);
+
+        // Display summary
+        DisplayUtilities.ShowInfo("\n[bold]Summary:[/]");
+        foreach (var protocol in protocols)
+        {
+            var results = allResults[protocol];
+            var totalTests = results.Count;
+            var passedTests = results.Count(r => r.Value.Success);
+            var failedTests = totalTests - passedTests;
+            DisplayUtilities.ShowInfo($"{protocol.ToString().ToUpper()}: {passedTests}/{totalTests} passed, {failedTests} failed");
+        }
+    }
+
+    private string FormatResult((bool Success, long ResponseTimeMs, string Error) result)
+    {
+        if (result.Success)
+        {
+            return $"[green]✓ {result.ResponseTimeMs}ms[/]";
+        }
+        else
+        {
+            var errorShort = string.IsNullOrEmpty(result.Error) ? "?" :
+                             result.Error.Contains("Unauthorized") ? "401" :
+                             result.Error.Contains("NotFound") ? "404" :
+                             result.Error.Contains("BadRequest") ? "400" : "Err";
+            return $"[red]✗ {errorShort}[/]";
+        }
     }
 
     private async Task HandleIsApiAvailableAsync(string[] args)
@@ -1284,9 +1645,9 @@ public class InteractiveConsole
                         .AddColumn("[bold]Value[/]");
 
                     table.AddRow("ID", data.Id.ToString());
-                    table.AddRow("Code", data.Code);
-                    table.AddRow("Name", data.Name);
-                    table.AddRow("Symbol", data.Symbol ?? "-");
+                    table.AddRow("Code", Markup.Escape(data.Code ?? ""));
+                    table.AddRow("Name", Markup.Escape(data.Name ?? ""));
+                    table.AddRow("Symbol", Markup.Escape(data.Symbol ?? "-"));
                     table.AddRow("Decimal Places", data.DecimalPlaces.ToString());
                     table.AddRow("Active", data.IsActive ? "[green]Yes[/]" : "[red]No[/]");
 
@@ -1405,9 +1766,9 @@ public class InteractiveConsole
                         .AddColumn("[bold]Value[/]");
 
                     table.AddRow("ID", data.Id.ToString());
-                    table.AddRow("Code", data.Code);
-                    table.AddRow("Name", data.Name);
-                    table.AddRow("Base URL", data.BaseUrl);
+                    table.AddRow("Code", Markup.Escape(data.Code ?? ""));
+                    table.AddRow("Name", Markup.Escape(data.Name ?? ""));
+                    table.AddRow("Base URL", Markup.Escape(data.BaseUrl ?? "N/A"));
                     table.AddRow("Active", data.IsActive ? "[green]Yes[/]" : "[red]No[/]");
 
                     AnsiConsole.Write(table);
@@ -1447,11 +1808,11 @@ public class InteractiveConsole
                         .AddColumn("[bold]Property[/]")
                         .AddColumn("[bold]Value[/]");
 
-                    table.AddRow("Provider Code", data.Code);
-                    table.AddRow("Name", data.Name ?? "-");
-                    table.AddRow("URL", data.Url ?? "-");
-                    table.AddRow("Description", data.Description ?? "-");
-                    table.AddRow("Base Currency Code", data.BaseCurrencyCode ?? "-");
+                    table.AddRow("Provider Code", Markup.Escape(data.Code ?? "-"));
+                    table.AddRow("Name", Markup.Escape(data.Name ?? "-"));
+                    table.AddRow("URL", Markup.Escape(data.Url ?? "-"));
+                    table.AddRow("Description", Markup.Escape(data.Description ?? "-"));
+                    table.AddRow("Base Currency Code", Markup.Escape(data.BaseCurrencyCode ?? "-"));
                     table.AddRow("Requires Auth", data.RequiresAuthentication ? "[green]Yes[/]" : "[red]No[/]");
                     table.AddRow("Is Active", data.IsActive ? "[green]Yes[/]" : "[red]No[/]");
 
@@ -2174,15 +2535,17 @@ public class InteractiveConsole
                         .Border(TableBorder.Rounded)
                         .AddColumn("[bold]Timestamp[/]")
                         .AddColumn("[bold]Severity[/]")
+                        .AddColumn("[bold]Provider[/]")
                         .AddColumn("[bold]Message[/]");
 
                     foreach (var error in data.Errors)
                     {
                         var severityColor = error.Severity?.ToLower() == "error" ? "red" : "yellow";
                         table.AddRow(
-                            error.OccurredAt.ToString("yyyy-MM-dd HH:mm:ss"),
-                            $"[{severityColor}]{error.Severity}[/]",
-                            error.ErrorMessage ?? "-"
+                            Markup.Escape(error.OccurredAt.ToString("yyyy-MM-dd HH:mm:ss")),
+                            $"[{severityColor}]{Markup.Escape(error.Severity ?? "Unknown")}[/]",
+                            Markup.Escape(error.ProviderCode ?? "-"),
+                            Markup.Escape(error.ErrorMessage ?? "-")
                         );
                     }
 
@@ -2247,16 +2610,18 @@ public class InteractiveConsole
                         .AddColumn("[bold]Provider[/]")
                         .AddColumn("[bold]Success[/]")
                         .AddColumn("[bold]Rates Count[/]")
-                        .AddColumn("[bold]Duration (ms)[/]");
+                        .AddColumn("[bold]Duration (ms)[/]")
+                        .AddColumn("[bold]Error[/]");
 
                     foreach (var activity in data.Activities)
                     {
                         table.AddRow(
-                            activity.FetchedAt.ToString("yyyy-MM-dd HH:mm:ss"),
-                            activity.ProviderCode ?? "-",
+                            Markup.Escape(activity.FetchedAt.ToString("yyyy-MM-dd HH:mm:ss")),
+                            Markup.Escape(activity.ProviderCode ?? "-"),
                             activity.Success ? "[green]Yes[/]" : "[red]No[/]",
-                            (activity.RatesCount ?? 0).ToString(),
-                            activity.DurationMs.ToString()
+                            Markup.Escape((activity.RatesCount ?? 0).ToString()),
+                            Markup.Escape(activity.DurationMs.ToString()),
+                            Markup.Escape(activity.ErrorMessage ?? "-")
                         );
                     }
 
@@ -2285,18 +2650,20 @@ public class InteractiveConsole
 
     private static bool TryParseProtocol(string input, out ApiProtocol protocol)
     {
-        return input.ToLowerInvariant() switch
+        switch (input.ToLowerInvariant())
         {
-            "rest" => SetProtocol(out protocol, ApiProtocol.Rest),
-            "soap" => SetProtocol(out protocol, ApiProtocol.Soap),
-            "grpc" => SetProtocol(out protocol, ApiProtocol.Grpc),
-            _ => SetProtocol(out protocol, default)
-        };
-
-        static bool SetProtocol(out ApiProtocol p, ApiProtocol value)
-        {
-            p = value;
-            return value != default;
+            case "rest":
+                protocol = ApiProtocol.Rest;
+                return true;
+            case "soap":
+                protocol = ApiProtocol.Soap;
+                return true;
+            case "grpc":
+                protocol = ApiProtocol.Grpc;
+                return true;
+            default:
+                protocol = default;
+                return false;
         }
     }
 }

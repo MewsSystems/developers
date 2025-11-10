@@ -42,7 +42,7 @@ public class UsersController : ControllerBase
     [ProducesResponseType(typeof(ApiResponse<IEnumerable<UserResponse>>), 200)]
     public async Task<IActionResult> GetAll()
     {
-        var query = new GetAllUsersQuery(PageNumber: 1, PageSize: 1000);
+        var query = new GetAllUsersQuery(PageNumber: 1, PageSize: 100);
         var pagedResult = await _mediator.Send(query);
 
         var response = ApiResponse<IEnumerable<UserResponse>>.Ok(

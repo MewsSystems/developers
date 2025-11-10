@@ -5,7 +5,7 @@ namespace SOAP.Models.Providers;
 /// <summary>
 /// SOAP model for provider information.
 /// </summary>
-[DataContract]
+[DataContract(Namespace = "")]
 public class ProviderSoap
 {
     [DataMember]

@@ -7,7 +7,7 @@ namespace SOAP.Models.ExchangeRates;
 /// SOAP response for grouped latest exchange rates.
 /// Structure: Provider → Base Currencies → Target Currencies
 /// </summary>
-[DataContract]
+[DataContract(Namespace = "")]
 public class LatestExchangeRatesGroupedSoap
 {
     [DataMember]
@@ -23,7 +23,7 @@ public class LatestExchangeRatesGroupedSoap
     public int TotalRates { get; set; }
 }
 
-[DataContract]
+[DataContract(Namespace = "")]
 public class BaseCurrencyGroupSoap
 {
     [DataMember]
@@ -36,7 +36,7 @@ public class BaseCurrencyGroupSoap
     public int TotalTargetCurrencies { get; set; }
 }
 
-[DataContract]
+[DataContract(Namespace = "")]
 public class TargetCurrencyRateSoap
 {
     [DataMember]

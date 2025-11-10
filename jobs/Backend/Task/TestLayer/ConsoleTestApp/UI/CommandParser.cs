@@ -27,7 +27,9 @@ public class CommandParser
 
             // Authentication
             "login" => new ParsedCommand { Type = CommandType.Login, Arguments = args },
-            "logout" => new ParsedCommand { Type = CommandType.Logout },
+            "login-all" => new ParsedCommand { Type = CommandType.LoginAll, Arguments = args },
+            "logout" => new ParsedCommand { Type = CommandType.Logout, Arguments = args },
+            "logout-all" => new ParsedCommand { Type = CommandType.LogoutAll },
 
             // Exchange Rates
             "current" => new ParsedCommand { Type = CommandType.GetCurrent, Arguments = args },
@@ -84,6 +86,8 @@ public class CommandParser
             // Testing
             "compare" => new ParsedCommand { Type = CommandType.Compare, Arguments = args },
             "solo" => new ParsedCommand { Type = CommandType.Solo, Arguments = args },
+            "exit-solo" or "normal" => new ParsedCommand { Type = CommandType.ExitSolo },
+            "test" => new ParsedCommand { Type = CommandType.Test, Arguments = args },
             "test-all" => new ParsedCommand { Type = CommandType.TestAll, Arguments = args },
 
             _ => new ParsedCommand { Type = CommandType.Invalid, Arguments = new[] { input } }
@@ -97,7 +101,7 @@ public class CommandParser
             // General
             "help", "exit", "quit", "clear", "cls", "status", "check-api", "ping",
             // Authentication
-            "login", "logout",
+            "login", "login-all", "logout", "logout-all",
             // Exchange Rates
             "current", "current-grouped", "latest", "latest-rate", "historical", "history", "convert",
             // Currencies
@@ -114,7 +118,7 @@ public class CommandParser
             // Streaming
             "stream-start", "stream", "stream-stop",
             // Testing
-            "compare", "solo", "test-all"
+            "compare", "solo", "exit-solo", "normal", "test", "test-all"
         };
     }
 }
@@ -136,7 +140,9 @@ public enum CommandType
 
     // Authentication
     Login,
+    LoginAll,
     Logout,
+    LogoutAll,
 
     // Exchange Rates
     GetCurrent,
@@ -193,5 +199,7 @@ public enum CommandType
     // Testing
     Compare,
     Solo,
+    ExitSolo,
+    Test,
     TestAll
 }

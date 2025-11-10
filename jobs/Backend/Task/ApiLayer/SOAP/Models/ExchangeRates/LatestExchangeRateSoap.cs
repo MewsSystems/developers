@@ -5,7 +5,7 @@ namespace SOAP.Models.ExchangeRates;
 /// <summary>
 /// SOAP model for latest exchange rate with freshness information.
 /// </summary>
-[DataContract]
+[DataContract(Namespace = "")]
 public class LatestExchangeRateSoap
 {
     [DataMember]

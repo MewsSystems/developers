@@ -43,7 +43,9 @@ public class GetCurrentExchangeRatesQueryHandler : IQueryHandler<GetCurrentExcha
 
             return new CurrentExchangeRateDto
             {
+                ProviderId = view.ProviderId,
                 ProviderCode = view.ProviderCode,
+                ProviderName = view.ProviderName,
                 BaseCurrencyCode = view.BaseCurrencyCode,
                 TargetCurrencyCode = view.TargetCurrencyCode,
                 Rate = view.Rate,

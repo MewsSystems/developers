@@ -5,7 +5,7 @@ namespace SOAP.Models.SystemHealth;
 /// <summary>
 /// SOAP data model for fetch activity information.
 /// </summary>
-[DataContract]
+[DataContract(Namespace = "")]
 public class FetchActivitySoap
 {
     [DataMember]

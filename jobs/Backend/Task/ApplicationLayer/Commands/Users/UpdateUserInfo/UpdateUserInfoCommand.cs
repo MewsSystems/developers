@@ -10,4 +10,4 @@ public record UpdateUserInfoCommand(
     int UserId,
     string FirstName,
     string LastName,
-    string Email) : ICommand<Result>;
+    string? Email = null) : ICommand<Result>;

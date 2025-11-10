@@ -5,7 +5,7 @@ namespace SOAP.Models.SystemHealth;
 /// <summary>
 /// SOAP data model for system health information.
 /// </summary>
-[DataContract]
+[DataContract(Namespace = "")]
 public class SystemHealthSoap
 {
     [DataMember]

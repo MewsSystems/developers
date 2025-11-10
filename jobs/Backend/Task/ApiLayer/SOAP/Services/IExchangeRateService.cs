@@ -6,7 +6,7 @@ namespace SOAP.Services;
 /// <summary>
 /// SOAP service contract for exchange rate operations.
 /// </summary>
-[ServiceContract]
+[ServiceContract(Namespace = "")]
 public interface IExchangeRateService
 {
     /// <summary>
@@ -74,7 +74,7 @@ public interface IExchangeRateService
 /// <summary>
 /// Request for getting all latest exchange rates grouped.
 /// </summary>
-[System.Runtime.Serialization.DataContract]
+[System.Runtime.Serialization.DataContract(Namespace = "")]
 public class GetAllLatestRatesGroupedRequest
 {
     // Empty request - no parameters needed for getting all rates
@@ -83,7 +83,7 @@ public class GetAllLatestRatesGroupedRequest
 /// <summary>
 /// Response containing grouped latest exchange rates.
 /// </summary>
-[System.Runtime.Serialization.DataContract]
+[System.Runtime.Serialization.DataContract(Namespace = "")]
 public class GetAllLatestRatesGroupedResponse
 {
     [System.Runtime.Serialization.DataMember]
@@ -102,7 +102,7 @@ public class GetAllLatestRatesGroupedResponse
 /// <summary>
 /// Request for getting current exchange rates.
 /// </summary>
-[System.Runtime.Serialization.DataContract]
+[System.Runtime.Serialization.DataContract(Namespace = "")]
 public class GetCurrentRatesRequest
 {
     // Empty request - no parameters needed for getting current rates
@@ -111,7 +111,7 @@ public class GetCurrentRatesRequest
 /// <summary>
 /// Response containing grouped current exchange rates.
 /// </summary>
-[System.Runtime.Serialization.DataContract]
+[System.Runtime.Serialization.DataContract(Namespace = "")]
 public class GetCurrentRatesResponse
 {
     [System.Runtime.Serialization.DataMember]
@@ -130,7 +130,7 @@ public class GetCurrentRatesResponse
 /// <summary>
 /// Request for converting currency.
 /// </summary>
-[System.Runtime.Serialization.DataContract]
+[System.Runtime.Serialization.DataContract(Namespace = "")]
 public class ConvertCurrencyRequest
 {
     [System.Runtime.Serialization.DataMember]
@@ -146,7 +146,7 @@ public class ConvertCurrencyRequest
 /// <summary>
 /// Response containing currency conversion result.
 /// </summary>
-[System.Runtime.Serialization.DataContract]
+[System.Runtime.Serialization.DataContract(Namespace = "")]
 public class ConvertCurrencyResponse
 {
     [System.Runtime.Serialization.DataMember]
@@ -165,7 +165,7 @@ public class ConvertCurrencyResponse
 /// <summary>
 /// SOAP fault for error responses.
 /// </summary>
-[System.Runtime.Serialization.DataContract]
+[System.Runtime.Serialization.DataContract(Namespace = "")]
 public class SoapFault
 {
     [System.Runtime.Serialization.DataMember]
@@ -181,7 +181,7 @@ public class SoapFault
 /// <summary>
 /// Request for getting the latest exchange rate for a currency pair.
 /// </summary>
-[System.Runtime.Serialization.DataContract]
+[System.Runtime.Serialization.DataContract(Namespace = "")]
 public class GetLatestRateRequest
 {
     [System.Runtime.Serialization.DataMember]
@@ -197,7 +197,7 @@ public class GetLatestRateRequest
 /// <summary>
 /// Response containing the latest exchange rate.
 /// </summary>
-[System.Runtime.Serialization.DataContract]
+[System.Runtime.Serialization.DataContract(Namespace = "")]
 public class GetLatestRateResponse
 {
     [System.Runtime.Serialization.DataMember]
@@ -216,7 +216,7 @@ public class GetLatestRateResponse
 /// <summary>
 /// Request for getting all latest exchange rates (flat list).
 /// </summary>
-[System.Runtime.Serialization.DataContract]
+[System.Runtime.Serialization.DataContract(Namespace = "")]
 public class GetAllLatestRatesRequest
 {
     // Empty request - no parameters needed
@@ -225,7 +225,7 @@ public class GetAllLatestRatesRequest
 /// <summary>
 /// Response containing all latest exchange rates as a flat list.
 /// </summary>
-[System.Runtime.Serialization.DataContract]
+[System.Runtime.Serialization.DataContract(Namespace = "")]
 public class GetAllLatestRatesResponse
 {
     [System.Runtime.Serialization.DataMember]
@@ -244,7 +244,7 @@ public class GetAllLatestRatesResponse
 /// <summary>
 /// Request for getting current exchange rates (flat list).
 /// </summary>
-[System.Runtime.Serialization.DataContract]
+[System.Runtime.Serialization.DataContract(Namespace = "")]
 public class GetCurrentRatesFlatRequest
 {
     // Empty request - no parameters needed
@@ -253,7 +253,7 @@ public class GetCurrentRatesFlatRequest
 /// <summary>
 /// Response containing current exchange rates as a flat list.
 /// </summary>
-[System.Runtime.Serialization.DataContract]
+[System.Runtime.Serialization.DataContract(Namespace = "")]
 public class GetCurrentRatesFlatResponse
 {
     [System.Runtime.Serialization.DataMember]
@@ -272,7 +272,7 @@ public class GetCurrentRatesFlatResponse
 /// <summary>
 /// Request for getting exchange rate history (flat list).
 /// </summary>
-[System.Runtime.Serialization.DataContract]
+[System.Runtime.Serialization.DataContract(Namespace = "")]
 public class GetHistoryRequest
 {
     [System.Runtime.Serialization.DataMember]
@@ -294,7 +294,7 @@ public class GetHistoryRequest
 /// <summary>
 /// Response containing exchange rate history as a flat list.
 /// </summary>
-[System.Runtime.Serialization.DataContract]
+[System.Runtime.Serialization.DataContract(Namespace = "")]
 public class GetHistoryResponse
 {
     [System.Runtime.Serialization.DataMember]
@@ -313,7 +313,7 @@ public class GetHistoryResponse
 /// <summary>
 /// Request for getting exchange rate history grouped by provider and base currency.
 /// </summary>
-[System.Runtime.Serialization.DataContract]
+[System.Runtime.Serialization.DataContract(Namespace = "")]
 public class GetHistoryGroupedRequest
 {
     [System.Runtime.Serialization.DataMember]
@@ -335,7 +335,7 @@ public class GetHistoryGroupedRequest
 /// <summary>
 /// Response containing exchange rate history grouped.
 /// </summary>
-[System.Runtime.Serialization.DataContract]
+[System.Runtime.Serialization.DataContract(Namespace = "")]
 public class GetHistoryGroupedResponse
 {
     [System.Runtime.Serialization.DataMember]

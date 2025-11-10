@@ -5,7 +5,7 @@ namespace SOAP.Models.SystemHealth;
 /// <summary>
 /// SOAP data model for error summary information.
 /// </summary>
-[DataContract]
+[DataContract(Namespace = "")]
 public class ErrorSummarySoap
 {
     [DataMember]

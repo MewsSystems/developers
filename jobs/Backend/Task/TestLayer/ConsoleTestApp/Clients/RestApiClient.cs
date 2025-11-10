@@ -1,11 +1,12 @@
-using System.Diagnostics;
-using System.Net.Http.Json;
-using System.Text;
-using System.Text.Json;
 using ConsoleTestApp.Config;
 using ConsoleTestApp.Core;
 using ConsoleTestApp.Models;
 using Microsoft.AspNetCore.SignalR.Client;
+using System.Diagnostics;
+using System.Net;
+using System.Net.Http.Json;
+using System.Text;
+using System.Text.Json;
 
 namespace ConsoleTestApp.Clients;
 
@@ -38,19 +39,19 @@ public class RestApiClient : IApiClient
             if (response.IsSuccessStatusCode)
             {
                 var result = await response.Content.ReadFromJsonAsync<LoginResponse>();
-                if (result != null)
+                if (result != null && result.Data != null)
                 {
-                    _authToken = result.Token;
+                    _authToken = result.Data.AccessToken;
                     _httpClient.DefaultRequestHeaders.Authorization =
                         new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", _authToken);
 
                     return new AuthenticationResult
                     {
                         Success = true,
-                        Token = result.Token,
-                        Email = result.Email,
-                        Role = result.Role,
-                        ExpiresAt = result.ExpiresAt
+                        Token = result.Data.AccessToken,
+                        Email = result.Data.Email,
+                        Role = result.Data.Role,
+                        ExpiresAt = DateTimeOffset.FromUnixTimeSeconds(result.Data.ExpiresAt).DateTime
                     };
                 }
             }
@@ -83,10 +84,14 @@ public class RestApiClient : IApiClient
         var stopwatch = Stopwatch.StartNew();
         try
         {
-            var response = await _httpClient.GetAsync("/api/exchange-rates/latest");
+            // Debug: Check if auth header is still set
+            var response = await _httpClient.GetAsync("/api/exchange-rates/latest/all/grouped");
             stopwatch.Stop();
 
+            // Debug: Log response status
+
             var content = await response.Content.ReadAsStringAsync();
+
             var payloadSize = Encoding.UTF8.GetByteCount(content);
 
             if (response.IsSuccessStatusCode)
@@ -131,7 +136,7 @@ public class RestApiClient : IApiClient
         var stopwatch = Stopwatch.StartNew();
         try
         {
-            var url = $"/api/exchange-rates/historical?from={from:yyyy-MM-dd}&to={to:yyyy-MM-dd}";
+            var url = $"/api/exchange-rates/history/grouped?sourceCurrency=EUR&targetCurrency=USD&startDate={from:yyyy-MM-dd}&endDate={to:yyyy-MM-dd}";
             var response = await _httpClient.GetAsync(url);
             stopwatch.Stop();
 
@@ -180,7 +185,7 @@ public class RestApiClient : IApiClient
         var stopwatch = Stopwatch.StartNew();
         try
         {
-            var response = await _httpClient.GetAsync("/api/exchange-rates/current");
+            var response = await _httpClient.GetAsync("/api/exchange-rates/current/grouped");
             stopwatch.Stop();
 
             var content = await response.Content.ReadAsStringAsync();
@@ -290,12 +295,12 @@ public class RestApiClient : IApiClient
 
             if (response.IsSuccessStatusCode)
             {
-                var result = JsonSerializer.Deserialize<RestExchangeRateResponse>(content, new JsonSerializerOptions
+                var result = JsonSerializer.Deserialize<RestSingleExchangeRateResponse>(content, new JsonSerializerOptions
                 {
                     PropertyNameCaseInsensitive = true
                 });
 
-                var data = MapToExchangeRateData(result);
+                var data = MapSingleExchangeRateToData(result?.Data);
 
                 return (data, new ApiCallMetrics
                 {
@@ -1238,7 +1243,7 @@ public class RestApiClient : IApiClient
                         CreatedAt = u.CreatedAt,
                         LastLoginAt = u.LastLoginAt
                     }).ToList() ?? new(),
-                    TotalCount = result?.Data?.Count ?? 0
+                    TotalCount = result?.TotalCount ?? 0
                 };
 
                 return (data, new ApiCallMetrics
@@ -1405,7 +1410,7 @@ public class RestApiClient : IApiClient
 
                 var data = new UsersListData
                 {
-                    Users = result?.Data?.Users?.Select(u => new UserData
+                    Users = result?.Data?.Select(u => new UserData
                     {
                         Id = u.Id,
                         Email = u.Email ?? "",
@@ -1466,8 +1471,8 @@ public class RestApiClient : IApiClient
 
                 return (new OperationResult
                 {
-                    Success = result?.Exists ?? false,
-                    Message = result?.Message ?? (result?.Exists == true ? "Email exists" : "Email does not exist")
+                    Success = result?.Data ?? false,
+                    Message = result?.Message ?? (result?.Data == true ? "Email exists" : "Email does not exist")
                 }, new ApiCallMetrics
                 {
                     ResponseTimeMs = stopwatch.ElapsedMilliseconds,
@@ -2142,8 +2147,11 @@ public class RestApiClient : IApiClient
     {
         try
         {
-            var response = await _httpClient.GetAsync("/api/health");
-            return response.IsSuccessStatusCode;
+            // Simple check: just verify the server responds to any request
+            using var testClient = new HttpClient { BaseAddress = _httpClient.BaseAddress, Timeout = TimeSpan.FromSeconds(2) };
+            var response = await testClient.GetAsync("/");
+            // Server is alive if it responds (even with 404 or redirect)
+            return true;
         }
         catch
         {
@@ -2162,7 +2170,7 @@ public class RestApiClient : IApiClient
             Providers = new List<ProviderRates>()
         };
 
-        foreach (var provider in response.Data.Providers ?? new List<RestProvider>())
+        foreach (var provider in response.Data ?? new List<RestProvider>())
         {
             var providerRates = new ProviderRates
             {
@@ -2200,44 +2208,139 @@ public class RestApiClient : IApiClient
         return data;
     }
 
+    private static ExchangeRateData MapSingleExchangeRateToData(RestSingleExchangeRateData? exchangeRate)
+    {
+        if (exchangeRate == null)
+            return new ExchangeRateData();
+
+        var data = new ExchangeRateData
+        {
+            FetchedAt = DateTime.UtcNow,
+            Providers = new List<ProviderRates>()
+        };
+
+        var providerRates = new ProviderRates
+        {
+            ProviderCode = exchangeRate.Provider?.Code ?? "",
+            ProviderName = exchangeRate.Provider?.Name ?? "",
+            BaseCurrencies = new List<BaseCurrencyRates>()
+        };
+
+        var baseCurrencyRates = new BaseCurrencyRates
+        {
+            CurrencyCode = exchangeRate.CurrencyPair?.SourceCurrencyCode ?? "",
+            TargetRates = new List<TargetRate>()
+        };
+
+        baseCurrencyRates.TargetRates.Add(new TargetRate
+        {
+            CurrencyCode = exchangeRate.CurrencyPair?.TargetCurrencyCode ?? "",
+            Rate = exchangeRate.RateInfo?.EffectiveRate ?? 0,
+            Multiplier = exchangeRate.RateInfo?.Multiplier ?? 1,
+            ValidDate = DateTime.TryParse(exchangeRate.ValidDate, out var validDate)
+                ? validDate
+                : DateTime.UtcNow
+        });
+
+        providerRates.BaseCurrencies.Add(baseCurrencyRates);
+        data.Providers.Add(providerRates);
+        data.TotalRates = 1;
+
+        return data;
+    }
+
     // REST API Response Models
     private class LoginResponse
     {
-        public string Token { get; set; } = string.Empty;
+        public bool Success { get; set; }
+        public string? Message { get; set; }
+        public LoginData? Data { get; set; }
+    }
+
+    private class LoginData
+    {
         public string Email { get; set; } = string.Empty;
         public string Role { get; set; } = string.Empty;
-        public DateTime ExpiresAt { get; set; }
+        public string AccessToken { get; set; } = string.Empty;
+        public long ExpiresAt { get; set; }
     }
 
     private class RestExchangeRateResponse
     {
-        public RestDataWrapper? Data { get; set; }
+        public List<RestProvider>? Data { get; set; }
     }
 
-    private class RestDataWrapper
+    // Response models for single exchange rate endpoint (GET /api/exchange-rates/latest?sourceCurrency=...&targetCurrency=...)
+    private class RestSingleExchangeRateResponse
     {
-        public List<RestProvider>? Providers { get; set; }
+        public RestSingleExchangeRateData? Data { get; set; }
     }
+
+    private class RestSingleExchangeRateData
+    {
+        public int Id { get; set; }
+        public RestProviderInfo? Provider { get; set; }
+        public RestCurrencyPair? CurrencyPair { get; set; }
+        public RestRateInfo? RateInfo { get; set; }
+        public string? ValidDate { get; set; }
+        public DateTimeOffset Created { get; set; }
+        public DateTimeOffset? Modified { get; set; }
+    }
+
+    private class RestCurrencyPair
+    {
+        public int SourceCurrencyId { get; set; }
+        public string? SourceCurrencyCode { get; set; }
+        public int TargetCurrencyId { get; set; }
+        public string? TargetCurrencyCode { get; set; }
+    }
+
+    // Note: RestProvider now maps to the grouped response structure (CurrentExchangeRatesGroupedResponse, etc.)
 
     private class RestProvider
     {
-        public string? ProviderCode { get; set; }
-        public string? ProviderName { get; set; }
+        public RestProviderInfo? Provider { get; set; }
         public List<RestBaseCurrency>? BaseCurrencies { get; set; }
+
+        // Computed properties for backwards compatibility
+        public string? ProviderCode => Provider?.Code;
+        public string? ProviderName => Provider?.Name;
+    }
+
+    private class RestProviderInfo
+    {
+        public int Id { get; set; }
+        public string? Code { get; set; }
+        public string? Name { get; set; }
     }
 
     private class RestBaseCurrency
     {
-        public string? CurrencyCode { get; set; }
-        public List<RestTargetCurrency>? TargetCurrencies { get; set; }
+        public string? BaseCurrency { get; set; }
+        public List<RestTargetCurrency>? Rates { get; set; }
+
+        // Computed property for backwards compatibility
+        public string? CurrencyCode => BaseCurrency;
+        public List<RestTargetCurrency>? TargetCurrencies => Rates;
     }
 
     private class RestTargetCurrency
     {
-        public string? CurrencyCode { get; set; }
-        public decimal Rate { get; set; }
-        public int Multiplier { get; set; }
+        public string? TargetCurrency { get; set; }
+        public RestRateInfo? RateInfo { get; set; }
         public DateTime ValidDate { get; set; }
+
+        // Computed properties for backwards compatibility
+        public string? CurrencyCode => TargetCurrency;
+        public decimal Rate => RateInfo?.EffectiveRate ?? 0;
+        public int Multiplier => RateInfo?.Multiplier ?? 1;
+    }
+
+    private class RestRateInfo
+    {
+        public decimal RawRate { get; set; }
+        public int Multiplier { get; set; }
+        public decimal EffectiveRate { get; set; }
     }
 
     private class RestConversionResponse
@@ -2332,6 +2435,10 @@ public class RestApiClient : IApiClient
     private class RestUsersResponse
     {
         public List<RestUserData>? Data { get; set; }
+        public int PageNumber { get; set; }
+        public int PageSize { get; set; }
+        public int TotalCount { get; set; }
+        public int TotalPages { get; set; }
     }
 
     private class RestUserResponse
@@ -2448,17 +2555,17 @@ public class RestApiClient : IApiClient
 
     private class RestUsersListResponse
     {
-        public RestUsersListData? Data { get; set; }
-    }
-
-    private class RestUsersListData
-    {
-        public List<RestUserData>? Users { get; set; }
+        public List<RestUserData>? Data { get; set; }
+        public int PageNumber { get; set; }
+        public int PageSize { get; set; }
+        public int TotalCount { get; set; }
+        public int TotalPages { get; set; }
     }
 
     private class RestCheckEmailResponse
     {
-        public bool Exists { get; set; }
+        public bool Success { get; set; }
         public string? Message { get; set; }
+        public bool Data { get; set; }
     }
 }

@@ -17,6 +17,8 @@ using Microsoft.IdentityModel.Tokens;
 using REST.Middleware;
 using RomanianNationalBank;
 using Scalar.AspNetCore;
+using Microsoft.IdentityModel.JsonWebTokens;
+using System.Diagnostics;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -86,6 +88,9 @@ builder.Services.AddControllers();
 // ============================================================
 // AUTHENTICATION & AUTHORIZATION
 // ============================================================
+// Clear default claim mappings to prevent JWT claims from being transformed
+JsonWebTokenHandler.DefaultInboundClaimTypeMap.Clear();
+
 // Configure JWT authentication
 var jwtSettings = builder.Configuration.GetSection(JwtSettings.SectionName).Get<JwtSettings>()
     ?? throw new InvalidOperationException("JWT settings not found in configuration");
@@ -107,11 +112,20 @@ builder.Services.AddAuthentication(options =>
         ValidIssuer = jwtSettings.Issuer,
         ValidAudience = jwtSettings.Audience,
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.SecretKey)),
-        ClockSkew = TimeSpan.Zero // Remove default 5-minute clock skew
+        ClockSkew = TimeSpan.Zero, // Remove default 5-minute clock skew
+        RoleClaimType = "role", // Match the simple "role" claim in the token
+        NameClaimType = "email"  // Match the "email" claim in the token
     };
+
+    // IMPORTANT: Configure claim types for the authentication handler
+    options.MapInboundClaims = false; // Prevent claim type mapping
 });
 
-builder.Services.AddAuthorization();
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("Admin", policy => policy.RequireRole("Admin"));
+    options.AddPolicy("Consumer", policy => policy.RequireRole("Consumer"));
+});
 
 // ============================================================
 // SIGNALR
@@ -220,7 +234,8 @@ if (app.Environment.IsDevelopment())
     });
 }
 
-app.UseHttpsRedirection();
+//This made me lose a day and 100% of sanity.
+//app.UseHttpsRedirection();
 
 // Hangfire Dashboard (monitor background jobs)
 // Access at: /hangfire

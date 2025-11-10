@@ -83,11 +83,11 @@ public static class ExchangeRateConverters
     {
         return new ConvertCurrencyResponse
         {
-            FromCurrency = fromCurrency,
-            ToCurrency = toCurrency,
-            Amount = amount,
-            ConvertedAmount = convertedAmount,
-            ExchangeRate = exchangeRate,
+            SourceCurrencyCode = fromCurrency,
+            TargetCurrencyCode = toCurrency,
+            SourceAmount = amount,
+            TargetAmount = convertedAmount,
+            EffectiveRate = exchangeRate,
             ValidDate = validDate
         };
     }

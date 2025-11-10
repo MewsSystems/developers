@@ -18,6 +18,7 @@ namespace SOAP.Services;
 /// SOAP service implementation for user operations.
 /// Reuses ApplicationLayer commands/queries via MediatR.
 /// </summary>
+[Authorize(Roles = "Admin")]
 public class UserService : IUserService
 {
     private readonly IMediator _mediator;
@@ -31,7 +32,6 @@ public class UserService : IUserService
         _logger = logger;
     }
 
-    [Authorize(Roles = "Admin")]
     public async Task<GetAllUsersResponse> GetAllUsersAsync(GetAllUsersRequest request)
     {
         try
@@ -46,7 +46,7 @@ public class UserService : IUserService
                 roleFilter = parsedRole;
             }
 
-            var query = new GetAllUsersQuery(PageNumber: 1, PageSize: 1000, SearchTerm: null, RoleFilter: roleFilter);
+            var query = new GetAllUsersQuery(PageNumber: 1, PageSize: 100, SearchTerm: null, RoleFilter: roleFilter);
             var pagedResult = await _mediator.Send(query);
 
             return new GetAllUsersResponse
@@ -75,7 +75,6 @@ public class UserService : IUserService
         }
     }
 
-    [Authorize(Roles = "Consumer,Admin")]
     public async Task<GetUserByIdResponse> GetUserByIdAsync(GetUserByIdRequest request)
     {
         try

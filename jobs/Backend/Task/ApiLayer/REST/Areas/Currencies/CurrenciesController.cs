@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ApplicationLayer.Queries.Currencies.GetAllCurrencies;
 using ApplicationLayer.Queries.Currencies.GetCurrencyByCode;
+using ApplicationLayer.Queries.Currencies.GetCurrencyById;
 using ApplicationLayer.Commands.Currencies.CreateCurrency;
 using ApplicationLayer.Commands.Currencies.DeleteCurrency;
 using REST.Response.Models.Common;
@@ -35,7 +36,7 @@ public class CurrenciesController : ControllerBase
     [ProducesResponseType(typeof(ApiResponse<IEnumerable<CurrencyResponse>>), 200)]
     public async Task<IActionResult> GetAll()
     {
-        var query = new GetAllCurrenciesQuery(PageNumber: 1, PageSize: 1000, IncludePagination: false);
+        var query = new GetAllCurrenciesQuery(PageNumber: 1, PageSize: 100, IncludePagination: false);
         var pagedResult = await _mediator.Send(query);
 
         var response = ApiResponse<IEnumerable<CurrencyResponse>>.Ok(
@@ -44,6 +45,30 @@ public class CurrenciesController : ControllerBase
         );
 
         return Ok(response);
+    }
+
+    /// <summary>
+    /// Get a specific currency by ID.
+    /// </summary>
+    /// <param name="id">Currency ID</param>
+    [HttpGet("id/{id}")]
+    [ProducesResponseType(typeof(ApiResponse<CurrencyResponse>), 200)]
+    [ProducesResponseType(typeof(ApiResponse), 404)]
+    public async Task<IActionResult> GetById(int id)
+    {
+        var query = new GetCurrencyByIdQuery(id);
+        var currencyDto = await _mediator.Send(query);
+
+        if (currencyDto != null)
+        {
+            var response = ApiResponse<CurrencyResponse>.Ok(
+                currencyDto.ToResponse(),
+                "Currency retrieved successfully"
+            );
+            return Ok(response);
+        }
+
+        return NotFound(ApiResponse<CurrencyResponse>.NotFound($"Currency with ID {id} not found"));
     }
 
     /// <summary>

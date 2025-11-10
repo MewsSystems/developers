@@ -88,6 +88,71 @@ public class ConvertCurrencyQueryHandler
             }
         }
 
+        // If no direct rate found, try inverse rate (target -> source)
+        bool useInverseRate = false;
+        if (exchangeRate == null)
+        {
+            _logger.LogInformation(
+                "No direct rate found for {Source}->{Target}, trying inverse rate",
+                request.SourceCurrencyCode,
+                request.TargetCurrencyCode);
+
+            if (request.Date.HasValue)
+            {
+                // Get inverse rate for specific date
+                var inverseRates = await _unitOfWork.ExchangeRates.GetHistoryAsync(
+                    targetCurrency.Id,
+                    sourceCurrency.Id,
+                    request.Date.Value,
+                    request.Date.Value,
+                    cancellationToken);
+
+                if (request.ProviderId.HasValue)
+                {
+                    exchangeRate = inverseRates.FirstOrDefault(r => r.ProviderId == request.ProviderId.Value);
+                }
+                else
+                {
+                    exchangeRate = inverseRates.OrderByDescending(r => r.Created).FirstOrDefault();
+                }
+            }
+            else
+            {
+                // Get latest inverse rate
+                exchangeRate = await _unitOfWork.ExchangeRates.GetLatestRateAsync(
+                    targetCurrency.Id,
+                    sourceCurrency.Id,
+                    cancellationToken);
+
+                // Filter by provider if specified
+                if (request.ProviderId.HasValue && exchangeRate != null && exchangeRate.ProviderId != request.ProviderId.Value)
+                {
+                    var today = DateOnly.FromDateTime(DateTime.UtcNow);
+                    var inverseRates = await _unitOfWork.ExchangeRates.GetHistoryAsync(
+                        targetCurrency.Id,
+                        sourceCurrency.Id,
+                        today.AddDays(-90),
+                        today,
+                        cancellationToken);
+
+                    exchangeRate = inverseRates
+                        .Where(r => r.ProviderId == request.ProviderId.Value)
+                        .OrderByDescending(r => r.ValidDate)
+                        .ThenByDescending(r => r.Created)
+                        .FirstOrDefault();
+                }
+            }
+
+            if (exchangeRate != null)
+            {
+                useInverseRate = true;
+                _logger.LogInformation(
+                    "Using inverse rate {Target}->{Source} for conversion",
+                    request.TargetCurrencyCode,
+                    request.SourceCurrencyCode);
+            }
+        }
+
         if (exchangeRate == null)
         {
             throw new NotFoundException(
@@ -100,8 +165,10 @@ public class ConvertCurrencyQueryHandler
         var provider = await _unitOfWork.ExchangeRateProviders.GetByIdAsync(exchangeRate.ProviderId, cancellationToken);
         var providerName = provider?.Name ?? "Unknown";
 
-        // Perform conversion
-        var convertedAmount = exchangeRate.ConvertAmount(request.Amount);
+        // Perform conversion (use inverse method if we're using an inverse rate)
+        var convertedAmount = useInverseRate
+            ? exchangeRate.ConvertAmountInverse(request.Amount)
+            : exchangeRate.ConvertAmount(request.Amount);
 
         _logger.LogInformation(
             "Converted {Amount} {Source} to {Result} {Target} using rate {Rate}/{Multiplier} from {Provider} (ValidDate: {Date})",
