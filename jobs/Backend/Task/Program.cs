@@ -1,6 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using ExchangeRateUpdater.Domain;
+using ExchangeRateUpdater.Infrastructure.CNB.Registry;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 
 namespace ExchangeRateUpdater
 {
@@ -19,12 +26,35 @@ namespace ExchangeRateUpdater
             new Currency("XYZ")
         };
 
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             try
             {
-                var provider = new ExchangeRateProvider();
-                var rates = provider.GetExchangeRates(currencies);
+                // The only purpose of the host here is to use the dependecy injection container and add configuration.
+                // In a bigger project, we would probably use the host to configure other services as well.
+                var host = Host.CreateDefaultBuilder(args)
+                .ConfigureAppConfiguration(config =>
+                {
+                    config.AddJsonFile("appsettings.json");
+                })
+                .ConfigureLogging((context, loggingBuilder) =>
+                {
+                    // We should probably use a more advanced logging provider, but for the sake of simplicity
+                    // we will use the console logger.
+                    loggingBuilder.AddConsole();
+                    loggingBuilder.AddConfiguration(context.Configuration.GetSection("Logging"));
+                })
+                .ConfigureServices((context, services) =>
+                {
+                    services
+                    .AddCNBInfrastructure(context.Configuration)
+                    .AddObservabilityInfrastructure()
+                    .AddSingleton<ExchangeRateProvider>();
+                })
+                .Build();
+
+                var provider = host.Services.GetRequiredService<ExchangeRateProvider>();
+                var rates = await provider.GetExchangeRates(currencies);
 
                 Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
                 foreach (var rate in rates)
