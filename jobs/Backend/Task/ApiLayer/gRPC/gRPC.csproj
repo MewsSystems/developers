@@ -1,0 +1,36 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- gRPC Packages -->
+    <PackageReference Include="Grpc.AspNetCore" Version="2.70.0" />
+    <PackageReference Include="Grpc.AspNetCore.Server.Reflection" Version="2.70.0" />
+    <PackageReference Include="Google.Protobuf" Version="3.28.3" />
+    <PackageReference Include="Grpc.Tools" Version="2.70.0" PrivateAssets="All" />
+
+    <!-- Authentication -->
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.10" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Proto files -->
+    <Protobuf Include="Protos\**\*.proto" GrpcServices="Server" ProtoRoot="Protos" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Layer Dependencies (reuse existing layers) -->
+    <ProjectReference Include="..\..\DataLayer\DataLayer.csproj" />
+    <ProjectReference Include="..\..\ConfigurationLayer\ConfigurationLayer.csproj" />
+    <ProjectReference Include="..\..\ApplicationLayer\ApplicationLayer.csproj" />
+    <ProjectReference Include="..\..\InfrastructureLayer\InfrastructureLayer.csproj" />
+    <ProjectReference Include="..\..\ExchangeRateProviderLayer\EuropeanCentralBank\EuropeanCentralBank.csproj" />
+    <ProjectReference Include="..\..\ExchangeRateProviderLayer\CzechNationalBank\CzechNationalBank.csproj" />
+    <ProjectReference Include="..\..\ExchangeRateProviderLayer\RomanianNationalBank\RomanianNationalBank.csproj" />
+  </ItemGroup>
+
+</Project>

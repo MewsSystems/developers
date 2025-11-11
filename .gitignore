@@ -17,6 +17,11 @@
 [Tt]humbs.db
 *.tgz
 *.sublime-*
+.vs/
+.claude/
+*.dbmdl
+*.jfm
+jobs/Backend/Task/ApiLayer/*/DataSource=file
 
 node_modules
 bower_components

@@ -1,0 +1,49 @@
+syntax = "proto3";
+
+import "common.proto";
+
+package exchangerates.authentication.v1;
+
+option csharp_namespace = "gRPC.Protos.Authentication";
+
+// ============================================================
+// AUTHENTICATION SERVICE
+// ============================================================
+
+/// Service for user authentication
+service AuthenticationService {
+  /// Authenticate a user and generate JWT token
+  rpc Login(LoginRequest) returns (LoginResponse);
+}
+
+// ============================================================
+// LOGIN
+// ============================================================
+
+/// Request message for user login
+message LoginRequest {
+  string email = 1;
+  string password = 2;
+}
+
+/// Response message containing authentication token and user info
+message LoginResponse {
+  bool success = 1;
+  string message = 2;
+  AuthenticationData data = 3;
+  .exchangerates.common.v1.ErrorDetails error = 4;
+}
+
+message AuthenticationData {
+  string access_token = 1;
+  string token_type = 2;
+  int64 expires_in_seconds = 3;
+  UserInfo user = 4;
+}
+
+message UserInfo {
+  int32 user_id = 1;
+  string email = 2;
+  string full_name = 3;
+  string role = 4;
+}

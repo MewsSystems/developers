@@ -1,0 +1,58 @@
+syntax = "proto3";
+
+package exchangerates.common.v1;
+
+option csharp_namespace = "gRPC.Protos.Common";
+
+// ============================================================
+// PAGINATION
+// ============================================================
+
+/// Request message for paginated queries
+message PagingRequest {
+  int32 page_number = 1;
+  int32 page_size = 2;
+}
+
+/// Response message containing pagination metadata
+message PagingResponse {
+  int32 total_count = 1;
+  int32 total_pages = 2;
+  int32 page_number = 3;
+  int32 page_size = 4;
+  bool has_next = 5;
+  bool has_previous = 6;
+}
+
+// ============================================================
+// ERROR HANDLING
+// ============================================================
+
+/// Error details for failed operations
+message ErrorDetails {
+  string code = 1;
+  string message = 2;
+  repeated string validation_errors = 3;
+}
+
+// ============================================================
+// COMMON RESPONSE WRAPPER
+// ============================================================
+
+/// Generic response wrapper with success status
+message OperationResponse {
+  bool success = 1;
+  string message = 2;
+  ErrorDetails error = 3;
+}
+
+// ============================================================
+// DATE & TIME
+// ============================================================
+
+/// Date-only message (no time component)
+message Date {
+  int32 year = 1;
+  int32 month = 2;
+  int32 day = 3;
+}

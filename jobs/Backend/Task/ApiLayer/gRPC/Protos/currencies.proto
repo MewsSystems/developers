@@ -1,0 +1,110 @@
+syntax = "proto3";
+
+import "common.proto";
+
+package exchangerates.currencies.v1;
+
+option csharp_namespace = "gRPC.Protos.Currencies";
+
+// ============================================================
+// CURRENCIES SERVICE
+// ============================================================
+
+/// Service for managing currencies
+service CurrenciesService {
+  /// Get all currencies
+  rpc GetAllCurrencies(GetAllCurrenciesRequest) returns (GetAllCurrenciesResponse);
+
+  /// Get a specific currency by ID
+  rpc GetCurrencyById(GetCurrencyByIdRequest) returns (GetCurrencyByIdResponse);
+
+  /// Get a specific currency by code
+  rpc GetCurrencyByCode(GetCurrencyByCodeRequest) returns (GetCurrencyByCodeResponse);
+
+  /// Create a new currency
+  rpc CreateCurrency(CreateCurrencyRequest) returns (CreateCurrencyResponse);
+
+  /// Delete a currency
+  rpc DeleteCurrency(DeleteCurrencyRequest) returns (DeleteCurrencyResponse);
+}
+
+// ============================================================
+// GET ALL CURRENCIES
+// ============================================================
+
+message GetAllCurrenciesRequest {
+  // No parameters needed
+}
+
+message GetAllCurrenciesResponse {
+  repeated CurrencyInfo currencies = 1;
+  string message = 2;
+}
+
+message CurrencyInfo {
+  int32 id = 1;
+  string code = 2;
+  string name = 3;
+  string symbol = 4;
+}
+
+// ============================================================
+// GET CURRENCY BY ID
+// ============================================================
+
+message GetCurrencyByIdRequest {
+  int32 id = 1;
+}
+
+message GetCurrencyByIdResponse {
+  bool success = 1;
+  string message = 2;
+  CurrencyInfo data = 3;
+  .exchangerates.common.v1.ErrorDetails error = 4;
+}
+
+// ============================================================
+// GET CURRENCY BY CODE
+// ============================================================
+
+message GetCurrencyByCodeRequest {
+  string code = 1;
+}
+
+message GetCurrencyByCodeResponse {
+  bool success = 1;
+  string message = 2;
+  CurrencyInfo data = 3;
+  .exchangerates.common.v1.ErrorDetails error = 4;
+}
+
+// ============================================================
+// CREATE CURRENCY
+// ============================================================
+
+message CreateCurrencyRequest {
+  string code = 1;
+  string name = 2;
+  string symbol = 3;
+}
+
+message CreateCurrencyResponse {
+  bool success = 1;
+  string message = 2;
+  CurrencyInfo data = 3;
+  .exchangerates.common.v1.ErrorDetails error = 4;
+}
+
+// ============================================================
+// DELETE CURRENCY
+// ============================================================
+
+message DeleteCurrencyRequest {
+  string code = 1;
+}
+
+message DeleteCurrencyResponse {
+  bool success = 1;
+  string message = 2;
+  .exchangerates.common.v1.ErrorDetails error = 3;
+}

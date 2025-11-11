@@ -1,0 +1,102 @@
+syntax = "proto3";
+
+import "common.proto";
+import "google/protobuf/timestamp.proto";
+
+package exchangerates.systemhealth.v1;
+
+option csharp_namespace = "gRPC.Protos.SystemHealth";
+
+// ============================================================
+// SYSTEM HEALTH SERVICE
+// ============================================================
+
+/// Service for monitoring system health
+service SystemHealthService {
+  /// Get overall system health status
+  rpc GetSystemHealth(GetSystemHealthRequest) returns (GetSystemHealthResponse);
+
+  /// Get recent error logs
+  rpc GetRecentErrors(GetRecentErrorsRequest) returns (GetRecentErrorsResponse);
+
+  /// Get recent fetch activity
+  rpc GetFetchActivity(GetFetchActivityRequest) returns (GetFetchActivityResponse);
+}
+
+// ============================================================
+// GET SYSTEM HEALTH
+// ============================================================
+
+message GetSystemHealthRequest {
+  // No parameters needed
+}
+
+message GetSystemHealthResponse {
+  SystemHealthInfo health = 1;
+  string message = 2;
+}
+
+message SystemHealthInfo {
+  int32 total_providers = 1;
+  int32 active_providers = 2;
+  int32 quarantined_providers = 3;
+  int32 total_currencies = 4;
+  int32 total_exchange_rates = 5;
+  optional .exchangerates.common.v1.Date latest_rate_date = 6;
+  optional .exchangerates.common.v1.Date oldest_rate_date = 7;
+  int32 total_fetches_today = 8;
+  int32 successful_fetches_today = 9;
+  int32 failed_fetches_today = 10;
+  double success_rate_today = 11;
+  google.protobuf.Timestamp last_updated = 12;
+}
+
+// ============================================================
+// GET RECENT ERRORS
+// ============================================================
+
+message GetRecentErrorsRequest {
+  int32 limit = 1; // Number of errors to retrieve
+  optional int32 provider_id = 2;
+}
+
+message GetRecentErrorsResponse {
+  repeated ErrorLogInfo errors = 1;
+  string message = 2;
+}
+
+message ErrorLogInfo {
+  int64 id = 1;
+  optional int32 provider_id = 2;
+  optional string provider_code = 3;
+  string error_message = 4;
+  string error_type = 5;
+  optional string stack_trace = 6;
+  google.protobuf.Timestamp occurred_at = 7;
+}
+
+// ============================================================
+// GET FETCH ACTIVITY
+// ============================================================
+
+message GetFetchActivityRequest {
+  int32 limit = 1; // Number of fetch logs to retrieve
+  optional int32 provider_id = 2;
+}
+
+message GetFetchActivityResponse {
+  repeated FetchLogInfo fetch_logs = 1;
+  string message = 2;
+}
+
+message FetchLogInfo {
+  int64 id = 1;
+  int32 provider_id = 2;
+  string provider_code = 3;
+  google.protobuf.Timestamp started_at = 4;
+  optional google.protobuf.Timestamp completed_at = 5;
+  string status = 6; // "InProgress", "Success", "Failed"
+  optional string error_message = 7;
+  int32 records_fetched = 8;
+  optional string requested_by = 9;
+}

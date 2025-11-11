@@ -1,0 +1,331 @@
+syntax = "proto3";
+
+import "common.proto";
+import "google/protobuf/timestamp.proto";
+
+package exchangerates.providers.v1;
+
+option csharp_namespace = "gRPC.Protos.Providers";
+
+// ============================================================
+// PROVIDERS SERVICE
+// ============================================================
+
+/// Service for managing exchange rate providers
+service ProvidersService {
+  /// Get all providers with optional filtering and pagination
+  rpc GetAllProviders(GetAllProvidersRequest) returns (GetAllProvidersResponse);
+
+  /// Get a specific provider by ID
+  rpc GetProviderById(GetProviderByIdRequest) returns (GetProviderByIdResponse);
+
+  /// Get a specific provider by code
+  rpc GetProviderByCode(GetProviderByCodeRequest) returns (GetProviderByCodeResponse);
+
+  /// Get health status for a specific provider
+  rpc GetProviderHealth(GetProviderHealthRequest) returns (GetProviderHealthResponse);
+
+  /// Get statistics for a specific provider
+  rpc GetProviderStatistics(GetProviderStatisticsRequest) returns (GetProviderStatisticsResponse);
+
+  /// Get detailed configuration for a provider
+  rpc GetProviderConfiguration(GetProviderConfigurationRequest) returns (GetProviderConfigurationResponse);
+
+  /// Activate a provider
+  rpc ActivateProvider(ActivateProviderRequest) returns (ActivateProviderResponse);
+
+  /// Deactivate a provider
+  rpc DeactivateProvider(DeactivateProviderRequest) returns (DeactivateProviderResponse);
+
+  /// Reset health status for a provider
+  rpc ResetProviderHealth(ResetProviderHealthRequest) returns (ResetProviderHealthResponse);
+
+  /// Trigger a manual fetch for a provider
+  rpc TriggerManualFetch(TriggerManualFetchRequest) returns (TriggerManualFetchResponse);
+
+  /// Create a new exchange rate provider
+  rpc CreateProvider(CreateProviderRequest) returns (CreateProviderResponse);
+
+  /// Update provider configuration
+  rpc UpdateProviderConfiguration(UpdateProviderConfigurationRequest) returns (UpdateProviderConfigurationResponse);
+
+  /// Delete a provider
+  rpc DeleteProvider(DeleteProviderRequest) returns (DeleteProviderResponse);
+
+  /// Reschedule a provider's job
+  rpc RescheduleProvider(RescheduleProviderRequest) returns (RescheduleProviderResponse);
+}
+
+// ============================================================
+// GET ALL PROVIDERS
+// ============================================================
+
+message GetAllProvidersRequest {
+  .exchangerates.common.v1.PagingRequest paging = 1;
+  optional bool is_active = 2;
+  optional string search_term = 3;
+}
+
+message GetAllProvidersResponse {
+  repeated ProviderInfo providers = 1;
+  .exchangerates.common.v1.PagingResponse paging = 2;
+  string message = 3;
+}
+
+message ProviderInfo {
+  int32 id = 1;
+  string code = 2;
+  string name = 3;
+  string url = 4;
+  bool is_active = 5;
+  string base_currency_code = 6;
+  string status = 7;
+  int32 consecutive_failures = 8;
+  optional google.protobuf.Timestamp last_successful_fetch = 9;
+  optional google.protobuf.Timestamp last_failed_fetch = 10;
+  google.protobuf.Timestamp created = 11;
+}
+
+// ============================================================
+// GET PROVIDER BY ID
+// ============================================================
+
+message GetProviderByIdRequest {
+  int32 id = 1;
+}
+
+message GetProviderByIdResponse {
+  bool success = 1;
+  string message = 2;
+  ProviderDetailInfo data = 3;
+  .exchangerates.common.v1.ErrorDetails error = 4;
+}
+
+// ============================================================
+// GET PROVIDER BY CODE
+// ============================================================
+
+message GetProviderByCodeRequest {
+  string code = 1;
+}
+
+message GetProviderByCodeResponse {
+  bool success = 1;
+  string message = 2;
+  ProviderInfo data = 3;
+  .exchangerates.common.v1.ErrorDetails error = 4;
+}
+
+// ============================================================
+// PROVIDER HEALTH
+// ============================================================
+
+message GetProviderHealthRequest {
+  string code = 1;
+}
+
+message GetProviderHealthResponse {
+  bool success = 1;
+  string message = 2;
+  ProviderHealthInfo data = 3;
+  .exchangerates.common.v1.ErrorDetails error = 4;
+}
+
+message ProviderHealthInfo {
+  int32 provider_id = 1;
+  string provider_code = 2;
+  string provider_name = 3;
+  string health_status = 4; // "Healthy", "Degraded", "Unhealthy"
+  int32 consecutive_failures = 5;
+  optional google.protobuf.Timestamp last_successful_fetch = 6;
+  optional google.protobuf.Timestamp last_failed_fetch = 7;
+  optional string last_error_message = 8;
+}
+
+// ============================================================
+// PROVIDER STATISTICS
+// ============================================================
+
+message GetProviderStatisticsRequest {
+  string code = 1;
+}
+
+message GetProviderStatisticsResponse {
+  bool success = 1;
+  string message = 2;
+  ProviderStatisticsInfo data = 3;
+  .exchangerates.common.v1.ErrorDetails error = 4;
+}
+
+message ProviderStatisticsInfo {
+  int32 provider_id = 1;
+  string provider_code = 2;
+  string provider_name = 3;
+  int64 total_rates_provided = 4;
+  int64 total_fetch_attempts = 5;
+  int64 successful_fetches = 6;
+  int64 failed_fetches = 7;
+  double success_rate = 8;
+  optional google.protobuf.Timestamp first_fetch_date = 9;
+  optional google.protobuf.Timestamp last_fetch_date = 10;
+  optional .exchangerates.common.v1.Date oldest_rate_date = 11;
+  optional .exchangerates.common.v1.Date newest_rate_date = 12;
+}
+
+// ============================================================
+// PROVIDER CONFIGURATION
+// ============================================================
+
+message GetProviderConfigurationRequest {
+  string code = 1;
+}
+
+message GetProviderConfigurationResponse {
+  bool success = 1;
+  string message = 2;
+  ProviderDetailInfo data = 3;
+  .exchangerates.common.v1.ErrorDetails error = 4;
+}
+
+message ProviderDetailInfo {
+  int32 id = 1;
+  string code = 2;
+  string name = 3;
+  string url = 4;
+  bool is_active = 5;
+  string base_currency_code = 6;
+  bool requires_authentication = 7;
+  optional string api_key_vault_reference = 8;
+  string status = 9;
+  int32 consecutive_failures = 10;
+  optional google.protobuf.Timestamp last_successful_fetch = 11;
+  optional google.protobuf.Timestamp last_failed_fetch = 12;
+  google.protobuf.Timestamp created = 13;
+  optional google.protobuf.Timestamp modified = 14;
+}
+
+// ============================================================
+// ACTIVATE PROVIDER
+// ============================================================
+
+message ActivateProviderRequest {
+  string code = 1;
+}
+
+message ActivateProviderResponse {
+  bool success = 1;
+  string message = 2;
+  .exchangerates.common.v1.ErrorDetails error = 3;
+}
+
+// ============================================================
+// DEACTIVATE PROVIDER
+// ============================================================
+
+message DeactivateProviderRequest {
+  string code = 1;
+}
+
+message DeactivateProviderResponse {
+  bool success = 1;
+  string message = 2;
+  .exchangerates.common.v1.ErrorDetails error = 3;
+}
+
+// ============================================================
+// RESET PROVIDER HEALTH
+// ============================================================
+
+message ResetProviderHealthRequest {
+  string code = 1;
+}
+
+message ResetProviderHealthResponse {
+  bool success = 1;
+  string message = 2;
+  .exchangerates.common.v1.ErrorDetails error = 3;
+}
+
+// ============================================================
+// TRIGGER MANUAL FETCH
+// ============================================================
+
+message TriggerManualFetchRequest {
+  string code = 1;
+}
+
+message TriggerManualFetchResponse {
+  bool success = 1;
+  string message = 2;
+  string data = 3; // Result message from fetch
+  .exchangerates.common.v1.ErrorDetails error = 4;
+}
+
+// ============================================================
+// CREATE PROVIDER
+// ============================================================
+
+message CreateProviderRequest {
+  string name = 1;
+  string code = 2;
+  string url = 3;
+  int32 base_currency_id = 4;
+  bool requires_authentication = 5;
+  optional string api_key_vault_reference = 6;
+}
+
+message CreateProviderResponse {
+  bool success = 1;
+  string message = 2;
+  ProviderInfo data = 3;
+  .exchangerates.common.v1.ErrorDetails error = 4;
+}
+
+// ============================================================
+// UPDATE PROVIDER CONFIGURATION
+// ============================================================
+
+message UpdateProviderConfigurationRequest {
+  string code = 1;
+  string name = 2;
+  string url = 3;
+  bool requires_authentication = 4;
+  optional string api_key_vault_reference = 5;
+}
+
+message UpdateProviderConfigurationResponse {
+  bool success = 1;
+  string message = 2;
+  .exchangerates.common.v1.ErrorDetails error = 3;
+}
+
+// ============================================================
+// DELETE PROVIDER
+// ============================================================
+
+message DeleteProviderRequest {
+  string code = 1;
+  bool force = 2;
+}
+
+message DeleteProviderResponse {
+  bool success = 1;
+  string message = 2;
+  .exchangerates.common.v1.ErrorDetails error = 3;
+}
+
+// ============================================================
+// RESCHEDULE PROVIDER
+// ============================================================
+
+message RescheduleProviderRequest {
+  string code = 1;
+  string update_time = 2; // Time in HH:mm format (e.g., "14:30")
+  string time_zone = 3;   // Timezone (e.g., "CET", "UTC", "EET")
+}
+
+message RescheduleProviderResponse {
+  bool success = 1;
+  string message = 2;
+  .exchangerates.common.v1.ErrorDetails error = 3;
+}

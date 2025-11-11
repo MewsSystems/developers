@@ -1,0 +1,301 @@
+syntax = "proto3";
+
+import "common.proto";
+import "google/protobuf/timestamp.proto";
+
+package exchangerates.exchangerates.v1;
+
+option csharp_namespace = "gRPC.Protos.ExchangeRates";
+
+// ============================================================
+// EXCHANGE RATES SERVICE
+// ============================================================
+
+/// Service for exchange rate operations and real-time updates
+service ExchangeRatesService {
+  /// Get current exchange rates (flat list)
+  rpc GetCurrentRates(GetCurrentRatesRequest) returns (GetCurrentRatesResponse);
+
+  /// Get current exchange rates grouped by provider and base currency
+  rpc GetCurrentRatesGrouped(GetCurrentRatesRequest) returns (GetCurrentRatesGroupedResponse);
+
+  /// Get the latest exchange rate for a specific currency pair
+  rpc GetLatestRate(GetLatestRateRequest) returns (GetLatestRateResponse);
+
+  /// Get all latest exchange rates across all currency pairs (flat list)
+  rpc GetAllLatestRates(GetAllLatestRatesRequest) returns (GetAllLatestRatesResponse);
+
+  /// Get all latest exchange rates grouped by provider and base currency
+  rpc GetAllLatestRatesGrouped(GetAllLatestRatesRequest) returns (GetAllLatestRatesGroupedResponse);
+
+  /// Get historical exchange rates for a currency pair (flat list)
+  rpc GetHistory(GetHistoryRequest) returns (GetHistoryResponse);
+
+  /// Get historical exchange rates grouped by provider and base currency
+  rpc GetHistoryGrouped(GetHistoryRequest) returns (GetHistoryGroupedResponse);
+
+  /// Convert an amount from one currency to another
+  rpc ConvertCurrency(ConvertCurrencyRequest) returns (ConvertCurrencyResponse);
+
+  /// STREAMING: Subscribe to real-time exchange rate updates (replaces SignalR)
+  rpc StreamExchangeRateUpdates(StreamSubscriptionRequest) returns (stream ExchangeRateUpdateEvent);
+}
+
+// ============================================================
+// CURRENT RATES (FLAT)
+// ============================================================
+
+message GetCurrentRatesRequest {
+  // No parameters needed
+}
+
+message GetCurrentRatesResponse {
+  repeated CurrentExchangeRate rates = 1;
+  string message = 2;
+}
+
+message CurrentExchangeRate {
+  int32 provider_id = 1;
+  string provider_code = 2;
+  string provider_name = 3;
+  string source_currency_code = 4;
+  string target_currency_code = 5;
+  string rate = 6; // decimal as string (raw rate from provider)
+  int32 multiplier = 7; // Rate multiplier (typically 1, could be 100 for currencies like JPY)
+  string effective_rate = 8; // Actual conversion rate after applying multiplier: 1 Base = EffectiveRate Target (decimal as string)
+  .exchangerates.common.v1.Date valid_date = 9;
+}
+
+// ============================================================
+// CURRENT RATES (GROUPED)
+// ============================================================
+
+message GetCurrentRatesGroupedResponse {
+  repeated ProviderRatesGroup providers = 1;
+  string message = 2;
+}
+
+message ProviderRatesGroup {
+  int32 provider_id = 1;
+  string provider_code = 2;
+  string provider_name = 3;
+  repeated BaseCurrencyGroup base_currencies = 4;
+}
+
+message BaseCurrencyGroup {
+  string base_currency_code = 1;
+  repeated TargetCurrencyRate target_currencies = 2;
+}
+
+message TargetCurrencyRate {
+  string target_currency_code = 1;
+  string rate = 2; // decimal as string (raw rate from provider)
+  int32 multiplier = 3; // Rate multiplier (typically 1, could be 100 for currencies like JPY)
+  string effective_rate = 4; // Actual conversion rate after applying multiplier: 1 Base = EffectiveRate Target (decimal as string)
+  .exchangerates.common.v1.Date valid_date = 5;
+}
+
+// ============================================================
+// LATEST RATE
+// ============================================================
+
+message GetLatestRateRequest {
+  string source_currency = 1;
+  string target_currency = 2;
+  optional int32 provider_id = 3;
+}
+
+message GetLatestRateResponse {
+  bool success = 1;
+  string message = 2;
+  ExchangeRateData data = 3;
+}
+
+message ExchangeRateData {
+  int32 provider_id = 1;
+  string provider_code = 2;
+  string provider_name = 3;
+  string source_currency_code = 4;
+  string target_currency_code = 5;
+  string rate = 6; // decimal as string (raw rate from provider)
+  int32 multiplier = 7; // Rate multiplier (typically 1, could be 100 for currencies like JPY)
+  string effective_rate = 8; // Actual conversion rate after applying multiplier: 1 Base = EffectiveRate Target (decimal as string)
+  .exchangerates.common.v1.Date valid_date = 9;
+}
+
+// ============================================================
+// ALL LATEST RATES (FLAT)
+// ============================================================
+
+message GetAllLatestRatesRequest {
+  // No parameters needed
+}
+
+message GetAllLatestRatesResponse {
+  repeated LatestExchangeRate rates = 1;
+  string message = 2;
+}
+
+message LatestExchangeRate {
+  int32 provider_id = 1;
+  string provider_code = 2;
+  string provider_name = 3;
+  string source_currency_code = 4;
+  string target_currency_code = 5;
+  string rate = 6; // decimal as string (raw rate from provider)
+  int32 multiplier = 7; // Rate multiplier (typically 1, could be 100 for currencies like JPY)
+  string effective_rate = 8; // Actual conversion rate after applying multiplier: 1 Base = EffectiveRate Target (decimal as string)
+  .exchangerates.common.v1.Date valid_date = 9;
+  google.protobuf.Timestamp updated_at = 10;
+}
+
+// ============================================================
+// ALL LATEST RATES (GROUPED)
+// ============================================================
+
+message GetAllLatestRatesGroupedResponse {
+  repeated LatestProviderRatesGroup providers = 1;
+  string message = 2;
+}
+
+message LatestProviderRatesGroup {
+  int32 provider_id = 1;
+  string provider_code = 2;
+  string provider_name = 3;
+  repeated LatestBaseCurrencyGroup base_currencies = 4;
+}
+
+message LatestBaseCurrencyGroup {
+  string base_currency_code = 1;
+  repeated LatestTargetCurrencyRate target_currencies = 2;
+}
+
+message LatestTargetCurrencyRate {
+  string target_currency_code = 1;
+  string rate = 2; // decimal as string (raw rate from provider)
+  int32 multiplier = 3; // Rate multiplier (typically 1, could be 100 for currencies like JPY)
+  string effective_rate = 4; // Actual conversion rate after applying multiplier: 1 Base = EffectiveRate Target (decimal as string)
+  .exchangerates.common.v1.Date valid_date = 5;
+  google.protobuf.Timestamp updated_at = 6;
+}
+
+// ============================================================
+// HISTORY (FLAT)
+// ============================================================
+
+message GetHistoryRequest {
+  string source_currency = 1;
+  string target_currency = 2;
+  .exchangerates.common.v1.Date start_date = 3;
+  .exchangerates.common.v1.Date end_date = 4;
+  optional int32 provider_id = 5;
+}
+
+message GetHistoryResponse {
+  repeated ExchangeRateHistory history = 1;
+  string message = 2;
+}
+
+message ExchangeRateHistory {
+  int32 provider_id = 1;
+  string provider_code = 2;
+  string provider_name = 3;
+  string source_currency_code = 4;
+  string target_currency_code = 5;
+  string rate = 6; // decimal as string (raw rate from provider)
+  int32 multiplier = 7; // Rate multiplier (typically 1, could be 100 for currencies like JPY)
+  string effective_rate = 8; // Actual conversion rate after applying multiplier: 1 Base = EffectiveRate Target (decimal as string)
+  .exchangerates.common.v1.Date valid_date = 9;
+}
+
+// ============================================================
+// HISTORY (GROUPED)
+// ============================================================
+
+message GetHistoryGroupedResponse {
+  repeated HistoryProviderGroup providers = 1;
+  string message = 2;
+}
+
+message HistoryProviderGroup {
+  int32 provider_id = 1;
+  string provider_code = 2;
+  string provider_name = 3;
+  repeated HistoryBaseCurrencyGroup base_currencies = 4;
+}
+
+message HistoryBaseCurrencyGroup {
+  string base_currency_code = 1;
+  repeated HistoryTargetCurrencyGroup target_currencies = 2;
+}
+
+message HistoryTargetCurrencyGroup {
+  string target_currency_code = 1;
+  repeated HistoricalRate rates = 2;
+}
+
+message HistoricalRate {
+  string rate = 1; // decimal as string (raw rate from provider)
+  int32 multiplier = 2; // Rate multiplier (typically 1, could be 100 for currencies like JPY)
+  string effective_rate = 3; // Actual conversion rate after applying multiplier: 1 Base = EffectiveRate Target (decimal as string)
+  .exchangerates.common.v1.Date valid_date = 4;
+}
+
+// ============================================================
+// CURRENCY CONVERSION
+// ============================================================
+
+message ConvertCurrencyRequest {
+  string from_currency = 1;
+  string to_currency = 2;
+  string amount = 3; // decimal as string
+  optional string provider_code = 4;
+}
+
+message ConvertCurrencyResponse {
+  bool success = 1;
+  string message = 2;
+  ConversionResult data = 3;
+}
+
+message ConversionResult {
+  string source_currency_code = 1;
+  string target_currency_code = 2;
+  string source_amount = 3; // decimal as string
+  string target_amount = 4; // decimal as string
+  string effective_rate = 5; // decimal as string
+  string valid_date = 6; // ISO date string
+}
+
+// ============================================================
+// STREAMING: PUSH NOTIFICATIONS
+// ============================================================
+
+/// Request message for subscribing to exchange rate updates
+message StreamSubscriptionRequest {
+  /// Types of updates to subscribe to: "latest", "historical", "all"
+  repeated string subscription_types = 1;
+
+  /// Optional: Filter by specific provider
+  optional int32 provider_id = 2;
+
+  /// Optional: Filter by specific currency codes
+  repeated string currency_codes = 3;
+}
+
+/// Streaming event pushed to clients when exchange rates are updated
+message ExchangeRateUpdateEvent {
+  /// Event type: "LatestRatesUpdated" or "HistoricalRatesUpdated"
+  string event_type = 1;
+
+  /// Timestamp when the update occurred
+  google.protobuf.Timestamp timestamp = 2;
+
+  /// The updated exchange rate data (grouped format)
+  ExchangeRatesGroupedData data = 3;
+}
+
+/// Grouped exchange rate data for streaming updates
+message ExchangeRatesGroupedData {
+  repeated LatestProviderRatesGroup providers = 1;
+}

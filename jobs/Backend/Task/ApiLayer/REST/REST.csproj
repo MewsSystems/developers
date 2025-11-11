@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.10" />
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.10" />
+    <PackageReference Include="Scalar.AspNetCore" Version="2.10.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Areas\" />
+    <Folder Include="Response\Models\" />
+    <Folder Include="Response\Converters\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\DataLayer\DataLayer.csproj" />
+    <ProjectReference Include="..\..\ConfigurationLayer\ConfigurationLayer.csproj" />
+    <ProjectReference Include="..\..\ApplicationLayer\ApplicationLayer.csproj" />
+    <ProjectReference Include="..\..\InfrastructureLayer\InfrastructureLayer.csproj" />
+    <ProjectReference Include="..\..\ExchangeRateProviderLayer\EuropeanCentralBank\EuropeanCentralBank.csproj" />
+    <ProjectReference Include="..\..\ExchangeRateProviderLayer\CzechNationalBank\CzechNationalBank.csproj" />
+    <ProjectReference Include="..\..\ExchangeRateProviderLayer\RomanianNationalBank\RomanianNationalBank.csproj" />
+  </ItemGroup>
+
+</Project>

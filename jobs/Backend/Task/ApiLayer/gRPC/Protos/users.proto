@@ -1,0 +1,202 @@
+syntax = "proto3";
+
+import "common.proto";
+import "google/protobuf/timestamp.proto";
+
+package exchangerates.users.v1;
+
+option csharp_namespace = "gRPC.Protos.Users";
+
+// ============================================================
+// USERS SERVICE
+// ============================================================
+
+/// Service for managing users
+service UsersService {
+  /// Get all users
+  rpc GetAllUsers(GetAllUsersRequest) returns (GetAllUsersResponse);
+
+  /// Get a specific user by ID
+  rpc GetUserById(GetUserByIdRequest) returns (GetUserByIdResponse);
+
+  /// Get a specific user by email
+  rpc GetUserByEmail(GetUserByEmailRequest) returns (GetUserByEmailResponse);
+
+  /// Get users by role
+  rpc GetUsersByRole(GetUsersByRoleRequest) returns (GetUsersByRoleResponse);
+
+  /// Check if email exists (Admin only)
+  rpc CheckEmailExists(CheckEmailExistsRequest) returns (CheckEmailExistsResponse);
+
+  /// Create a new user
+  rpc CreateUser(CreateUserRequest) returns (CreateUserResponse);
+
+  /// Update user information
+  rpc UpdateUserInfo(UpdateUserInfoRequest) returns (UpdateUserInfoResponse);
+
+  /// Change user password
+  rpc ChangeUserPassword(ChangeUserPasswordRequest) returns (ChangeUserPasswordResponse);
+
+  /// Change user role
+  rpc ChangeUserRole(ChangeUserRoleRequest) returns (ChangeUserRoleResponse);
+
+  /// Delete a user
+  rpc DeleteUser(DeleteUserRequest) returns (DeleteUserResponse);
+}
+
+// ============================================================
+// GET ALL USERS
+// ============================================================
+
+message GetAllUsersRequest {
+  // No parameters needed
+}
+
+message GetAllUsersResponse {
+  repeated UserInfo users = 1;
+  string message = 2;
+}
+
+message UserInfo {
+  int32 id = 1;
+  string email = 2;
+  string full_name = 3;
+  string role = 4;
+  google.protobuf.Timestamp created_at = 5;
+  google.protobuf.Timestamp updated_at = 6;
+}
+
+// ============================================================
+// GET USER BY ID
+// ============================================================
+
+message GetUserByIdRequest {
+  int32 id = 1;
+}
+
+message GetUserByIdResponse {
+  bool success = 1;
+  string message = 2;
+  UserInfo data = 3;
+  .exchangerates.common.v1.ErrorDetails error = 4;
+}
+
+// ============================================================
+// GET USER BY EMAIL
+// ============================================================
+
+message GetUserByEmailRequest {
+  string email = 1;
+}
+
+message GetUserByEmailResponse {
+  bool success = 1;
+  string message = 2;
+  UserInfo data = 3;
+  .exchangerates.common.v1.ErrorDetails error = 4;
+}
+
+// ============================================================
+// GET USERS BY ROLE
+// ============================================================
+
+message GetUsersByRoleRequest {
+  string role = 1;
+}
+
+message GetUsersByRoleResponse {
+  repeated UserInfo users = 1;
+  string message = 2;
+}
+
+// ============================================================
+// CHECK EMAIL EXISTS
+// ============================================================
+
+message CheckEmailExistsRequest {
+  string email = 1;
+}
+
+message CheckEmailExistsResponse {
+  bool exists = 1;
+  string message = 2;
+}
+
+// ============================================================
+// CREATE USER
+// ============================================================
+
+message CreateUserRequest {
+  string email = 1;
+  string password = 2;
+  string full_name = 3;
+  string role = 4;
+}
+
+message CreateUserResponse {
+  bool success = 1;
+  string message = 2;
+  UserInfo data = 3;
+  .exchangerates.common.v1.ErrorDetails error = 4;
+}
+
+// ============================================================
+// UPDATE USER INFO
+// ============================================================
+
+message UpdateUserInfoRequest {
+  int32 id = 1;
+  string email = 2;
+  string full_name = 3;
+}
+
+message UpdateUserInfoResponse {
+  bool success = 1;
+  string message = 2;
+  .exchangerates.common.v1.ErrorDetails error = 3;
+}
+
+// ============================================================
+// CHANGE USER PASSWORD
+// ============================================================
+
+message ChangeUserPasswordRequest {
+  int32 id = 1;
+  string current_password = 2;
+  string new_password = 3;
+}
+
+message ChangeUserPasswordResponse {
+  bool success = 1;
+  string message = 2;
+  .exchangerates.common.v1.ErrorDetails error = 3;
+}
+
+// ============================================================
+// CHANGE USER ROLE
+// ============================================================
+
+message ChangeUserRoleRequest {
+  int32 id = 1;
+  string new_role = 2;
+}
+
+message ChangeUserRoleResponse {
+  bool success = 1;
+  string message = 2;
+  .exchangerates.common.v1.ErrorDetails error = 3;
+}
+
+// ============================================================
+// DELETE USER
+// ============================================================
+
+message DeleteUserRequest {
+  int32 id = 1;
+}
+
+message DeleteUserResponse {
+  bool success = 1;
+  string message = 2;
+  .exchangerates.common.v1.ErrorDetails error = 3;
+}

@@ -1,0 +1,108 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <Name>Database</Name>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectVersion>4.1</ProjectVersion>
+    <ProjectGuid>{ad34fbe9-b60b-491d-b5ad-edc615336bae}</ProjectGuid>
+    <DSP>Microsoft.Data.Tools.Schema.Sql.Sql150DatabaseSchemaProvider</DSP>
+    <OutputType>Database</OutputType>
+    <RootPath>
+    </RootPath>
+    <RootNamespace>ApiDatabase</RootNamespace>
+    <AssemblyName>ApiDatabase</AssemblyName>
+    <ModelCollation>1033, CI</ModelCollation>
+    <DefaultFileStructure>BySchemaAndSchemaType</DefaultFileStructure>
+    <DeployToDatabase>True</DeployToDatabase>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <TargetLanguage>CS</TargetLanguage>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <SqlServerVerification>False</SqlServerVerification>
+    <IncludeCompositeObjects>True</IncludeCompositeObjects>
+    <TargetDatabaseSet>True</TargetDatabaseSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">11.0</VisualStudioVersion>
+    <!-- Default to the v11.0 targets path if the targets file for the current VS version is not found -->
+    <SSDTExists Condition="Exists('$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets')">True</SSDTExists>
+    <VisualStudioVersion Condition="'$(SSDTExists)' == ''">11.0</VisualStudioVersion>
+  </PropertyGroup>
+  <Import Condition="'$(SQLDBExtensionsRefPath)' != ''" Project="$(SQLDBExtensionsRefPath)\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
+  <Import Condition="'$(SQLDBExtensionsRefPath)' == ''" Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
+  <ItemGroup>
+    <Folder Include="Properties" />
+    <Folder Include="Table" />
+    <Folder Include="Table\Finance" />
+    <Folder Include="Table\Provider" />
+    <Folder Include="Table\User" />
+    <Folder Include="Script" />
+    <Folder Include="Table\Audit" />
+    <Folder Include="Table\System" />
+    <Folder Include="View" />
+    <Folder Include="View\ExchangeRate" />
+    <Folder Include="View\Provider" />
+    <Folder Include="View\System" />
+    <Folder Include="Procedure" />
+    <Folder Include="Procedure\ExchangeRate" />
+    <Folder Include="Procedure\Audit" />
+  </ItemGroup>
+  <ItemGroup>
+    <Build Include="Table\Finance\Currency.sql" />
+    <Build Include="Table\Finance\ExchangeRate.sql" />
+    <Build Include="Table\Provider\ExchangeRateProvider.sql" />
+    <Build Include="Table\User\User.sql" />
+    <Build Include="Table\Audit\ExchangeRateFetchLog.sql" />
+    <Build Include="Table\System\SystemConfiguration.sql" />
+    <Build Include="Table\Provider\ExchangeRateProviderConfiguration.sql" />
+    <Build Include="Table\System\ErrorLog.sql" />
+    <Build Include="View\ExchangeRate\vw_LatestExchangeRates.sql" />
+    <Build Include="View\ExchangeRate\vw_CurrentExchangeRates.sql" />
+    <Build Include="View\Provider\vw_ProviderHealthStatus.sql" />
+    <Build Include="View\ExchangeRate\vw_ExchangeRateHistory.sql" />
+    <Build Include="View\Provider\vw_ProviderConfigurationSummary.sql" />
+    <Build Include="View\Provider\vw_RecentFetchActivity.sql" />
+    <Build Include="View\System\vw_ErrorSummary.sql" />
+    <Build Include="View\ExchangeRate\vw_CurrencyPairAvailability.sql" />
+    <Build Include="View\System\vw_SystemHealthDashboard.sql" />
+    <Build Include="View\ExchangeRate\vw_AllLatestExchangeRates.sql" />
+    <Build Include="View\ExchangeRate\vw_AllLatestUpdatedExchangeRates.sql" />
+    <Build Include="Procedure\ExchangeRate\sp_BulkUpsertExchangeRates.sql" />
+    <Build Include="Procedure\Audit\sp_StartFetchLog.sql" />
+    <Build Include="Procedure\Audit\sp_CompleteFetchLog.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Script\Index.sql" />
+    <None Include="Script\SeedCurrencies.sql" />
+    <None Include="Script\SeedExchangeRateProvidersAndConfiguration.sql" />
+    <None Include="Script\SeedSystemConfiguration.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <PostDeploy Include="Script.PostDeployment.sql" />
+    <None Include="Script\SeedUsers.sql" />
+  </ItemGroup>
+</Project>
