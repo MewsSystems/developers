@@ -1,0 +1,3 @@
+namespace ExchangeRate.Domain.Providers.CzechNationalBank;
+
+public sealed record CzechNationalBankProviderResponse(IEnumerable<CzechNationalBankExchangeRate> Rates);
