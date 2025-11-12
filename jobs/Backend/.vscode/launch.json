@@ -1,0 +1,11 @@
+{
+    "configurations": [
+    {
+        "name": "C#: Backend Task Debug",
+        "type": "coreclr",
+        "request": "launch",
+        "program": "${workspaceFolder}/Task/bin/debug/net6.0/ExchangeRateUpdater.dll",
+        "console": "internalConsole"
+    }
+    ]
+}
