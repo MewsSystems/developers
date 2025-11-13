@@ -1,0 +1,12 @@
+.pageNumber {
+  list-style: none;
+  border-radius: 3px;
+  width: 26px;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+}
+
+.active {
+  color: red;
+}
