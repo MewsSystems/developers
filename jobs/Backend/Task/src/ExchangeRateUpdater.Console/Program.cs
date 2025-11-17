@@ -4,15 +4,14 @@ using Microsoft.Extensions.Logging;
 using ExchangeRateUpdater.BusinessLogic;
 using ExchangeRateUpdater.BusinessLogic.Models;
 using ExchangeRateUpdater.Data;
-using BusinessLogicUpdater = ExchangeRateUpdater.BusinessLogic.ExchangeRateUpdater;
 
 var host = Host.CreateDefaultBuilder(args)
     .ConfigureServices(s =>
     {
         s.AddLogging(l => l.AddConsole());
         s.AddHttpClient<IExchangeRateProvider, ExchangeRateProvider>();
-        s.AddScoped<IExchangeRateUpdater>(sp =>
-            new BusinessLogicUpdater(
+        s.AddScoped<IExchangeRateManager>(sp =>
+            new ExchangeRateManager(
                 currencies => sp.GetRequiredService<IExchangeRateProvider>().GetExchangeRates(currencies)
             )
         );
@@ -23,7 +22,7 @@ var logger = host.Services.GetRequiredService<ILogger<Program>>();
 
 try
 {
-    var updater = host.Services.GetRequiredService<IExchangeRateUpdater>();
+    var manager = host.Services.GetRequiredService<IExchangeRateManager>();
 
     var currencies = new[]
     {
@@ -38,7 +37,7 @@ try
         new Currency("XYZ")
     };
 
-    var rates = updater.GetExchangeRates(currencies);
+    var rates = manager.GetExchangeRates(currencies);
 
     Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
     foreach (var rate in rates)

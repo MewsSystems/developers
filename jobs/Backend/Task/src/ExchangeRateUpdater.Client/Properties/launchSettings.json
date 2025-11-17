@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "ExchangeRateUpdater.Client": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "https://localhost:57076;http://localhost:57077"
+    }
+  }
+}

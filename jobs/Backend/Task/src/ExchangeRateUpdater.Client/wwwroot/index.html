@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exchange Rate Viewer</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 600px;
+            width: 100%;
+            padding: 40px;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 30px;
+            text-align: center;
+            font-size: 28px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            color: #555;
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .loading {
+            text-align: center;
+            color: #667eea;
+            font-weight: 600;
+            margin: 20px 0;
+        }
+
+        .error {
+            background: #fee;
+            color: #c33;
+            padding: 12px;
+            border-radius: 6px;
+            margin: 20px 0;
+            border-left: 4px solid #c33;
+        }
+
+        .success {
+            background: #efe;
+            color: #3c3;
+            padding: 12px;
+            border-radius: 6px;
+            margin: 20px 0;
+            border-left: 4px solid #3c3;
+        }
+
+        .rates-container {
+            margin-top: 30px;
+        }
+
+        .rates-title {
+            color: #333;
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .rate-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px;
+            background: #f9f9f9;
+            border-radius: 6px;
+            margin-bottom: 10px;
+            border: 1px solid #e0e0e0;
+            transition: background 0.2s;
+        }
+
+        .rate-item:hover {
+            background: #f0f0f0;
+        }
+
+        .rate-name {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .rate-value {
+            color: #667eea;
+            font-weight: 700;
+            font-size: 16px;
+        }
+
+        .info {
+            background: #f0f7ff;
+            color: #0066cc;
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            border-left: 4px solid #0066cc;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+            margin-right: 10px;
+            vertical-align: middle;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Exchange Rate Viewer</h1>
+        
+        <div class="info">
+            Enter currency codes (e.g., USD, EUR, JPY) separated by commas to view their exchange rates to CZK
+        </div>
+
+        <form id="exchangeForm">
+            <div class="form-group">
+                <label for="currencies">Currency Codes</label>
+                <input 
+                    type="text" 
+                    id="currencies" 
+                    placeholder="e.g., USD, EUR, JPY, GBP"
+                    required
+                    autocomplete="off"
+                >
+            </div>
+            <button type="submit" id="submitBtn">Get Exchange Rates</button>
+        </form>
+
+        <div id="status"></div>
+        <div id="rates"></div>
+    </div>
+
+    <script>
+        const API_URL = 'https://localhost:5001/api/exchangerates';
+        const form = document.getElementById('exchangeForm');
+        const currenciesInput = document.getElementById('currencies');
+        const statusDiv = document.getElementById('status');
+        const ratesDiv = document.getElementById('rates');
+        const submitBtn = document.getElementById('submitBtn');
+
+        // Load last used currencies from localStorage
+        window.addEventListener('load', () => {
+            const saved = localStorage.getItem('lastCurrencies');
+            if (saved) {
+                currenciesInput.value = saved;
+            }
+        });
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const currencies = currenciesInput.value.trim();
+
+            if (!currencies) {
+                showError('Please enter at least one currency code');
+                return;
+            }
+
+            // Save to localStorage
+            localStorage.setItem('lastCurrencies', currencies);
+
+            await fetchExchangeRates(currencies);
+        });
+
+        async function fetchExchangeRates(currencies) {
+            try {
+                submitBtn.disabled = true;
+                statusDiv.innerHTML = '<div class="loading"><span class="spinner"></span>Loading exchange rates...</div>';
+                ratesDiv.innerHTML = '';
+
+                const response = await fetch(`${API_URL}?currencies=${encodeURIComponent(currencies)}`);
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    showError(errorData.error || `Error: ${response.statusText}`);
+                    submitBtn.disabled = false;
+                    return;
+                }
+
+                const rates = await response.json();
+
+                if (!rates || rates.length === 0) {
+                    showError('No exchange rates found for the specified currencies');
+                    submitBtn.disabled = false;
+                    return;
+                }
+
+                displayRates(rates);
+                statusDiv.innerHTML = `<div class="success"> Successfully retrieved ${rates.length} exchange rate(s)</div>`;
+            } catch (error) {
+                showError(`Failed to fetch exchange rates: ${error.message}`);
+            } finally {
+                submitBtn.disabled = false;
+            }
+        }
+
+        function displayRates(rates) {
+            let html = '<div class="rates-container"><div class="rates-title">Exchange Rates (to CZK)</div>';
+
+            rates.forEach(rate => {
+                const rateValue = parseFloat(rate.rate).toFixed(6);
+                const pairName = `${rate.sourceCurrencyCode} ${rate.targetCurrencyCode}`;
+                html += `
+                    <div class="rate-item">
+                        <span class="rate-name">${pairName}</span>
+                        <span class="rate-value">${rateValue}</span>
+                    </div>
+                `;
+            });
+
+            html += '</div>';
+            ratesDiv.innerHTML = html;
+        }
+
+        function showError(message) {
+            statusDiv.innerHTML = `<div class="error"> ${message}</div>`;
+            ratesDiv.innerHTML = '';
+        }
+    </script>
+</body>
+</html>

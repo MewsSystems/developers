@@ -5,10 +5,10 @@ using System.Collections.Generic;
 namespace ExchangeRateUpdater.BusinessLogic
 {
     /// <summary>
-    /// Business logic service that retrieves exchange rates.
-    /// Accepts a provider via dependency injection (wired at composition root in Console).
+    /// Business logic service that manages and retrieves exchange rates.
+    /// Accepts a provider via dependency injection (wired at composition root in Console/API).
     /// </summary>
-    public class ExchangeRateUpdater : IExchangeRateUpdater
+    public class ExchangeRateManager : IExchangeRateManager
     {
         private readonly Func<IEnumerable<Currency>, IEnumerable<ExchangeRate>> _getExchangeRates;
 
@@ -16,7 +16,7 @@ namespace ExchangeRateUpdater.BusinessLogic
         /// Constructor accepting a function that retrieves exchange rates from the data layer.
         /// This avoids circular dependency between BusinessLogic and Data projects.
         /// </summary>
-        public ExchangeRateUpdater(Func<IEnumerable<Currency>, IEnumerable<ExchangeRate>> getExchangeRates)
+        public ExchangeRateManager(Func<IEnumerable<Currency>, IEnumerable<ExchangeRate>> getExchangeRates)
         {
             _getExchangeRates = getExchangeRates ?? throw new ArgumentNullException(nameof(getExchangeRates));
         }

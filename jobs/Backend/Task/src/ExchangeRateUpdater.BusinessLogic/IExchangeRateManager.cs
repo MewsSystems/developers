@@ -4,9 +4,9 @@ using System.Collections.Generic;
 namespace ExchangeRateUpdater.BusinessLogic
 {
     /// <summary>
-    /// Business logic service for retrieving exchange rates.
+    /// Business logic service for managing and retrieving exchange rates.
     /// </summary>
-    public interface IExchangeRateUpdater
+    public interface IExchangeRateManager
     {
         /// <summary>
         /// Should return exchange rates among the specified currencies that are defined by the source.
