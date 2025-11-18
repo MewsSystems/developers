@@ -1,4 +1,4 @@
-namespace ExchangeRateUpdater.Api.Controllers
+namespace ExchangeRateUpdater.Api.Models
 {
     /// <summary>
     /// DTO for exchange rate information.

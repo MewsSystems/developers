@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using ExchangeRateUpdater.BusinessLogic;
 using ExchangeRateUpdater.BusinessLogic.Models;
+using ExchangeRateUpdater.Api.Models;
 
 namespace ExchangeRateUpdater.Api.Controllers
 {
