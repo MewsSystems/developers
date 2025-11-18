@@ -5,9 +5,8 @@ using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
-using CsvHelper;
-using CsvHelper.Configuration;
 using ExchangeRateUpdater.BusinessLogic.Models;
+using ExchangeRateUpdater.Data.Helpers;
 using Microsoft.Extensions.Logging;
 
 namespace ExchangeRateUpdater.Data
@@ -29,8 +28,8 @@ namespace ExchangeRateUpdater.Data
 
         public IEnumerable<ExchangeRate> GetExchangeRates(IEnumerable<Currency> currencies)
         {
-            // Synchronous wrapper around async operation
-            var result = GetExchangeRatesAsync(currencies).GetAwaiter().GetResult();
+            // Synchronous wrapper around async operation and I am now using ConfigureAwait(false) to prevent deadlock 
+            var result = GetExchangeRatesAsync(currencies).ConfigureAwait(false).GetAwaiter().GetResult();
             return result;
         }
 
@@ -40,125 +39,30 @@ namespace ExchangeRateUpdater.Data
             {
                 _logger.LogDebug("Downloading daily exchange rates from {Url}", DailyRatesUrl);
 
-                using var res = await _httpClient.GetAsync(DailyRatesUrl, HttpCompletionOption.ResponseHeadersRead);
+                using var res = await _httpClient.GetAsync(DailyRatesUrl, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false);
                 res.EnsureSuccessStatusCode();
-                await using var stream = await res.Content.ReadAsStreamAsync();
+                await using var stream = await res.Content.ReadAsStreamAsync().ConfigureAwait(false);
                 using var sr = new StreamReader(stream);
 
-                var allText = await sr.ReadToEndAsync();
+                var allText = await sr.ReadToEndAsync().ConfigureAwait(false);
 
-                return ParseRates(allText, currencies);
+                // Parser is now a static helper
+                return ParseHelper.ParseRates(allText, currencies);
             }
-            catch (Exception ex)
+            catch (HttpRequestException httpEx)
             {
-                _logger.LogError(ex, "Failed to download or parse exchange rates.");
+                _logger.LogError(httpEx, "Failed to download exchange rates from {Url}. HTTP error occurred.", DailyRatesUrl);
                 throw;
             }
-        }
-
-        /// <summary>
-        /// Parses exchange rates from the source content.
-        /// </summary>
-        public IEnumerable<ExchangeRate> ParseRates(string content, IEnumerable<Currency> currencies)
-        {
-            var lines = content.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
-            if (lines.Length < 3)
-                return Enumerable.Empty<ExchangeRate>();
-
-            var codesInInput = new HashSet<string>(currencies.Select(c => c.Code), StringComparer.OrdinalIgnoreCase);
-            var targetCurrencyCode = "CZK";
-
-            var result = new List<ExchangeRate>();
-
-            try
+            catch (IOException ioEx)
             {
-                // The CNB data format:
-                // Line 1: Date (e.g., "14 Nov 2025")
-                // Line 2: Reference number (e.g., "#222")
-                // Line 3: Header (e.g., "Country|Currency|Amount|Code|Rate")
-                // Line 4+: Data rows
-                
-                var csvLines = lines.Skip(2).ToList();
-                
-                if (csvLines.Count == 0)
-                    return Enumerable.Empty<ExchangeRate>();
-
-                var csvContent = string.Join(Environment.NewLine, csvLines);
-
-                using var reader = new StringReader(csvContent);
-                var config = new CsvConfiguration(CultureInfo.InvariantCulture)
-                {
-                    Delimiter = "|",
-                    HasHeaderRecord = true,
-                    HeaderValidated = null,  // Disable header validation
-                };
-                using var csv = new CsvReader(reader, config);
-                
-                // Register the class map for proper field mapping
-                csv.Context.RegisterClassMap<ExchangeRateRecordMap>();
-
-                // Read all records - materialize the enumerable to ensure parsing happens
-                var records = csv.GetRecords<ExchangeRateRecord>().ToList();
-
-                foreach (var record in records)
-                {
-                    try
-                    {
-                        // Skip records with invalid data
-                        if (record?.Code == null || string.IsNullOrWhiteSpace(record.Code))
-                            continue;
-
-                        // Validate that both source currency and target currency (CZK) are requested
-                        if (!codesInInput.Contains(record.Code) || !codesInInput.Contains(targetCurrencyCode))
-                            continue;
-
-                        // Calculate unit rate: rate / amount
-                        var unitRate = record.Rate / record.Amount;
-                        var sourceCurrency = new Currency(record.Code);
-                        var targetCurrency = new Currency(targetCurrencyCode);
-
-                        result.Add(new ExchangeRate(sourceCurrency, targetCurrency, unitRate));
-                    }
-                    catch (Exception ex)
-                    {
-                        _logger.LogWarning(ex, "Failed to parse record for currency code.");
-                    }
-                }
+                _logger.LogError(ioEx, "I/O error occurred while reading exchange rate data.");
+                throw;
             }
-            catch (Exception ex)
+            catch (OperationCanceledException cancelEx)
             {
-                _logger.LogError(ex, "Failed to parse CSV content.");
-            }
-
-            return result;
-        }
-
-        /// <summary>
-        /// CSV record mapping for exchange rate data from CNB.
-        /// </summary>
-        private class ExchangeRateRecord
-        {
-            public string Country { get; set; }
-            public string Currency { get; set; }
-            public decimal Amount { get; set; }
-            public string Code { get; set; }
-            public decimal Rate { get; set; }
-        }
-
-        /// <summary>
-        /// Class map for CsvHelper to properly map CSV columns to ExchangeRateRecord properties.
-        /// Maps by column index (0-based) instead of by header name for better flexibility.
-        /// </summary>
-        private sealed class ExchangeRateRecordMap : ClassMap<ExchangeRateRecord>
-        {
-            public ExchangeRateRecordMap()
-            {
-                // Map by index instead of header name for more flexibility
-                Map(m => m.Country).Index(0);
-                Map(m => m.Currency).Index(1);
-                Map(m => m.Amount).Index(2);
-                Map(m => m.Code).Index(3);
-                Map(m => m.Rate).Index(4);
+                _logger.LogWarning(cancelEx, "Exchange rate download was cancelled.");
+                throw;
             }
         }
     }

@@ -14,7 +14,4 @@
     <ProjectReference Include="..\ExchangeRateUpdater.Data\ExchangeRateUpdater.Data.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Models\" />
-  </ItemGroup>
 </Project>

@@ -263,7 +263,7 @@
                 }
 
                 displayRates(rates);
-                statusDiv.innerHTML = `<div class="success"> Successfully retrieved ${rates.length} exchange rate(s)</div>`;
+                statusDiv.innerHTML = `<div class="success">Successfully retrieved ${rates.length} exchange rate(s)</div>`;
             } catch (error) {
                 showError(`Failed to fetch exchange rates: ${error.message}`);
             } finally {
@@ -290,7 +290,7 @@
         }
 
         function showError(message) {
-            statusDiv.innerHTML = `<div class="error"> ${message}</div>`;
+            statusDiv.innerHTML = `<div class="error">${message}</div>`;
             ratesDiv.innerHTML = '';
         }
     </script>

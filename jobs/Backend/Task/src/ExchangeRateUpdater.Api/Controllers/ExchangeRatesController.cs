@@ -70,9 +70,24 @@ namespace ExchangeRateUpdater.Api.Controllers
 
                 return Ok(result);
             }
-            catch (Exception ex)
+            catch (HttpRequestException httpEx)
             {
-                _logger.LogError(ex, "Error retrieving exchange rates for currencies: {Currencies}", currencies);
+                _logger.LogError(httpEx, "HTTP error occurred while retrieving exchange rates for currencies: {Currencies}", currencies);
+                return StatusCode(StatusCodes.Status503ServiceUnavailable, new { error = "Exchange rate service is temporarily unavailable." });
+            }
+            catch (OperationCanceledException cancelEx)
+            {
+                _logger.LogWarning(cancelEx, "Exchange rate request was cancelled for currencies: {Currencies}", currencies);
+                return StatusCode(StatusCodes.Status408RequestTimeout, new { error = "Request timeout while retrieving exchange rates." });
+            }
+            catch (ArgumentException argEx)
+            {
+                _logger.LogWarning(argEx, "Invalid argument provided for currencies: {Currencies}", currencies);
+                return BadRequest(new { error = "Invalid currency data." });
+            }
+            catch (InvalidOperationException ioEx)
+            {
+                _logger.LogError(ioEx, "Invalid operation while retrieving exchange rates for currencies: {Currencies}", currencies);
                 return StatusCode(StatusCodes.Status500InternalServerError, new { error = "Failed to retrieve exchange rates." });
             }
         }
