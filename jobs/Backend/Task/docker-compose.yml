@@ -1,0 +1,29 @@
+version: '3.8'
+services:
+  redis:
+    image: redis:7
+    container_name: exchange-rate-redis
+    ports:
+      - "6379:6379"
+
+  api:
+    build:
+      context: .
+      dockerfile: EchangeRateUpdater.Api/Dockerfile
+    environment:
+      - REDIS_CONNECTION=redis:6379
+      - ExchangeRateApiClientConfig__BaseUrl=https://api.cnb.cz/cnbapi/exrates/
+    depends_on:
+      - redis
+    ports:
+      - "5000:80"
+
+  worker:
+    build:
+      context: .
+      dockerfile: ExchangeRateUpdater.Worker/Dockerfile
+    environment:
+      - REDIS_CONNECTION=redis:6379
+      - ExchangeRateApiClientConfig__BaseUrl=https://api.cnb.cz/cnbapi/exrates/
+    depends_on:
+      - redis

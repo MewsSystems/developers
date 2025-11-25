@@ -12,6 +12,9 @@ using Microsoft.Extensions.Options;
 using Data;
 using Polly;
 using Polly.Extensions.Http;
+using StackExchange.Redis;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 
 public static class ServiceCollectionExtensions
 {
@@ -24,10 +27,22 @@ public static class ServiceCollectionExtensions
                 httpClient.BaseAddress = new Uri(exchangeRateApiClientConfig.Value.BaseUrl);
             }).AddPolicyHandler(GetRetryPolicy());
 
-        return self
-            // Configuration settings.
-            .AddSingleton<ICacheRepository, CacheRepository>()
-            .AddMemoryCache();
+        // Redis configuration
+        var redisConnection = configuration.GetValue<string>("Redis:Connection");
+
+        if (!string.IsNullOrWhiteSpace(redisConnection))
+        {
+            var mux = ConnectionMultiplexer.Connect(redisConnection);
+            self.AddSingleton<IConnectionMultiplexer>(mux);
+            self.AddSingleton<ICacheRepository, RedisCacheRepository>();
+        }
+        else
+        {
+            self.AddSingleton<ICacheRepository, CacheRepository>();
+            self.AddMemoryCache();
+        }
+
+        return self;
     }
 
     static IAsyncPolicy<HttpResponseMessage> GetRetryPolicy() =>
