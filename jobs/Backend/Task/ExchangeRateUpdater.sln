@@ -19,6 +19,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeRateUpdater.Api", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeRateUpdater.Client", "src\ExchangeRateUpdater.Client\ExchangeRateUpdater.Client.csproj", "{26F867DC-B5EF-9545-2053-6EEE6D5E8BE9}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{101353D8-A63C-43AD-B04B-A2A5C7C02270}"
+	ProjectSection(SolutionItems) = preProject
+		README.MD = README.MD
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -112,5 +117,8 @@ Global
 		{02DCD6F6-F79D-460E-9943-A9E164F79452} = {0AB3BF05-4346-4AA6-1389-037BE0695223}
 		{60D975FE-B57B-E1C4-6D3F-CF509327D85B} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
 		{26F867DC-B5EF-9545-2053-6EEE6D5E8BE9} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B62F2767-E00D-40E9-834A-79B58C8960FB}
 	EndGlobalSection
 EndGlobal
