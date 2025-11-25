@@ -1,8 +1,7 @@
 namespace ExchangeRateUpdater.Application.ExchangeRates.Query.GetExchangeRatesDaily;
 
-using AutoMapper;
 using Common.Interfaces;
-using Common.Models;
+using Common.Mappings;
 using Domain.Common;
 using Domain.Entities;
 using Domain.Repositories;
@@ -20,18 +19,15 @@ public class GetExchangesRatesByDateQueryHandler : IQueryHandler<GetExchangesRat
 {
     private readonly ICacheRepository _cacheRepository;
     private readonly IExchangeRateApiClient _exchangeRateApiClient;
-    private readonly IMapper _mapper;
     private const string CacheKey = "ExchangeRates";
 
     public GetExchangesRatesByDateQueryHandler(ICacheRepository cacheRepository,
-        IExchangeRateApiClient exchangeRateApiClient,  IMapper mapper)
+        IExchangeRateApiClient exchangeRateApiClient)
     {
         Ensure.Argument.NotNull(cacheRepository, nameof(cacheRepository));
         Ensure.Argument.NotNull(exchangeRateApiClient, nameof(exchangeRateApiClient));
-        Ensure.Argument.NotNull(mapper, nameof(mapper));
         _cacheRepository = cacheRepository;
         _exchangeRateApiClient = exchangeRateApiClient;
-        _mapper = mapper;
     }
 
     public async ValueTask<List<ExchangeRateDto>> Handle(GetExchangesRatesByDateQuery request,
@@ -44,13 +40,13 @@ public class GetExchangesRatesByDateQueryHandler : IQueryHandler<GetExchangesRat
         if (!exchangeRates.Any())
         {
             var exchangeRateApiDtos = await _exchangeRateApiClient.GetExchangeRatesAsync(request.Date, request.Language);
-            exchangeRates = exchangeRateApiDtos.Select(x => _mapper.Map<ExchangeRate>(x)).ToList();
+            exchangeRates = exchangeRateApiDtos.Select(x => x.ToExchangeRateEntity()).ToList();
             _cacheRepository.SetCache(CacheKey, exchangeRates);
         }
 
         var requestedExchangeRates = exchangeRates
             .Where(rates => requestedCurrencies.Any(currency => currency == rates.SourceCurrency))
-            .Select(exchangeRate => _mapper.Map<ExchangeRateDto>(exchangeRate)).ToList();
+            .Select(exchangeRate => exchangeRate.ToDto()).ToList();
 
         return requestedExchangeRates;
     }

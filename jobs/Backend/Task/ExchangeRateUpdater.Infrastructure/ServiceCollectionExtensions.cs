@@ -24,7 +24,8 @@ public static class ServiceCollectionExtensions
         self.Configure<ExchangeRateApiClientConfig>(configuration.GetSection(nameof(ExchangeRateApiClientConfig)))
             .AddHttpClient<IExchangeRateApiClient, ExchangeRateApiClient>((sp, httpClient) =>
             {
-                var exchangeRateApiClientConfig = sp.GetService<IOptions<ExchangeRateApiClientConfig>>();
+                var exchangeRateApiClientConfig = sp.GetService<IOptions<ExchangeRateApiClientConfig>>() ??
+                                                  throw new NullReferenceException($"{nameof(ExchangeRateApiClientConfig)} is not configured");
                 httpClient.BaseAddress = new Uri(exchangeRateApiClientConfig.Value.BaseUrl);
             }).AddPolicyHandler(GetRetryPolicy());
 

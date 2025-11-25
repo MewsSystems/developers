@@ -7,7 +7,6 @@
     </PropertyGroup>
     
     <ItemGroup>
-        <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
         <PackageReference Include="FluentValidation" Version="11.5.0" />
         <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.5.0" />
         <PackageReference Include="Mediator.Abstractions" Version="3.0.1"/>

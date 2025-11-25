@@ -8,9 +8,8 @@ public class GetExchangesRatesByDateQuery : IQuery<List<ExchangeRateDto>>
 {
     /// <summary>
     /// List of three-letter ISO 4217 currency codes for which exchange rates are requested.
-    /// If empty, all available rates are fetched.
     /// </summary>
-    public List<string>? CurrencyCodes { get; set; }
+    public required List<string> CurrencyCodes { get; set; }
 
     /// <summary>
     /// Date for which exchange rates are requested.
