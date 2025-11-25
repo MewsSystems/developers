@@ -1,33 +1,23 @@
 ﻿namespace ExchangeRateUpdater.Domain.Entities;
 
 using Common;
+using ValueObjects;
 
-public class ExchangeRate
+public class ExchangeRate(Currency sourceCurrency, Currency targetCurrency, decimal value)
 {
-    public ExchangeRate()
+    public Currency SourceCurrency { get; set; } = sourceCurrency;
+
+    public Currency TargetCurrency { get; set; } = targetCurrency;
+
+    public decimal Value { get; } = value;
+
+    public static ExchangeRate New(Currency sourceCurrency, Currency targetCurrency, decimal value)
     {
+        Ensure.Argument.NotNull(sourceCurrency, "Source currency should not be null");
+        Ensure.Argument.NotNull(targetCurrency,  "Target currency should not be null");
+        Ensure.Argument.NotNull(value, "Exchange value should not be null");
+        return new ExchangeRate(sourceCurrency, targetCurrency, value);
     }
-
-    public ExchangeRate(Currency sourceCurrency, Currency targetCurrency, decimal value)
-    {
-        SourceCurrency = sourceCurrency;
-        TargetCurrency = targetCurrency;
-        Value = value;
-    }
-
-    public Currency SourceCurrency { get; set; }
-
-    public Currency TargetCurrency { get; set; }
-
-    public decimal Value { get; }
-
-    // public static ExchangeRate New(Currency sourceCurrency, Currency targetCurrency, decimal value)
-    // {
-    //     Ensure.Argument.NotNull(sourceCurrency, "Source currency should not be null");
-    //     Ensure.Argument.NotNull(targetCurrency,  "Target currency should not be null");
-    //     Ensure.Argument.NotNull(value, "Exchange value should not be null");
-    //     return new ExchangeRate(sourceCurrency, targetCurrency, value);
-    // }
 
     public override string ToString()
     {

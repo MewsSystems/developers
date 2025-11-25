@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using ExchangeRateUpdater.Application;
+﻿using ExchangeRateUpdater.Application;
 using ExchangeRateUpdater.Application.ExchangeRates.Query.GetExchangeRatesDaily;
 using ExchangeRateUpdater.Infrastructure;
-using MediatR;
+using Mediator;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -35,7 +32,6 @@ var host = new HostBuilder()
 
 try
 {
-    
     var mediator = host.Services.GetRequiredService<IMediator>();
     var response = await mediator.Send(new GetExchangesRatesByDateQuery
     {
@@ -48,13 +44,11 @@ try
         Language = null
     });
 
-    if (response.Succeeded)
+
+    Console.WriteLine($"Successfully retrieved {response.Count} exchange rates:");
+    foreach (var rate in response)
     {
-        Console.WriteLine($"Successfully retrieved {response.Value.Count} exchange rates:");
-        foreach (var rate in response.Value)
-        {
-            Console.WriteLine(rate.ToString());
-        }
+        Console.WriteLine(rate.ToString());
     }
 }
 catch (Exception e)

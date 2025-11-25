@@ -4,10 +4,8 @@ using System.Text;
 using System.Text.Json;
 using Application.Common.Interfaces;
 using Application.ExchangeRates.Dtos;
-using Application.ExchangeRates.Query;
 using Domain.Common;
 using Domain.Enums;
-using Domain.Repositories;
 
 public class ExchangeRateApiClient : IExchangeRateApiClient
 {

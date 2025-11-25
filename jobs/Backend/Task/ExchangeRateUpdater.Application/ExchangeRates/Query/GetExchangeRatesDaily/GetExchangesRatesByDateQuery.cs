@@ -1,11 +1,10 @@
 namespace ExchangeRateUpdater.Application.ExchangeRates.Query.GetExchangeRatesDaily;
 
-using Common.Models;
 using Domain.Enums;
 using Dtos;
-using MediatR;
+using Mediator;
 
-public class GetExchangesRatesByDateQuery : IRequest<Result<List<ExchangeRateDto>>>
+public class GetExchangesRatesByDateQuery : IQuery<List<ExchangeRateDto>>
 {
     /// <summary>
     /// List of three-letter ISO 4217 currency codes for which exchange rates are requested.

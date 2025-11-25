@@ -3,6 +3,7 @@ namespace ExchangeRateUpdater.Infrastructure;
 using System;
 using ApiClients;
 using Application.Common.Interfaces;
+using Cache;
 using Configurations;
 using Domain.Repositories;
 using Microsoft.Extensions.Configuration;

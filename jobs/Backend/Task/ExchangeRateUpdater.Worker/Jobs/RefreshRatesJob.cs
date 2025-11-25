@@ -28,7 +28,7 @@ public class RefreshRatesJob : IJob
         {
             logger.LogInformation("Starting RefreshRatesJob at {Time}", DateTimeOffset.UtcNow);
             var rates = await apiClient.GetExchangeRatesAsync(null, null);
-            var list = rates?.ToList() ?? new System.Collections.Generic.List<object>();
+            var list = rates?.ToList();
             cacheRepository.SetCache("rates:latest", list);
             // store updated timestamp separately for scalar metrics
             cacheRepository.SetCache("rates:latest:updatedAt", DateTimeOffset.UtcNow);

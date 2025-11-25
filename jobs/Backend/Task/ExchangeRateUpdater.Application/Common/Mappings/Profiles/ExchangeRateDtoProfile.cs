@@ -1,6 +1,7 @@
 namespace ExchangeRateUpdater.Application.Common.Mappings.Profiles;
 
 using AutoMapper;
+using Domain.ValueObjects;
 using ExchangeRateUpdater.Application.ExchangeRates.Dtos;
 using ExchangeRateUpdater.Domain.Entities;
 

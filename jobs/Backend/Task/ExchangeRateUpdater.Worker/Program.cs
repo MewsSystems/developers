@@ -1,8 +1,6 @@
 using ExchangeRateUpdater.Application;
 using ExchangeRateUpdater.Infrastructure;
 using ExchangeRateUpdater.Worker.Jobs;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using Quartz;
 
 // Ensure REDIS_CONNECTION env var is visible in IConfiguration
@@ -19,8 +17,6 @@ var builder = Host.CreateDefaultBuilder(args)
 
         services.AddQuartz(q =>
         {
-            q.UseMicrosoftDependencyInjectionScopedJobFactory();
-
             var jobKey = new JobKey("RefreshRatesJob");
             q.AddJob<RefreshRatesJob>(opts => opts.WithIdentity(jobKey));
             q.AddTrigger(opts => opts
@@ -28,7 +24,7 @@ var builder = Host.CreateDefaultBuilder(args)
                 .WithIdentity("RefreshRatesTrigger")
                 .WithCronSchedule("0 0/1 * * * ?"));
         });
-
+        
         services.AddQuartzHostedService(q => q.WaitForJobsToComplete = true);
     })
     .Build();

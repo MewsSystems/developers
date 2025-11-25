@@ -1,47 +1,48 @@
-using System.Text.Json;
+using EchangeRateUpdater.Api.Configurations.Extensions;
 using ExchangeRateUpdater.Application;
 using ExchangeRateUpdater.Infrastructure;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Serilog;
-using SharpGrip.FluentValidation.AutoValidation.Mvc.Extensions;
 
-var builder = WebApplication.CreateBuilder(args);
+InitializeBootstrapLogger();
 
-// Read REDIS_CONNECTION env var into configuration (if present)
-var redisConnection = Environment.GetEnvironmentVariable("REDIS_CONNECTION");
-if (!string.IsNullOrWhiteSpace(redisConnection))
+try
 {
-	builder.Configuration["Redis:Connection"] = redisConnection;
+	var builder = WebApplication.CreateBuilder(args);
+
+	builder.Services.AddControllers();
+		
+	builder.Services.AddApiServices()
+		.AddApplicationServices()
+		.AddInfrastructure(builder.Configuration)
+		.AddControllers();
+
+	var app = builder.Build();
+	
+	app.UseExceptionHandler();
+	app.UseHealthChecks("/health");
+	
+	
+	app.UseHttpsRedirection();
+	app.UseApiDocumentation();
+	app.MapControllers();
+
+	app.Run();
+}
+catch (Exception ex)
+{
+	Log.Error(ex, "Unhandled exception");
+}
+finally
+{
+	await Log.CloseAndFlushAsync();
 }
 
-// Serilog
-Log.Logger = new LoggerConfiguration()
-	.ReadFrom.Configuration(builder.Configuration)
-	.Enrich.FromLogContext()
-	.CreateLogger();
+return;
 
-builder.Host.UseSerilog();
 
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-builder.Services.AddFluentValidationAutoValidation();
-builder.Services.AddHttpContextAccessor();
-builder.Services.AddApplicationServices();
-builder.Services.AddInfrastructure(builder.Configuration);
-builder.Services.AddControllers();
-
-builder.Services.AddHealthChecks()
-	.AddCheck("self", () => HealthCheckResult.Healthy())
-	.AddRedis(builder.Configuration.GetValue<string>("Redis:Connection"), name: "redis", tags: new[] { "ready" });
-
-var app = builder.Build();
-
-app.UseSerilogRequestLogging();
-
-app.UseSwagger();
-app.UseSwaggerUI();
-app.UseHttpsRedirection();
-app.MapControllers();
-app.MapHealthChecks("/healthz");
-
-app.Run();
+void InitializeBootstrapLogger()
+{ 
+	var config = new LoggerConfiguration().WriteTo.Console(); 
+        
+	Log.Logger = config.CreateBootstrapLogger();
+}

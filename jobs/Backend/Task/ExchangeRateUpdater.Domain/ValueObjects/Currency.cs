@@ -1,4 +1,4 @@
-﻿namespace ExchangeRateUpdater;
+﻿namespace ExchangeRateUpdater.Domain.ValueObjects;
 
 public record Currency
 {
