@@ -19,12 +19,14 @@ namespace ExchangeRateUpdater
             new Currency("XYZ")
         };
 
+        public static Currency baseCurrency = new Currency("CZK");
+
         public static void Main(string[] args)
         {
             try
             {
                 var provider = new ExchangeRateProvider();
-                var rates = provider.GetExchangeRates(currencies);
+                var rates = provider.GetExchangeRates(currencies, baseCurrency);
 
                 Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
                 foreach (var rate in rates)
