@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "Console (Redis localhost:6379)": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "REDIS_CONNECTION_STRING": "localhost"
+      }
+    }
+  }
+}
