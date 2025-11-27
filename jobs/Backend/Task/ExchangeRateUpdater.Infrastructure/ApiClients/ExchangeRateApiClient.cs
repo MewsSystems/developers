@@ -28,9 +28,25 @@ public class ExchangeRateApiClient : IExchangeRateApiClient
         {
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase
         });
-        return exchangeRates.Rates;
+        return exchangeRates!.Rates;
+    }
+    
+    public async Task<List<ExchangeRateApiDto>> GetDefaultExchangeRatesForYearAsync(int year)
+    {
+        var endpointRute = BuildExchangeRateDailyYearEndpointPath(year);
+        var response = await _httpClient.GetAsync(endpointRute);
+        response.EnsureSuccessStatusCode();
+        var apiResponse = await response.Content.ReadAsStringAsync();
+        var yearResponse = JsonSerializer.Deserialize<ExchangeYearRatesApiDto>(apiResponse, new JsonSerializerOptions
+        {
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+        });
+        return yearResponse!.Rates;
     }
 
+    private string BuildExchangeRateDailyYearEndpointPath(int year) 
+        => new StringBuilder("daily-year?year=" + year).ToString();
+    
     private string BuildExchangeRateDailyEndpointPath(DateTime? date, Language? language)
     {
         var stringBuilder = new StringBuilder(string.Empty);
@@ -39,7 +55,7 @@ public class ExchangeRateApiClient : IExchangeRateApiClient
 
         if (date is not null)
         {
-            stringBuilder.Append($"?date={date}");
+            stringBuilder.Append($"?date={date:yyyy-MM-dd}");
         }
 
         if (language is not null)

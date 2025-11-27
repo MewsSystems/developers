@@ -10,3 +10,8 @@ public class ExchangeRateApiDto
     public string CurrencyCode { get; set; }
     public decimal Rate { get; set; }
 }
+
+public class ExchangeYearRatesApiDto
+{
+    public List<ExchangeRateApiDto> Rates { get; set; } = new();
+}

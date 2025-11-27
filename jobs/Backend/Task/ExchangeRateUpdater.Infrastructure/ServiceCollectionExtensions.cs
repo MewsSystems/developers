@@ -8,14 +8,10 @@ using Configurations;
 using Domain.Repositories;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
-using Data;
 using Polly;
 using Polly.Extensions.Http;
 using StackExchange.Redis;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
 
 public static class ServiceCollectionExtensions
 {
@@ -28,21 +24,16 @@ public static class ServiceCollectionExtensions
                                                   throw new NullReferenceException($"{nameof(ExchangeRateApiClientConfig)} is not configured");
                 httpClient.BaseAddress = new Uri(exchangeRateApiClientConfig.Value.BaseUrl);
             }).AddPolicyHandler(GetRetryPolicy());
-
-        // Redis configuration
+        
         var redisConnection = configuration.GetValue<string>("Redis:Connection");
 
-        if (!string.IsNullOrWhiteSpace(redisConnection))
+        if (string.IsNullOrWhiteSpace(redisConnection))
         {
-            var mux = ConnectionMultiplexer.Connect(redisConnection);
-            self.AddSingleton<IConnectionMultiplexer>(mux);
-            self.AddSingleton<ICacheRepository, RedisCacheRepository>();
+            throw new NullReferenceException("Redis:Connection setting is not configured");
         }
-        else
-        {
-            self.AddSingleton<ICacheRepository, CacheRepository>();
-            self.AddMemoryCache();
-        }
+        
+        self.AddScoped<IConnectionMultiplexer>(sp => ConnectionMultiplexer.Connect(redisConnection));
+        self.AddScoped<ICacheRepository, RedisCacheRepository>();
 
         return self;
     }

@@ -2,8 +2,10 @@ namespace ExchangeRateUpdater.Application.ExchangeRates.Query.GetExchangeRatesDa
 
 using Common.Interfaces;
 using Common.Mappings;
+using Common.Utils;
 using Domain.Common;
 using Domain.Entities;
+using Domain.Enums;
 using Domain.Repositories;
 using Domain.ValueObjects;
 using Dtos;
@@ -17,37 +19,34 @@ using Mediator;
 /// </summary>
 public class GetExchangesRatesByDateQueryHandler : IQueryHandler<GetExchangesRatesByDateQuery, List<ExchangeRateDto>>
 {
-    private readonly ICacheRepository _cacheRepository;
-    private readonly IExchangeRateApiClient _exchangeRateApiClient;
-    private const string CacheKey = "ExchangeRates";
+    private readonly ICacheRepository _redisRepository;
 
-    public GetExchangesRatesByDateQueryHandler(ICacheRepository cacheRepository,
-        IExchangeRateApiClient exchangeRateApiClient)
+    public GetExchangesRatesByDateQueryHandler(ICacheRepository redisRepository)
     {
-        Ensure.Argument.NotNull(cacheRepository, nameof(cacheRepository));
-        Ensure.Argument.NotNull(exchangeRateApiClient, nameof(exchangeRateApiClient));
-        _cacheRepository = cacheRepository;
-        _exchangeRateApiClient = exchangeRateApiClient;
+        Ensure.Argument.NotNull(redisRepository, nameof(redisRepository));
+        _redisRepository = redisRepository;
     }
 
     public async ValueTask<List<ExchangeRateDto>> Handle(GetExchangesRatesByDateQuery request,
         CancellationToken cancellationToken)
     {
+        var cacheKey = GetCacheKey(request);
+        
         var requestedCurrencies = request.CurrencyCodes.Select(currencyCode => new Currency(currencyCode));
-        var exchangeRates = _cacheRepository
-            .GetFromCache<List<ExchangeRate>>(CacheKey);
+        var exchangeRates = await _redisRepository
+            .GetRatesListAsync(cacheKey);
 
-        if (!exchangeRates.Any())
-        {
-            var exchangeRateApiDtos = await _exchangeRateApiClient.GetExchangeRatesAsync(request.Date, request.Language);
-            exchangeRates = exchangeRateApiDtos.Select(x => x.ToExchangeRateEntity()).ToList();
-            _cacheRepository.SetCache(CacheKey, exchangeRates);
-        }
-
-        var requestedExchangeRates = exchangeRates
+        var requestedExchangeRates = (exchangeRates ?? Enumerable.Empty<ExchangeRate>())
             .Where(rates => requestedCurrencies.Any(currency => currency == rates.SourceCurrency))
             .Select(exchangeRate => exchangeRate.ToDto()).ToList();
 
         return requestedExchangeRates;
+    }
+
+    private string GetCacheKey(GetExchangesRatesByDateQuery request)
+    {
+        var requestedDate = request.Date ?? DateTime.UtcNow.Date;
+        var requestedLanguage = request.Language ?? Language.CZ;
+        return CacheKeyHelper.RatesKey(requestedLanguage, requestedDate);
     }
 }

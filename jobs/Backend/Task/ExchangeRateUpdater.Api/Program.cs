@@ -21,7 +21,6 @@ try
 	app.UseExceptionHandler();
 	app.UseHealthChecks("/health");
 	
-	
 	app.UseHttpsRedirection();
 	app.UseApiDocumentation();
 	app.MapControllers();

@@ -12,4 +12,6 @@ public interface IExchangeRateApiClient
     /// some of the currencies, ignore them.
     /// </summary>
     Task<IEnumerable<ExchangeRateApiDto>> GetExchangeRatesAsync(DateTime? date, Language? language);
+
+    Task<List<ExchangeRateApiDto>> GetDefaultExchangeRatesForYearAsync(int year);
 }

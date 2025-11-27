@@ -4,7 +4,7 @@ public record Currency
 {
     public Currency(string code)
     {
-        Code = code;
+        Code = code.ToUpperInvariant();
     }
     /// <summary>
     /// Three-letter ISO 4217 code of the currency.

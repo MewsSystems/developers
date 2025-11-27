@@ -1,30 +1,36 @@
 using ExchangeRateUpdater.Application;
 using ExchangeRateUpdater.Infrastructure;
+using ExchangeRateUpdater.Worker;
 using ExchangeRateUpdater.Worker.Jobs;
 using Quartz;
 
-// Ensure REDIS_CONNECTION env var is visible in IConfiguration
-var redisConnection = Environment.GetEnvironmentVariable("REDIS_CONNECTION");
 var builder = Host.CreateDefaultBuilder(args)
     .ConfigureServices((hostContext, services) =>
     {
-        if (!string.IsNullOrWhiteSpace(redisConnection))
-        {
-            hostContext.Configuration["Redis:Connection"] = redisConnection;
-        }
         services.AddApplicationServices();
         services.AddInfrastructure(hostContext.Configuration);
+        services.AddExchangeRateWorkerServices();
 
         services.AddQuartz(q =>
         {
-            var jobKey = new JobKey("RefreshRatesJob");
-            q.AddJob<RefreshRatesJob>(opts => opts.WithIdentity(jobKey));
+            //All this part could be improved by using a loop getting all Jobs via reflection in case there were many jobs to register.
+
+            var backfillJobKey = new JobKey("ExchangeRatesBackfillJob");
+            q.AddJob<ExchangeRatesBackfillJob>(opts => opts.WithIdentity(backfillJobKey));
             q.AddTrigger(opts => opts
-                .ForJob(jobKey)
-                .WithIdentity("RefreshRatesTrigger")
-                .WithCronSchedule("0 0/1 * * * ?"));
+                .ForJob(backfillJobKey)
+                .WithIdentity("ExchangeRatesBackfillJob")
+                .StartNow()
+            );
+            var dailyJobKey = new JobKey("DailyExchangeRatesRefreshJob");
+            q.AddJob<DailyExchangeRatesRefreshJob>(opts => opts.WithIdentity(dailyJobKey));
+            q.AddTrigger(opts => opts
+                .ForJob(dailyJobKey)
+                .WithIdentity("DailyExchangeRatesRefreshJob")
+                .WithCronSchedule("0 0 0 ? * * *")
+            );
         });
-        
+
         services.AddQuartzHostedService(q => q.WaitForJobsToComplete = true);
     })
     .Build();
