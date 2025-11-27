@@ -12,9 +12,10 @@ This document explains the architecture, startup sequence, readiness signalling,
 Design details:
 - Clean architecture
 - Mediator pattern
-- CQS pattern
+- Strict CQS pattern
 - Options pattern: Access the configuration data
 - Retry policy using Polly for ExchangeRateApiClient
+- Open Api Documentation using Scalar
 - Health Check: Worker readiness file, API HTTP endpoint
 - Dependency/Startup Ordering: Compose depends_on with health conditions
 - Shared Resource/Volume: Shared Docker volume for readiness signaling
