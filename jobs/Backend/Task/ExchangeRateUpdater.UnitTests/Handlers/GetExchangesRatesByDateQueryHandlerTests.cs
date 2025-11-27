@@ -1,12 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using ExchangeRateUpdater.Application.ExchangeRates.Query.GetExchangeRatesDaily;
 using ExchangeRateUpdater.Domain.Entities;
-using ExchangeRateUpdater.Domain.Repositories;
 using ExchangeRateUpdater.Domain.ValueObjects;
-using Shouldly;
-using Xunit;
 
 namespace UnitTests.Handlers;
 

@@ -1,6 +1,5 @@
 namespace ExchangeRateUpdater.Application.ExchangeRates.Query.GetExchangeRatesDaily;
 
-using Common.Interfaces;
 using Common.Mappings;
 using Common.Utils;
 using Domain.Common;

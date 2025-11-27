@@ -8,7 +8,6 @@ using Application.Common.Interfaces;
 using Application.Common.Mappings;
 using Application.Common.Utils;
 using Domain.Common;
-using Domain.Entities;
 using Domain.Repositories;
 using Microsoft.Extensions.Logging;
 

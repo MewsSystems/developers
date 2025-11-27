@@ -1,9 +1,6 @@
-using System.Collections.Generic;
 using ExchangeRateUpdater.Application.Common.Mappings;
 using ExchangeRateUpdater.Domain.Entities;
 using ExchangeRateUpdater.Domain.ValueObjects;
-using Shouldly;
-using Xunit;
 
 namespace UnitTests.Mapping;
 

@@ -1,6 +1,5 @@
 using ExchangeRateUpdater.Worker.Services;
 using ExchangeRateUpdater.Application.ExchangeRates.Dtos;
-using ExchangeRateUpdater.Domain.Entities;
 using Microsoft.Extensions.Logging.Abstractions;
 using UnitTests.Fakers;
 

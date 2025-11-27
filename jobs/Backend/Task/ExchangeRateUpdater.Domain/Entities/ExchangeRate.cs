@@ -1,6 +1,5 @@
 ﻿namespace ExchangeRateUpdater.Domain.Entities;
 
-using Common;
 using ValueObjects;
 
 public class ExchangeRate(Currency sourceCurrency, Currency targetCurrency, decimal value)

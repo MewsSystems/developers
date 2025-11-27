@@ -1,8 +1,5 @@
 namespace ExchangeRateUpdater.Application.ExchangeRates.Dtos;
 
-using Common.Mappings;
-using Domain.Entities;
-
 public record ExchangeRateDto
 {
     /// <summary>

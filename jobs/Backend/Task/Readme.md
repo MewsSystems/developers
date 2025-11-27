@@ -5,8 +5,22 @@ This repository contains an ExchangeRateUpdater system composed of three main se
 - Redis — distributed cache and optional pub/sub transport
 - Worker — background service that performs backfills and daily updates and signals readiness
 - API — HTTP service that serves exchange rate queries and depends on the worker being healthy
+- ConsoleApp - The initial console app given in the task.
 
 This document explains the architecture, startup sequence, readiness signalling, healthchecks, shared volumes, and operational best practices. It also includes diagrams (Mermaid) and simple commands for running the system locally with Docker Compose.
+
+Design details:
+- Clean architecture
+- Mediator pattern
+- Strict CQS pattern
+- Options pattern: Access the configuration data
+- Retry policy using Polly for ExchangeRateApiClient
+- Open Api Documentation using Scalar
+- Health Check: Worker readiness file, API HTTP endpoint
+- Dependency/Startup Ordering: Compose depends_on with health conditions
+- Shared Resource/Volume: Shared Docker volume for readiness signaling
+- Caching: Redis service
+
 
 ## Goals and Problem Statement
 
@@ -132,7 +146,7 @@ curl http://localhost:5000/api/exchangerates?date=2025-11-27
 
 - depends_on with health conditions ensures proper start ordering for Compose v2+.
 
-## Best practices for container orchestration & reliability
+## Improvements for production container orchestration & reliability
 
 - Prefer orchestration platforms (Kubernetes, ECS) for production. They offer richer primitives (readiness/liveness probes, rollout strategies, PodDisruptionBudgets, init containers) and cluster-wide scheduling.
 - In Kubernetes, replace file-based readiness with:

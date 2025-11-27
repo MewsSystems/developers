@@ -9,6 +9,7 @@ using StackExchange.Redis;
 using System.Collections.Generic;
 using System.Linq;
 using Application.Common.Mappings;
+using Domain.Common;
 using Domain.Entities;
 
 public class RedisCacheRepository : ICacheRepository
@@ -18,8 +19,10 @@ public class RedisCacheRepository : ICacheRepository
 
     public RedisCacheRepository(IConnectionMultiplexer connection, ILogger<RedisCacheRepository> logger)
     {
-        _database = connection?.GetDatabase() ?? throw new ArgumentNullException(nameof(connection));
-        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        Ensure.Argument.NotNull(connection, nameof(connection));
+        Ensure.Argument.NotNull(logger, nameof(logger));
+        _database = connection.GetDatabase();
+        _logger = logger;
     }
 
     public async Task<Dictionary<string, ExchangeRate>?> GetRatesDictionaryAsync(string key)
@@ -49,7 +52,7 @@ public class RedisCacheRepository : ICacheRepository
         catch (Exception e)
         {
             _logger.LogError(e, "Failed to get or deserialize cached value for {Key}", key);
-            return default;
+            throw;
         }
     }
 
@@ -57,23 +60,13 @@ public class RedisCacheRepository : ICacheRepository
     {
         try
         {
-            var value = await _database.StringGetAsync(key).ConfigureAwait(false);
-            if (!value.HasValue)
-            {
-                _logger.LogInformation("{Key} not found in redis cache", key);
-                return default;
-            }
-
-            var dtos = JsonSerializer.Deserialize<List<ExchangeRateDto>>(value!);
-            if (dtos == null) return default;
-            var list = dtos.Select(d => d.ToEntity()).ToList();
-            _logger.LogInformation("{Key} found in redis cache (string)", key);
-            return list;
+            var dictionary = await GetRatesDictionaryAsync(key);
+            return dictionary?.Values.ToList();
         }
         catch (Exception e)
         {
             _logger.LogError(e, "Failed to get or deserialize cached value for {Key}", key);
-            return default;
+            throw;
         }
     }
 
@@ -109,6 +102,7 @@ public class RedisCacheRepository : ICacheRepository
         catch (Exception e)
         {
             _logger.LogError(e, "Failed to set cache for {Key}", key);
+            throw;
         }
     }
 
@@ -123,6 +117,7 @@ public class RedisCacheRepository : ICacheRepository
         catch (Exception e)
         {
             _logger.LogError(e, "Failed to set cache for {Key}", key);
+            throw;
         }
     }
 

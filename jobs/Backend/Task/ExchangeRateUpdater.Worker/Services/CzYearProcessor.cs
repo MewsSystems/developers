@@ -5,7 +5,6 @@ using Application.Common.Interfaces;
 using Application.Common.Mappings;
 using Application.Common.Utils;
 using Domain.Common;
-using Domain.Entities;
 using Domain.Enums;
 using Domain.Repositories;
 
