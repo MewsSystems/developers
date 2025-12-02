@@ -27,11 +27,17 @@ namespace ExchangeRateUpdater.Providers
             if (currencies == null)
                 throw new ArgumentNullException(nameof(currencies));
 
+            Log("Downloading daily rates...");
             var raw = DownloadDailyRatesAsync().GetAwaiter().GetResult();
+            Log("Download completed.");
 
             var rows = ParseDailyRates(raw);
+            Log($"Parsed {rows.Count} CNB rows.");
 
-            return MapToExchangeRates(rows, currencies);
+            var result = MapToExchangeRates(rows, currencies);
+            Log($"Mapped {result.Count()} exchange rates.");
+
+            return result;
         }
 
 
@@ -148,10 +154,20 @@ namespace ExchangeRateUpdater.Providers
             if (requestedByCode.Count == 0)
                 return Enumerable.Empty<ExchangeRate>();
 
-            // Index CNB rows by currency code
-            var rowsByCode = rows
+            // Index CNB rows by currency code and detect duplicates
+            var duplicateCodes = rows
                 .GroupBy(r => r.Code.ToUpperInvariant())
-                .ToDictionary(g => g.Key, g => g.First());
+                .Where(g => g.Count() > 1)
+                .Select(g => g.Key)
+                .ToList();
+
+            if (duplicateCodes.Count > 0)
+            {
+                throw new FormatException(
+                    $"CNB daily rates contain duplicate entries for currency codes: {string.Join(", ", duplicateCodes)}.");
+            }
+
+            var rowsByCode = rows.ToDictionary(r => r.Code.ToUpperInvariant());
 
             var result = new List<ExchangeRate>();
 
@@ -180,6 +196,12 @@ namespace ExchangeRateUpdater.Providers
             return result;
         }
 
+        private void Log(string message)
+        {
+#if DEBUG
+            Console.WriteLine($"[CNB] {message}");
+#endif
+        }
 
         private sealed class CnbRateRow
         {
