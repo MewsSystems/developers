@@ -24,11 +24,14 @@ namespace ExchangeRateUpdater.Providers
         /// </summary>
         public IEnumerable<ExchangeRate> GetExchangeRates(IEnumerable<Currency> currencies)
         {
+            if (currencies == null)
+                throw new ArgumentNullException(nameof(currencies));
+
             var raw = DownloadDailyRatesAsync().GetAwaiter().GetResult();
 
             var rows = ParseDailyRates(raw);
 
-            return Enumerable.Empty<ExchangeRate>();
+            return MapToExchangeRates(rows, currencies);
         }
 
 
@@ -113,6 +116,70 @@ namespace ExchangeRateUpdater.Providers
 
             return result;
         }
+
+        /// <summary>
+        /// Maps parsed CNB rate rows to domain exchange rates for the requested currencies.
+        /// </summary>
+        /// 
+        /// <param name="rows">Parsed CNB daily rate rows.</param>
+        /// <param name="requestedCurrencies">
+        /// Currencies for which exchange rates should be returned. 
+        /// Only currencies available in the CNB data source are included.
+        /// </param>
+        /// <returns>
+        /// Collection of exchange rates where source currency is the requested currency and target currency is CZK.
+        /// </returns>
+        private IEnumerable<ExchangeRate> MapToExchangeRates(
+            IReadOnlyList<CnbRateRow> rows,
+            IEnumerable<Currency> requestedCurrencies)
+        {
+            if (rows == null)
+                throw new ArgumentNullException(nameof(rows));
+
+            if (requestedCurrencies == null)
+                throw new ArgumentNullException(nameof(requestedCurrencies));
+
+            // Normalize requested currencies by code (case-insensitive)
+            var requestedByCode = requestedCurrencies
+                .Where(c => c != null && !string.IsNullOrWhiteSpace(c.Code))
+                .GroupBy(c => c.Code.ToUpperInvariant())
+                .ToDictionary(g => g.Key, g => g.First());
+
+            if (requestedByCode.Count == 0)
+                return Enumerable.Empty<ExchangeRate>();
+
+            // Index CNB rows by currency code
+            var rowsByCode = rows
+                .GroupBy(r => r.Code.ToUpperInvariant())
+                .ToDictionary(g => g.Key, g => g.First());
+
+            var result = new List<ExchangeRate>();
+
+            // Target currency is always CZK for CNB rates
+            var targetCurrency = new Currency("CZK");
+
+            foreach (var (codeKey, sourceCurrency) in requestedByCode)
+            {
+                if (!rowsByCode.TryGetValue(codeKey, out var row))
+                {
+                    // CNB does not provide rate for this currency – we skip it.
+                    continue;
+                }
+
+                if (row.Amount <= 0)
+                    throw new FormatException($"Invalid amount '{row.Amount}' for currency '{row.Code}' in CNB data.");
+
+                var valuePerUnit = row.Rate / row.Amount;
+
+                result.Add(new ExchangeRate(
+                    sourceCurrency,
+                    targetCurrency,
+                    valuePerUnit));
+            }
+
+            return result;
+        }
+
 
         private sealed class CnbRateRow
         {
