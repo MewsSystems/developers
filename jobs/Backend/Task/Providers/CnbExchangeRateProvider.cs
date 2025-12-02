@@ -1,9 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using ExchangeRateUpdater.Interfaces;
+using System.Collections.Generic;
 using System.Linq;
 
-namespace ExchangeRateUpdater
+namespace ExchangeRateUpdater.Providers
 {
-    public class ExchangeRateProvider
+    public class CnbExchangeRateProvider : IExchangeRateProvider
     {
         /// <summary>
         /// Should return exchange rates among the specified currencies that are defined by the source. But only those defined
