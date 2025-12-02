@@ -1,6 +1,7 @@
 ﻿using ExchangeRateUpdater.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -24,6 +25,8 @@ namespace ExchangeRateUpdater.Providers
         public IEnumerable<ExchangeRate> GetExchangeRates(IEnumerable<Currency> currencies)
         {
             var raw = DownloadDailyRatesAsync().GetAwaiter().GetResult();
+
+            var rows = ParseDailyRates(raw);
 
             return Enumerable.Empty<ExchangeRate>();
         }
@@ -54,6 +57,75 @@ namespace ExchangeRateUpdater.Providers
             {
                 throw new HttpRequestException("Failed to download daily exchange rates from CNB.", ex);
             }
+        }
+
+        /// <summary>
+        /// Parses the raw CNB daily rates TXT content into a collection of CNB rate rows.
+        /// </summary>
+        /// <param name="rawContent">Raw TXT response returned by the CNB endpoint.</param>
+        /// <returns>Parsed list of CNB rate rows.</returns>
+        /// <exception cref="FormatException">
+        /// Thrown when the response does not match the expected CNB TXT format.
+        /// </exception>
+        private IReadOnlyList<CnbRateRow> ParseDailyRates(string rawContent)
+        {
+            if (string.IsNullOrWhiteSpace(rawContent))
+                throw new FormatException("CNB daily rates response is empty.");
+
+            var lines = rawContent
+                .Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+
+            // Expect at least: 1 line with date, 1 header line, and at least 1 data line
+            if (lines.Length < 3)
+                throw new FormatException("CNB daily rates response does not contain expected header and data lines.");
+
+            // line[0] = date metadata, line[1] = header, rest = data
+            var dataLines = lines.Skip(2);
+
+            var result = new List<CnbRateRow>();
+
+            foreach (var line in dataLines)
+            {
+                var parts = line.Split('|');
+
+                if (parts.Length != 5)
+                    throw new FormatException($"Unexpected CNB daily rates line format: '{line}'.");
+
+                // parts[0] = Country (ignored)
+                // parts[1] = Currency name (ignored)
+                // parts[2] = Amount
+                // parts[3] = Code
+                // parts[4] = Rate
+
+                if (!int.TryParse(parts[2], NumberStyles.Integer, CultureInfo.InvariantCulture, out var amount))
+                    throw new FormatException($"Invalid amount value in CNB daily rates line: '{line}'.");
+
+                if (!decimal.TryParse(parts[4], NumberStyles.Number, CultureInfo.InvariantCulture, out var rate))
+                    throw new FormatException($"Invalid rate value in CNB daily rates line: '{line}'.");
+
+                var code = parts[3].Trim();
+
+                if (string.IsNullOrEmpty(code))
+                    throw new FormatException($"Missing currency code in CNB daily rates line: '{line}'.");
+
+                result.Add(new CnbRateRow(code, amount, rate));
+            }
+
+            return result;
+        }
+
+        private sealed class CnbRateRow
+        {
+            public CnbRateRow(string code, int amount, decimal rate)
+            {
+                Code = code;
+                Amount = amount;
+                Rate = rate;
+            }
+
+            public string Code { get; }
+            public int Amount { get; }
+            public decimal Rate { get; }
         }
     }
 }
