@@ -26,3 +26,20 @@ dotnet build
 dotnet run
 
 
+
+## Unit Tests
+
+A few unit tests were added to check the key logic of the CNB provider:
+
+- parsing the `daily.txt` file  
+- handling invalid or unexpected input  
+- mapping CNB rows to `ExchangeRate`  
+- preventing duplicate currency codes  
+
+Only the internal parsing/mapping is tested — the HTTP download is intentionally not covered to keep things simple.
+
+Tests use **xUnit** + **FluentAssertions**.
+
+### Running the tests
+
+dotnet test
