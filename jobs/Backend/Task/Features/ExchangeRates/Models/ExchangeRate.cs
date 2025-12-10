@@ -1,4 +1,6 @@
-﻿namespace ExchangeRateUpdater
+﻿using ExchangeRateUpdater.Common.Models;
+
+namespace ExchangeRateUpdater.Features.ExchangeRates.Models
 {
     public class ExchangeRate
     {
