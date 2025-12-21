@@ -1,0 +1,21 @@
+<Solution>
+  <Folder Name="/Solution Items/">
+    <File Path=".dockerignore" />
+    <File Path=".gitignore" />
+    <File Path="Directory.Build.props" />
+    <File Path="README.md" />
+  </Folder>
+  <Folder Name="/src/">
+    <Project Path="src/ExchangeRateProvider.Api/ExchangeRateProvider.Api.csproj" />
+    <Project Path="src/ExchangeRateProvider.Application/ExchangeRateProvider.Application.csproj" Id="a95c6811-35b2-43a5-ba1a-c43ea5a8f5f2" />
+    <Project Path="src/ExchangeRateProvider.ConsoleApp/ExchangeRateProvider.ConsoleApp.csproj" Id="c3dea637-7462-4556-96c3-bd0566d4b048" />
+    <Project Path="src/ExchangeRateProvider.Domain/ExchangeRateProvider.Domain.csproj" Id="59563b16-ef8d-40a3-989c-55d20981d44b" />
+    <Project Path="src/ExchangeRateProvider.Infrastructure/ExchangeRateProvider.Infrastructure.csproj" Id="123cec49-5d58-4d48-bde2-e81e2336a7b3" />
+  </Folder>
+  <Folder Name="/test/">
+    <Project Path="test/ExchangeRateProvider.Api.Tests/ExchangeRateProvider.Api.Tests.csproj" Id="08997157-197c-42f0-ad8d-232e3f6c11e9" />
+    <Project Path="test/ExchangeRateProvider.Application.UnitTests/ExchangeRateProvider.Application.UnitTests.csproj" Id="846d1fb9-6be2-4384-8f4c-bf17a6a03a7d" />
+    <Project Path="test/ExchangeRateProvider.Domain.Tests/ExchangeRateProvider.Domain.Tests.csproj" Id="8917c2f7-c1a0-4377-82fe-e6bd9098ea71" />
+    <Project Path="test/ExchangeRateProvider.Infrastructure.Tests/ExchangeRateProvider.Infrastructure.Tests.csproj" Id="ff11b2a3-29c6-454e-8f63-705e48ebbdf7" />
+  </Folder>
+</Solution>

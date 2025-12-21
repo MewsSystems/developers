@@ -1,0 +1,20 @@
+@ExchangeRateProvider_HostAddress = http://localhost:5078
+@AccessToken = your_access_token_here
+
+### Get Latest Exchange Rates
+GET {{ExchangeRateProvider_HostAddress}}/exchange-rates?currencies=USD,EUR,GBP,XYZ
+Accept: application/json
+Authorization: Bearer {{AccessToken}}
+
+### Get Latest Exchange Rates - Single Currency
+GET {{ExchangeRateProvider_HostAddress}}/exchange-rates?currencies=USD
+Accept: application/json
+Authorization: Bearer {{AccessToken}}
+
+### Get Latest Exchange Rates - Error Case (Missing currencies parameter)
+GET {{ExchangeRateProvider_HostAddress}}/exchange-rates
+Accept: application/json
+Authorization: Bearer {{AccessToken}}
+
+### Health Check
+GET {{ExchangeRateProvider_HostAddress}}/health
