@@ -1,0 +1,5 @@
+@HostAddress = https://localhost:7232
+
+### Get exchange rates for EUR and USD
+GET {{HostAddress}}/exchange-rates?currencies=eur&currencies=usd
+Accept: application/json
