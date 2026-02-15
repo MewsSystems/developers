@@ -1,0 +1,7 @@
+2026-02-15 18:57:37.727 +01:00 [INF] Starting web host
+2026-02-15 18:57:45.283 +01:00 [INF] Received request to fetch exchange rates for currencies: eur
+2026-02-15 18:57:45.287 +01:00 [INF] Cache miss for CNB rates, fetching from upstream
+2026-02-15 18:57:47.589 +01:00 [INF] Received request to fetch exchange rates for currencies: eur
+2026-02-15 18:57:47.589 +01:00 [DBG] Cache hit for CNB rates
+2026-02-15 18:58:04.413 +01:00 [INF] Received request to fetch exchange rates for currencies: eur,usd
+2026-02-15 18:58:04.413 +01:00 [DBG] Cache hit for CNB rates
