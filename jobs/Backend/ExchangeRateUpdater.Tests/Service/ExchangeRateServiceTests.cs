@@ -9,14 +9,14 @@ namespace ExchangeRateUpdater.Tests.Service
     [TestFixture]
     internal class ExchangeRateServiceTests
     {
-        private IExchangeRateProvider _provider = null!;
-        private ILogger<ExchangeRateService> _logger = null!;
+        private IExchangeRateProvider provider = null!;
+        private ILogger<ExchangeRateService> logger = null!;
 
         [SetUp]
         public void SetUp()
         {
-            _provider = Substitute.For<IExchangeRateProvider>();
-            _logger = Substitute.For<ILogger<ExchangeRateService>>();
+            provider = Substitute.For<IExchangeRateProvider>();
+            logger = Substitute.For<ILogger<ExchangeRateService>>();
         }
 
         [Test]
@@ -25,10 +25,10 @@ namespace ExchangeRateUpdater.Tests.Service
             var now = DateTime.UtcNow;
             var expected = new[] { new ExchangeRate(new Currency("USD"), new Currency("CZK"), 25m, now) };
 
-            _provider.GetExchangeRatesAsync(Arg.Is<IEnumerable<Currency>>(list => list.Select(c => c.Code).SequenceEqual(new[] { "USD" })))
+            provider.GetExchangeRatesAsync(Arg.Is<IEnumerable<Currency>>(list => list.Select(c => c.Code).SequenceEqual(new[] { "USD" })))
                 .Returns(Task.FromResult<IEnumerable<ExchangeRate>>(expected));
 
-            var svc = new ExchangeRateService(_provider, _logger);
+            var svc = new ExchangeRateService(provider, logger);
             var result = await svc.GetExchangeRatesFromStringList(new[] { "USD" });
 
             Assert.That(result, Is.Not.Null);

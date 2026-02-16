@@ -21,7 +21,7 @@ namespace ExchangeRateUpdater.DependencyInjection
             services.AddMemoryCache();
             services.AddScoped<IExchangeRateProvider, ExchangeRateProvider>();
             services.AddScoped<IExchangeRateService, ExchangeRateService>();
-            services.AddScoped<IExchangeRateClient, ExchangeRateCbnApiClient>();
+            services.AddScoped<IExchangeRateClient, ExchangeRateCnbApiClient>();
 
             // Configure a named HttpClient for the CNB API with Polly-based retry policy.
             // This will be available as httpClientFactory.CreateClient("CnbApi").

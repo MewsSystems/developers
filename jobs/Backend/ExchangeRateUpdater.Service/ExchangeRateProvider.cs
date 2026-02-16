@@ -24,24 +24,9 @@ namespace ExchangeRateUpdater.Service
                 logger.LogInformation("Cache miss for CNB rates, fetching from upstream");
                 var fetched = await exchangeRateClient.GetExchangeRatesAsync();
 
-                // Determine cache expiration: CNB publishes new rates around 14:30 UTC on working days.
-                // Set 30 minutes margin to ensure we get the new rates after publication. 
-                var now = DateTime.UtcNow;
-                var nextPublication = new DateTime(now.Year, now.Month, now.Day, 15, 0, 0, DateTimeKind.Utc);
-                if (now >= nextPublication)
-                {
-                    // already past today's publication time, schedule for next day
-                    nextPublication = nextPublication.AddDays(1);
-                }
-
-                var absoluteExpirationRelative = nextPublication - now;
-                // Guard: ensure a minimum cache duration and reasonable maximum (24h)
-                // Cache will refresh even on non-working days, but that's acceptable because 1 unnecessary request a day is not a problem for CNB.
-                if (absoluteExpirationRelative < TimeSpan.FromMinutes(1)) absoluteExpirationRelative = TimeSpan.FromMinutes(1);
-                if (absoluteExpirationRelative > TimeSpan.FromHours(24)) absoluteExpirationRelative = TimeSpan.FromHours(24);
-
+                var cacheExpiration = CalculateCacheExpiration();
                 var options = new MemoryCacheEntryOptions()
-                    .SetAbsoluteExpiration(absoluteExpirationRelative);
+                    .SetAbsoluteExpiration(cacheExpiration);
 
                 cache.Set(CacheKey, fetched, options);
                 cachedRates = fetched;
@@ -54,6 +39,37 @@ namespace ExchangeRateUpdater.Service
             var currencySet = currencies.ToHashSet();
             var filteredRates = cachedRates.Where(rate => currencySet.Contains(rate.SourceCurrency));
             return filteredRates;
+        }
+
+        /// <summary>
+        /// Calculates the cache expiration duration based on CNB API publication schedule.
+        /// The CNB publishes new rates around 15:00 UTC on working days.
+        /// This method schedules the cache to expire shortly after the next expected publication.
+        /// </summary>
+        /// <returns>A TimeSpan representing the cache duration (minimum 1 minute, maximum 24 hours).</returns>
+        private static TimeSpan CalculateCacheExpiration()
+        {
+            var now = DateTime.UtcNow;
+            var nextPublication = new DateTime(now.Year, now.Month, now.Day, 15, 0, 0, DateTimeKind.Utc);
+            
+            if (now >= nextPublication)
+            {
+                // Already past today's publication time, schedule for next day
+                nextPublication = nextPublication.AddDays(1);
+            }
+
+            var absoluteExpirationRelative = nextPublication - now;
+            
+            // Guard: ensure a minimum cache duration and reasonable maximum (24h)
+            // Cache will refresh even on non-working days, but that's acceptable because 
+            // 1 unnecessary request a day is not a problem for CNB.
+            if (absoluteExpirationRelative < TimeSpan.FromMinutes(1)) 
+                absoluteExpirationRelative = TimeSpan.FromMinutes(1);
+            
+            if (absoluteExpirationRelative > TimeSpan.FromHours(24)) 
+                absoluteExpirationRelative = TimeSpan.FromHours(24);
+
+            return absoluteExpirationRelative;
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿using ExchangeRateUpdater.CbnApiClient.DTO;
+﻿using ExchangeRateUpdater.CbnApiClient.Dto;
 using ExchangeRateUpdater.CbnApiClient.Mapper;
 
 namespace ExchangeRateUpdater.Tests.CbnApiClient

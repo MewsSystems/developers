@@ -10,20 +10,20 @@ namespace ExchangeRateUpdater.Tests.Service
     [TestFixture]
     public class ExchangeRateProviderTests
     {
-        private IExchangeRateClient _client = null!;
-        private IMemoryCache _cache = null!;
+        private IExchangeRateClient client = null!;
+        private IMemoryCache cache = null!;
 
         [SetUp]
         public void SetUp()
         {
-            _client = Substitute.For<IExchangeRateClient>();
-            _cache = new MemoryCache(new MemoryCacheOptions());
+            client = Substitute.For<IExchangeRateClient>();
+            cache = new MemoryCache(new MemoryCacheOptions());
         }
 
         [TearDown]
         public void TearDown()
         {
-            _cache.Dispose();
+            cache.Dispose();
         }
 
         [Test]
@@ -33,9 +33,9 @@ namespace ExchangeRateUpdater.Tests.Service
             var usd = new ExchangeRate(new Currency("USD"), new Currency("CZK"), 25m, now);
             var eur = new ExchangeRate(new Currency("EUR"), new Currency("CZK"), 27m, now);
 
-            _client.GetExchangeRatesAsync().Returns(Task.FromResult<IEnumerable<ExchangeRate>>(new[] { usd, eur }));
+            client.GetExchangeRatesAsync().Returns(Task.FromResult<IEnumerable<ExchangeRate>>(new[] { usd, eur }));
 
-            var provider = new ExchangeRateProvider(_client, NullLogger<ExchangeRateProvider>.Instance, _cache);
+            var provider = new ExchangeRateProvider(client, NullLogger<ExchangeRateProvider>.Instance, cache);
 
             var requested = new[] { new Currency("usd") };
 
@@ -46,11 +46,11 @@ namespace ExchangeRateUpdater.Tests.Service
             Assert.That(arr1[0].SourceCurrency.Code, Is.EqualTo("USD"));
 
             // Client should have been called once
-            await _client.Received(1).GetExchangeRatesAsync();
+            await client.Received(1).GetExchangeRatesAsync();
 
             // Call again: should hit cache and not call client again
             var secondCall = await provider.GetExchangeRatesAsync(requested);
-            await _client.Received(1).GetExchangeRatesAsync();
+            await client.Received(1).GetExchangeRatesAsync();
             var arr2 = secondCall.ToArray();
             Assert.That(arr2.Length, Is.EqualTo(1));
             Assert.That(arr2[0].SourceCurrency.Code, Is.EqualTo("USD"));
@@ -59,7 +59,7 @@ namespace ExchangeRateUpdater.Tests.Service
         [Test]
         public void GetExchangeRatesAsync_NullCurrencies_Throws()
         {
-            var provider = new ExchangeRateProvider(_client, NullLogger<ExchangeRateProvider>.Instance, _cache);
+            var provider = new ExchangeRateProvider(client, NullLogger<ExchangeRateProvider>.Instance, cache);
 
             Assert.That(async () => await provider.GetExchangeRatesAsync(null!), Throws.TypeOf<ArgumentNullException>());
         }

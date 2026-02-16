@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Text.Json.Serialization;
 
-namespace ExchangeRateUpdater.CbnApiClient.DTO
+namespace ExchangeRateUpdater.CbnApiClient.Dto
 {
     /// <summary>
     /// Represents the response returned by the CBN API containing a collection of exchange rate entries.

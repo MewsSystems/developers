@@ -1,6 +1,6 @@
 ﻿using ExchangeRateUpdater.Abstraction.Interfaces;
 using ExchangeRateUpdater.Abstraction.Model;
-using ExchangeRateUpdater.CbnApiClient.DTO;
+using ExchangeRateUpdater.CbnApiClient.Dto;
 using ExchangeRateUpdater.CbnApiClient.Mapper;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -8,7 +8,7 @@ using System.Text.Json;
 
 namespace ExchangeRateUpdater.CbnApiClient.Implementation
 {
-    public class ExchangeRateCbnApiClient(IHttpClientFactory httpClientFactory, IConfiguration config, ILogger<ExchangeRateCbnApiClient> logger) : IExchangeRateClient
+    public class ExchangeRateCnbApiClient(IHttpClientFactory httpClientFactory, IConfiguration config, ILogger<ExchangeRateCnbApiClient> logger) : IExchangeRateClient
     {
         private readonly string CnbApiUrl = config.GetValue<string>("CbnApiUrl") ?? throw new InvalidOperationException("CbnApiUrl configuration is missing.");
         // Supports EN and CZ, CZ is the default if not specified.

@@ -10,8 +10,8 @@ namespace ExchangeRateUpdater.Tests.IntegrationTests
     [TestFixture]
     internal class IntegrationTests
     {
-        private WebApplicationFactory<Program> _factory = null!;
-        private HttpClient _apiClient = null!;
+        private WebApplicationFactory<Program> factory = null!;
+        private HttpClient apiClient = null!;
 
         [SetUp]
         public void SetUp()
@@ -19,7 +19,7 @@ namespace ExchangeRateUpdater.Tests.IntegrationTests
             // Reset the call counter before each test
             MockCnbApiHandler.ResetCallCount();
 
-            _factory = new WebApplicationFactory<Program>()
+            factory = new WebApplicationFactory<Program>()
                 .WithWebHostBuilder(builder =>
                 {
                     builder.ConfigureTestServices(services =>
@@ -36,21 +36,21 @@ namespace ExchangeRateUpdater.Tests.IntegrationTests
                     });
                 });
 
-            _apiClient = _factory.CreateClient();
+            apiClient = factory.CreateClient();
         }
 
         [TearDown]
         public void TearDown()
         {
-            _apiClient?.Dispose();
-            _factory?.Dispose();
+            apiClient?.Dispose();
+            factory?.Dispose();
         }
 
         [Test]
         public async Task GetExchangeRates_EndToEnd_ReturnsFilteredRates()
         {
             // Call the actual API endpoint
-            var response = await _apiClient.GetAsync("/ExchangeRate?currencyCodes=USD,EUR");
+            var response = await apiClient.GetAsync("/ExchangeRate?currencyCodes=USD,EUR");
 
             Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
 
@@ -69,7 +69,7 @@ namespace ExchangeRateUpdater.Tests.IntegrationTests
         public async Task GetExchangeRates_InvalidCurrencyCodes_ReturnsBadRequest()
         {
             // Request with invalid codes (e.g., empty, too short)
-            var response = await _apiClient.GetAsync("/ExchangeRate?currencyCodes=US,E");
+            var response = await apiClient.GetAsync("/ExchangeRate?currencyCodes=US,E");
 
             Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.BadRequest).Or.EqualTo(HttpStatusCode.OK));
         }
@@ -78,14 +78,14 @@ namespace ExchangeRateUpdater.Tests.IntegrationTests
         public async Task GetExchangeRates_CachingWorks_OnlyOneUpstreamCall()
         {
             // First call
-            var response1 = await _apiClient.GetAsync("/ExchangeRate?currencyCodes=USD");
+            var response1 = await apiClient.GetAsync("/ExchangeRate?currencyCodes=USD");
             Assert.That(response1.StatusCode, Is.EqualTo(HttpStatusCode.OK));
 
             // Verify one upstream call was made
             Assert.That(MockCnbApiHandler.CallCount, Is.EqualTo(1));
 
             // Second call (should hit cache if enabled)
-            var response2 = await _apiClient.GetAsync("/ExchangeRate?currencyCodes=EUR");
+            var response2 = await apiClient.GetAsync("/ExchangeRate?currencyCodes=EUR");
             Assert.That(response2.StatusCode, Is.EqualTo(HttpStatusCode.OK));
 
             // Verify still only one upstream call was made (second request hit cache)

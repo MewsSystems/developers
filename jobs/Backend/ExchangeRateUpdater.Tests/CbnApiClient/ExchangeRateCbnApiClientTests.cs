@@ -9,13 +9,13 @@ namespace ExchangeRateUpdater.Tests.CbnApiClient
 {
     public class ExchangeRateCbnApiClientTests
     {
-        private IConfiguration _config = null!;
-        private readonly ILogger<ExchangeRateCbnApiClient> _logger = NullLogger<ExchangeRateCbnApiClient>.Instance;
+        private IConfiguration config = null!;
+        private readonly ILogger<ExchangeRateCnbApiClient> logger = NullLogger<ExchangeRateCnbApiClient>.Instance;
 
         [SetUp]
         public void SetUp()
         {
-            _config = new ConfigurationBuilder()
+            config = new ConfigurationBuilder()
                 .AddInMemoryCollection(new Dictionary<string, string> { { "CbnApiUrl", "https://api.cnb.cz/cnbapi/exrates/daily" } })
                 .Build();
         }
@@ -44,7 +44,7 @@ namespace ExchangeRateUpdater.Tests.CbnApiClient
 
             var factory = CreateHttpClientFactory(response);
 
-            var client = new ExchangeRateCbnApiClient(factory, _config, _logger);
+            var client = new ExchangeRateCnbApiClient(factory, config, logger);
             var rates = await client.GetExchangeRatesAsync();
 
             Assert.That(rates, Is.Not.Null);
@@ -61,7 +61,7 @@ namespace ExchangeRateUpdater.Tests.CbnApiClient
             var response = new HttpResponseMessage(HttpStatusCode.InternalServerError);
             var factory = CreateHttpClientFactory(response);
 
-            var client = new ExchangeRateCbnApiClient(factory, _config, _logger);
+            var client = new ExchangeRateCnbApiClient(factory, config, logger);
             Assert.That(async () => await client.GetExchangeRatesAsync(), Throws.InstanceOf<HttpRequestException>());
         }
 
@@ -71,7 +71,7 @@ namespace ExchangeRateUpdater.Tests.CbnApiClient
             var response = new HttpResponseMessage(HttpStatusCode.OK) { Content = new StringContent(string.Empty) };
             var factory = CreateHttpClientFactory(response);
 
-            var client = new ExchangeRateCbnApiClient(factory, _config, _logger);
+            var client = new ExchangeRateCnbApiClient(factory, config, logger);
             Assert.That(async () => await client.GetExchangeRatesAsync(), Throws.InstanceOf<InvalidOperationException>());
         }
 
@@ -81,7 +81,7 @@ namespace ExchangeRateUpdater.Tests.CbnApiClient
             var response = new HttpResponseMessage(HttpStatusCode.OK) { Content = new StringContent("not json") };
             var factory = CreateHttpClientFactory(response);
 
-            var client = new ExchangeRateCbnApiClient(factory, _config, _logger);
+            var client = new ExchangeRateCnbApiClient(factory, config, logger);
             Assert.That(async () => await client.GetExchangeRatesAsync(), Throws.InstanceOf<InvalidOperationException>());
         }
 
@@ -93,7 +93,7 @@ namespace ExchangeRateUpdater.Tests.CbnApiClient
             var response = new HttpResponseMessage(HttpStatusCode.OK) { Content = new StringContent(json) };
             var factory = CreateHttpClientFactory(response, req => captured = req);
 
-            var client = new ExchangeRateCbnApiClient(factory, _config, _logger);
+            var client = new ExchangeRateCnbApiClient(factory, config, logger);
             var date = new DateTime(2026, 02, 15);
             await client.GetExchangeRatesAsync(date);
 

@@ -10,16 +10,16 @@ namespace ExchangeRateUpdater.Tests.Api
     [TestFixture]
     internal class ExchangeRateControllerTests
     {
-        private IExchangeRateService _service = null!;
-        private ILogger<ExchangeRateController> _logger = null!;
-        private ExchangeRateController _controller = null!;
+        private IExchangeRateService service = null!;
+        private ILogger<ExchangeRateController> logger = null!;
+        private ExchangeRateController controller = null!;
 
         [SetUp]
         public void SetUp()
         {
-            _service = Substitute.For<IExchangeRateService>();
-            _logger = Substitute.For<ILogger<ExchangeRateController>>();
-            _controller = new ExchangeRateController(_service, _logger);
+            service = Substitute.For<IExchangeRateService>();
+            logger = Substitute.For<ILogger<ExchangeRateController>>();
+            controller = new ExchangeRateController(service, logger);
         }
 
         [Test]
@@ -27,9 +27,9 @@ namespace ExchangeRateUpdater.Tests.Api
         {
             var now = DateTime.UtcNow;
             var rates = new[] { new ExchangeRate(new Currency("USD"), new Currency("CZK"), 25m, now) };
-            _service.GetExchangeRatesFromStringList(Arg.Any<IEnumerable<string>>()).Returns(Task.FromResult<IEnumerable<ExchangeRate>>(rates));
+            service.GetExchangeRatesFromStringList(Arg.Any<IEnumerable<string>>()).Returns(Task.FromResult<IEnumerable<ExchangeRate>>(rates));
 
-            var result = await _controller.GetExchangeRates("USD, EUR");
+            var result = await controller.GetExchangeRates("USD, EUR");
 
             Assert.That(result.Result, Is.TypeOf<OkObjectResult>());
             var ok = (OkObjectResult)result.Result!;
@@ -39,22 +39,22 @@ namespace ExchangeRateUpdater.Tests.Api
             Assert.That(returned[0].SourceCurrency.Code, Is.EqualTo("USD"));
 
             // Ensure service was called with the split and trimmed values
-            await _service.Received(1).GetExchangeRatesFromStringList(Arg.Is<IEnumerable<string>>(s => s.SequenceEqual(new[] { "USD", "EUR" })));
+            await service.Received(1).GetExchangeRatesFromStringList(Arg.Is<IEnumerable<string>>(s => s.SequenceEqual(new[] { "USD", "EUR" })));
         }
 
         [Test]
         public async Task GetExchangeRates_ReturnsBadRequest_WhenNoRates()
         {
-            _service.GetExchangeRatesFromStringList(Arg.Any<IEnumerable<string>>()).Returns(Task.FromResult<IEnumerable<ExchangeRate>>(Array.Empty<ExchangeRate>()));
+            service.GetExchangeRatesFromStringList(Arg.Any<IEnumerable<string>>()).Returns(Task.FromResult<IEnumerable<ExchangeRate>>(Array.Empty<ExchangeRate>()));
 
-            var result = await _controller.GetExchangeRates("USD");
+            var result = await controller.GetExchangeRates("USD");
 
             Assert.That(result.Result, Is.TypeOf<BadRequestObjectResult>());
             var bad = (BadRequestObjectResult)result.Result!;
             Assert.That(bad.Value, Is.EqualTo("No exchange rates found for the provided currency codes."));
 
             // Logger should have been called to warn
-            _logger.Received().Log(
+            logger.Received().Log(
                 LogLevel.Warning,
                 Arg.Any<EventId>(),
                 Arg.Any<object>(),
