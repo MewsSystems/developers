@@ -131,7 +131,7 @@ Error handling is applied at several levels:
 
 ## Caching strategy
 
-Given CNB’s update behaviour, caching is particularly effective for this use case. Daily FX rates are published once on business days around 14:30 UTC and remain valid for the entire day (and weekends/holidays until the next business day). The API always returns the latest available set of rates for the most recent `validFor` date.
+Given CNB's update behaviour, caching is particularly effective for this use case. Daily FX rates are published once on business days around 14:30 UTC and remain valid for the entire day (and weekends/holidays until the next business day). The API always returns the latest available set of rates for the most recent `validFor` date.
 
 The `ExchangeRateProvider` uses an in-memory cache based on `IMemoryCache`. The cache stores the full set of CNB rates under a single key and applies time-based expiration:
 
