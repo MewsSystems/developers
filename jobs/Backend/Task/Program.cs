@@ -16,7 +16,7 @@ namespace ExchangeRateUpdater;
 
 public static class Program
 {
-    public static int Main(string[] args)
+    public static async Task<int> Main(string[] args)
     {
         using IHost host = BuildHost(args);
         ILogger logger = host.Services.GetRequiredService<ILoggerFactory>().CreateLogger("ExchangeRateUpdater");
@@ -25,7 +25,7 @@ public static class Program
         {
             IExchangeRateProvider provider = host.Services.GetRequiredService<IExchangeRateProvider>();
             IEnumerable<Currency> currencies = BuildRequestedCurrencies(args);
-            IEnumerable<ExchangeRate> rates = provider.GetExchangeRates(currencies);
+            IReadOnlyCollection<ExchangeRate> rates = await provider.GetExchangeRatesAsync(currencies);
 
             foreach (ExchangeRate rate in rates)
             {
