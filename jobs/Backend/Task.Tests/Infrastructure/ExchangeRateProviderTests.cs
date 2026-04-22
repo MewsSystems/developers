@@ -179,20 +179,28 @@ public sealed class ExchangeRateProviderTests
     [Fact]
     public async global::System.Threading.Tasks.Task GetExchangeRates_concurrent_calls_only_one_http_request()
     {
+        using ManualResetEventSlim handlerEntered = new(initialState: false);
+        using ManualResetEventSlim handlerRelease = new(initialState: false);
         int requestCount = 0;
+
         ExchangeRateProvider provider = CreateProvider(
             _ =>
             {
                 Interlocked.Increment(ref requestCount);
-                Thread.Sleep(100);
+                handlerEntered.Set();
+                handlerRelease.Wait();
                 return CreateOkResponse(DefaultPayload);
             });
 
         global::System.Threading.Tasks.Task<ExchangeRate[]> task1 =
             global::System.Threading.Tasks.Task.Run(() => provider.GetExchangeRates([new Currency("USD")]).ToArray());
+        handlerEntered.Wait(); // task1 holds the refresh semaphore and is blocked in the handler
+
         global::System.Threading.Tasks.Task<ExchangeRate[]> task2 =
             global::System.Threading.Tasks.Task.Run(() => provider.GetExchangeRates([new Currency("EUR")]).ToArray());
+        await global::System.Threading.Tasks.Task.Delay(20); // let task2 reach _refreshSemaphore.WaitAsync()
 
+        handlerRelease.Set();
         await global::System.Threading.Tasks.Task.WhenAll(task1, task2);
 
         Assert.Equal(1, requestCount);
