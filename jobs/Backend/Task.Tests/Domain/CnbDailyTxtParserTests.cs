@@ -150,4 +150,20 @@ public sealed class CnbDailyTxtParserTests
         Assert.Contains("Rate must be greater than zero.", ex.Message);
         Assert.Contains("Line 3", ex.Message);
     }
+
+    [Fact]
+    public void Parse_malformed_line_longer_than_100_chars_is_truncated_in_error()
+    {
+        string longCountryName = new('A', 101);
+        string payload = $"""
+            22.04.2026 #78
+            Country|Currency|Amount|Code|Rate
+            {longCountryName}|dollar|1|AUD
+            """;
+
+        FormatException ex = Assert.Throws<FormatException>(() => CnbDailyTxtParser.Parse(payload).ToArray());
+
+        Assert.Contains("...", ex.Message);
+        Assert.DoesNotContain(longCountryName, ex.Message);
+    }
 }

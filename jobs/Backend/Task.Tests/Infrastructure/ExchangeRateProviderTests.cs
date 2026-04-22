@@ -25,6 +25,28 @@ public sealed class ExchangeRateProviderTests
     }
 
     [Fact]
+    public void GetExchangeRates_null_item_in_currencies_throws()
+    {
+        ExchangeRateProvider provider = CreateProvider(_ => CreateOkResponse(DefaultPayload));
+
+        ArgumentException ex = Assert.Throws<ArgumentException>(
+            () => provider.GetExchangeRates([null!, new Currency("USD")]).ToArray());
+
+        Assert.Equal("currencies", ex.ParamName);
+    }
+
+    [Fact]
+    public void GetExchangeRates_collection_with_only_null_items_throws()
+    {
+        ExchangeRateProvider provider = CreateProvider(_ => CreateOkResponse(DefaultPayload));
+
+        ArgumentException ex = Assert.Throws<ArgumentException>(
+            () => provider.GetExchangeRates([null!]).ToArray());
+
+        Assert.Equal("currencies", ex.ParamName);
+    }
+
+    [Fact]
     public void GetExchangeRates_empty_currencies_returns_empty()
     {
         var factory = new FakeHttpClientFactory(new HttpClient(new DelegateHttpMessageHandler(_ => CreateOkResponse(DefaultPayload))));

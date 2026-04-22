@@ -12,20 +12,20 @@ using Microsoft.Extensions.Options;
 
 namespace ExchangeRateUpdater.Infrastructure;
 
-public sealed class ExchangeRateProvider : IExchangeRateProvider
+public sealed class ExchangeRateProvider : IExchangeRateProvider, IDisposable
 {
     private readonly IHttpClientFactory _httpClientFactory;
     private readonly CnbOptions _options;
     private readonly ILogger<ExchangeRateProvider> _logger;
     private readonly TimeProvider _timeProvider;
     private readonly SemaphoreSlim _refreshSemaphore = new(1, 1);
-    private CacheSnapshot _snapshot;
+    private CacheSnapshot? _snapshot;
 
     public ExchangeRateProvider(
         IHttpClientFactory httpClientFactory,
         IOptions<CnbOptions> options,
         ILogger<ExchangeRateProvider> logger,
-        TimeProvider timeProvider = null)
+        TimeProvider? timeProvider = null)
     {
         _httpClientFactory = httpClientFactory ?? throw new ArgumentNullException(nameof(httpClientFactory));
         _options = options?.Value ?? throw new ArgumentNullException(nameof(options));
@@ -43,9 +43,10 @@ public sealed class ExchangeRateProvider : IExchangeRateProvider
             return [];
         }
 
-        CacheSnapshot snapshot = Volatile.Read(ref _snapshot);
+        CacheSnapshot? snapshot = Volatile.Read(ref _snapshot);
         if (snapshot is not null && IsFresh(snapshot))
         {
+            _logger.LogDebug("Serving exchange rates from cache (cached at {CachedAt}).", snapshot.CachedAt);
             return FilterRates(snapshot.Rates, requestedCodes);
         }
 
@@ -55,6 +56,7 @@ public sealed class ExchangeRateProvider : IExchangeRateProvider
             snapshot = Volatile.Read(ref _snapshot);
             if (snapshot is not null && IsFresh(snapshot))
             {
+                _logger.LogDebug("Serving exchange rates from cache (cached at {CachedAt}).", snapshot.CachedAt);
                 return FilterRates(snapshot.Rates, requestedCodes);
             }
 
@@ -68,7 +70,7 @@ public sealed class ExchangeRateProvider : IExchangeRateProvider
         }
     }
 
-    private CacheSnapshot FetchSnapshot(CacheSnapshot currentSnapshot)
+    private CacheSnapshot FetchSnapshot(CacheSnapshot? currentSnapshot)
     {
         HttpClient client = _httpClientFactory.CreateClient("cnb");
         using HttpResponseMessage response = SendRequest(client, ifModifiedSince: currentSnapshot?.LastModified);
@@ -129,7 +131,7 @@ public sealed class ExchangeRateProvider : IExchangeRateProvider
         {
             if (currency is null)
             {
-                continue;
+                throw new ArgumentException("Currencies collection must not contain null elements.", nameof(currencies));
             }
 
             if (currency.Code == "CZK")
@@ -154,4 +156,6 @@ public sealed class ExchangeRateProvider : IExchangeRateProvider
     {
         return rates.Where(rate => requestedCodes.Contains(rate.SourceCurrency.Code)).ToArray();
     }
+
+    public void Dispose() => _refreshSemaphore.Dispose();
 }

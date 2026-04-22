@@ -70,7 +70,7 @@ public static class CnbDailyTxtParser
     {
         string preview = lineContent.Length <= MaxLinePreviewLength
             ? lineContent
-            : string.Concat(lineContent.Take(MaxLinePreviewLength), "...");
+            : lineContent[..MaxLinePreviewLength] + "...";
 
         return new FormatException($"{reason} Line {lineNumber}: '{preview}'");
     }

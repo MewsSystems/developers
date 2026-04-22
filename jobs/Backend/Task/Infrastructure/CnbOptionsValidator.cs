@@ -5,7 +5,7 @@ namespace ExchangeRateUpdater.Infrastructure;
 
 public sealed class CnbOptionsValidator : IValidateOptions<CnbOptions>
 {
-    public ValidateOptionsResult Validate(string name, CnbOptions options)
+    public ValidateOptionsResult Validate(string? name, CnbOptions options)
     {
         ArgumentNullException.ThrowIfNull(options);
 
@@ -14,7 +14,7 @@ public sealed class CnbOptionsValidator : IValidateOptions<CnbOptions>
             return ValidateOptionsResult.Fail("Cnb:Url is required.");
         }
 
-        if (!Uri.TryCreate(options.Url, UriKind.Absolute, out Uri uri))
+        if (!Uri.TryCreate(options.Url, UriKind.Absolute, out Uri? uri))
         {
             return ValidateOptionsResult.Fail("Cnb:Url must be a valid absolute URI.");
         }
