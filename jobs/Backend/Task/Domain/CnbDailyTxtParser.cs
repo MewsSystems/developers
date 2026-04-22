@@ -10,6 +10,7 @@ public static class CnbDailyTxtParser
     private const string Header = "Country|Currency|Amount|Code|Rate";
     private const int MaxLinePreviewLength = 100;
     private static readonly CultureInfo CsCulture = CultureInfo.GetCultureInfo("cs-CZ");
+    private static readonly CultureInfo InvariantCulture = CultureInfo.InvariantCulture;
 
     public static IEnumerable<ExchangeRate> Parse(string rawContent)
     {
@@ -40,12 +41,12 @@ public static class CnbDailyTxtParser
                 throw CreateFormatException(i + 1, line, "Malformed CNB line.");
             }
 
-            if (!decimal.TryParse(parts[2].Trim(), NumberStyles.Number, CsCulture, out decimal amount))
+            if (!TryParseCnbNumber(parts[2], out decimal amount))
             {
                 throw CreateFormatException(i + 1, line, "Invalid amount in CNB line.");
             }
 
-            if (!decimal.TryParse(parts[4].Trim(), NumberStyles.Number, CsCulture, out decimal rate))
+            if (!TryParseCnbNumber(parts[4], out decimal rate))
             {
                 throw CreateFormatException(i + 1, line, "Invalid rate in CNB line.");
             }
@@ -72,5 +73,30 @@ public static class CnbDailyTxtParser
             : string.Concat(lineContent.Take(MaxLinePreviewLength), "...");
 
         return new FormatException($"{reason} Line {lineNumber}: '{preview}'");
+    }
+
+    private static bool TryParseCnbNumber(string token, out decimal value)
+    {
+        value = 0m;
+
+        string trimmedToken = token.Trim();
+        if (trimmedToken.Length == 0)
+        {
+            return false;
+        }
+
+        if (decimal.TryParse(trimmedToken, NumberStyles.Number, CsCulture, out value))
+        {
+            return true;
+        }
+
+        if (trimmedToken.Contains('.') &&
+            !trimmedToken.Contains(',') &&
+            decimal.TryParse(trimmedToken, NumberStyles.Number, InvariantCulture, out value))
+        {
+            return true;
+        }
+
+        return false;
     }
 }

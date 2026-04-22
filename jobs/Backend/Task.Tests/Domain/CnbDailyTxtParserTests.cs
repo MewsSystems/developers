@@ -59,6 +59,25 @@ public sealed class CnbDailyTxtParserTests
     }
 
     [Fact]
+    public void Parse_accepts_dot_decimal_from_english_cnb_endpoint()
+    {
+        string payload = """
+            22.04.2026 #78
+            Country|Currency|Amount|Code|Rate
+            Australia|dollar|1|AUD|14.795
+            Japan|yen|100|JPY|15.320
+            """;
+
+        ExchangeRate[] rates = CnbDailyTxtParser.Parse(payload).ToArray();
+
+        Assert.Equal(2, rates.Length);
+        Assert.Equal("AUD", rates[0].SourceCurrency.Code);
+        Assert.Equal(14.795m, rates[0].Value);
+        Assert.Equal("JPY", rates[1].SourceCurrency.Code);
+        Assert.Equal(0.1532m, rates[1].Value);
+    }
+
+    [Fact]
     public void Parse_malformed_line_throws_with_line_number()
     {
         string payload = """
