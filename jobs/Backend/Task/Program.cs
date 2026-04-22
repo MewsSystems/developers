@@ -79,7 +79,7 @@ public static class Program
                         {
                             int statusCode = args.Outcome.Result is null ? 0 : (int)args.Outcome.Result.StatusCode;
                             bool shouldRetryStatus = statusCode == 408 || statusCode == 429 || statusCode >= 500;
-                            bool shouldRetryException = args.Outcome.Exception is HttpRequestException or TimeoutException;
+                            bool shouldRetryException = args.Outcome.Exception is HttpRequestException or OperationCanceledException;
                             return ValueTask.FromResult(shouldRetryStatus || shouldRetryException);
                         }
                     });

@@ -100,7 +100,7 @@ public sealed class ExchangeRateProvider : IExchangeRateProvider
         }
 
         using Stream stream = response.Content.ReadAsStream();
-        using StreamReader reader = new(stream);
+        using StreamReader reader = new(stream, leaveOpen: true);
         string rawContent = reader.ReadToEnd();
 
         ExchangeRate[] rates = CnbDailyTxtParser.Parse(rawContent).ToArray();
@@ -127,7 +127,7 @@ public sealed class ExchangeRateProvider : IExchangeRateProvider
         HashSet<string> requestedCodes = new(StringComparer.Ordinal);
         foreach (Currency currency in currencies)
         {
-            if (currency is null || string.IsNullOrWhiteSpace(currency.Code))
+            if (currency is null)
             {
                 continue;
             }
