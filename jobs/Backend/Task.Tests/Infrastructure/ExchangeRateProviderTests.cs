@@ -198,7 +198,7 @@ public sealed class ExchangeRateProviderTests
 
         global::System.Threading.Tasks.Task<ExchangeRate[]> task2 =
             global::System.Threading.Tasks.Task.Run(() => provider.GetExchangeRates([new Currency("EUR")]).ToArray());
-        await global::System.Threading.Tasks.Task.Delay(20); // let task2 reach _refreshSemaphore.WaitAsync()
+        await global::System.Threading.Tasks.Task.Delay(20); // let task2 reach _refreshSemaphore.Wait()
 
         handlerRelease.Set();
         await global::System.Threading.Tasks.Task.WhenAll(task1, task2);

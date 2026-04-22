@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading;
-using System.Threading.Tasks;
 using ExchangeRateUpdater.Application;
 using ExchangeRateUpdater.Domain;
 using Microsoft.Extensions.Logging;
@@ -35,18 +35,7 @@ public sealed class ExchangeRateProvider : IExchangeRateProvider
 
     public IEnumerable<ExchangeRate> GetExchangeRates(IEnumerable<Currency> currencies)
     {
-        return GetExchangeRatesAsync(currencies, CancellationToken.None)
-            .ConfigureAwait(false)
-            .GetAwaiter()
-            .GetResult();
-    }
-
-    public async Task<IReadOnlyCollection<ExchangeRate>> GetExchangeRatesAsync(
-        IEnumerable<Currency> currencies,
-        CancellationToken cancellationToken = default)
-    {
         ArgumentNullException.ThrowIfNull(currencies);
-        cancellationToken.ThrowIfCancellationRequested();
 
         HashSet<string> requestedCodes = NormalizeRequestedCodes(currencies);
         if (requestedCodes.Count == 0)
@@ -60,7 +49,7 @@ public sealed class ExchangeRateProvider : IExchangeRateProvider
             return FilterRates(snapshot.Rates, requestedCodes);
         }
 
-        await _refreshSemaphore.WaitAsync(cancellationToken).ConfigureAwait(false);
+        _refreshSemaphore.Wait();
         try
         {
             snapshot = Volatile.Read(ref _snapshot);
@@ -69,7 +58,7 @@ public sealed class ExchangeRateProvider : IExchangeRateProvider
                 return FilterRates(snapshot.Rates, requestedCodes);
             }
 
-            CacheSnapshot refreshedSnapshot = await FetchSnapshotAsync(snapshot, cancellationToken).ConfigureAwait(false);
+            CacheSnapshot refreshedSnapshot = FetchSnapshot(snapshot);
             Volatile.Write(ref _snapshot, refreshedSnapshot);
             return FilterRates(refreshedSnapshot.Rates, requestedCodes);
         }
@@ -79,11 +68,11 @@ public sealed class ExchangeRateProvider : IExchangeRateProvider
         }
     }
 
-    private async Task<CacheSnapshot> FetchSnapshotAsync(CacheSnapshot currentSnapshot, CancellationToken cancellationToken)
+    private CacheSnapshot FetchSnapshot(CacheSnapshot currentSnapshot)
     {
         HttpClient client = _httpClientFactory.CreateClient("cnb");
-        using HttpResponseMessage response =
-            await SendRequestAsync(client, ifModifiedSince: currentSnapshot?.LastModified, cancellationToken).ConfigureAwait(false);
+        using HttpResponseMessage response = SendRequest(client, ifModifiedSince: currentSnapshot?.LastModified);
+
         if (response.StatusCode == HttpStatusCode.NotModified)
         {
             if (currentSnapshot is not null)
@@ -93,17 +82,14 @@ public sealed class ExchangeRateProvider : IExchangeRateProvider
             }
 
             _logger.LogWarning("CNB returned 304 without an existing snapshot. Retrying with a full GET.");
-            using HttpResponseMessage fallbackResponse =
-                await SendRequestAsync(client, ifModifiedSince: null, cancellationToken).ConfigureAwait(false);
-            return await BuildSnapshotFromSuccessResponseAsync(fallbackResponse, cancellationToken).ConfigureAwait(false);
+            using HttpResponseMessage fallbackResponse = SendRequest(client, ifModifiedSince: null);
+            return BuildSnapshotFromSuccessResponse(fallbackResponse);
         }
 
-        return await BuildSnapshotFromSuccessResponseAsync(response, cancellationToken).ConfigureAwait(false);
+        return BuildSnapshotFromSuccessResponse(response);
     }
 
-    private async Task<CacheSnapshot> BuildSnapshotFromSuccessResponseAsync(
-        HttpResponseMessage response,
-        CancellationToken cancellationToken)
+    private CacheSnapshot BuildSnapshotFromSuccessResponse(HttpResponseMessage response)
     {
         if (!response.IsSuccessStatusCode)
         {
@@ -113,7 +99,10 @@ public sealed class ExchangeRateProvider : IExchangeRateProvider
                 response.StatusCode);
         }
 
-        string rawContent = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
+        using Stream stream = response.Content.ReadAsStream();
+        using StreamReader reader = new(stream);
+        string rawContent = reader.ReadToEnd();
+
         ExchangeRate[] rates = CnbDailyTxtParser.Parse(rawContent).ToArray();
         DateTimeOffset now = _timeProvider.GetUtcNow();
         DateTimeOffset? lastModified = response.Content.Headers.LastModified;
@@ -122,10 +111,7 @@ public sealed class ExchangeRateProvider : IExchangeRateProvider
         return new CacheSnapshot(rates, now, lastModified);
     }
 
-    private Task<HttpResponseMessage> SendRequestAsync(
-        HttpClient client,
-        DateTimeOffset? ifModifiedSince,
-        CancellationToken cancellationToken)
+    private HttpResponseMessage SendRequest(HttpClient client, DateTimeOffset? ifModifiedSince)
     {
         using HttpRequestMessage request = new(HttpMethod.Get, _options.Url);
         if (ifModifiedSince is not null)
@@ -133,7 +119,7 @@ public sealed class ExchangeRateProvider : IExchangeRateProvider
             request.Headers.IfModifiedSince = ifModifiedSince;
         }
 
-        return client.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, cancellationToken);
+        return client.Send(request, HttpCompletionOption.ResponseHeadersRead);
     }
 
     private HashSet<string> NormalizeRequestedCodes(IEnumerable<Currency> currencies)
