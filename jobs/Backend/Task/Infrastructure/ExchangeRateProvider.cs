@@ -14,8 +14,6 @@ namespace ExchangeRateUpdater.Infrastructure;
 
 public sealed class ExchangeRateProvider : IExchangeRateProvider
 {
-    private static readonly TimeSpan ZeroTtl = TimeSpan.Zero;
-
     private readonly IHttpClientFactory _httpClientFactory;
     private readonly CnbOptions _options;
     private readonly ILogger<ExchangeRateProvider> _logger;
@@ -148,13 +146,12 @@ public sealed class ExchangeRateProvider : IExchangeRateProvider
                 continue;
             }
 
-            string normalizedCode = currency.Code.Trim().ToUpperInvariant();
-            if (normalizedCode == "CZK")
+            if (currency.Code == "CZK")
             {
                 continue;
             }
 
-            requestedCodes.Add(normalizedCode);
+            requestedCodes.Add(currency.Code);
         }
 
         return requestedCodes;
@@ -163,11 +160,6 @@ public sealed class ExchangeRateProvider : IExchangeRateProvider
     private bool IsFresh(CacheSnapshot snapshot)
     {
         TimeSpan ttl = TimeSpan.FromSeconds(_options.CacheTtlSeconds);
-        if (ttl <= ZeroTtl)
-        {
-            return false;
-        }
-
         DateTimeOffset now = _timeProvider.GetUtcNow();
         return now - snapshot.CachedAt < ttl;
     }
