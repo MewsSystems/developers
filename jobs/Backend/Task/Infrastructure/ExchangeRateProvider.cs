@@ -99,6 +99,7 @@ public sealed class ExchangeRateProvider : IExchangeRateProvider
                 response.StatusCode);
         }
 
+        // Keep the public contract sync-first while consuming HttpContent.
         string rawContent = response.Content.ReadAsStringAsync().ConfigureAwait(false).GetAwaiter().GetResult();
         ExchangeRate[] rates = CnbDailyTxtParser.Parse(rawContent).ToArray();
         DateTimeOffset now = _timeProvider.GetUtcNow();

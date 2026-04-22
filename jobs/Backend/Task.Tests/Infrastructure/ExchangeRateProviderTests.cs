@@ -96,6 +96,18 @@ public sealed class ExchangeRateProviderTests
     }
 
     [Fact]
+    public void GetExchangeRates_only_czk_returns_empty_without_calling_http()
+    {
+        var factory = new FakeHttpClientFactory(new HttpClient(new DelegateHttpMessageHandler(_ => CreateOkResponse(DefaultPayload))));
+        ExchangeRateProvider provider = CreateProvider(factory);
+
+        ExchangeRate[] rates = provider.GetExchangeRates([new Currency("CZK"), new Currency(" czk ")]).ToArray();
+
+        Assert.Empty(rates);
+        Assert.Equal(0, factory.CreateClientCalls);
+    }
+
+    [Fact]
     public void GetExchangeRates_http_error_throws()
     {
         ExchangeRateProvider provider = CreateProvider(_ => new HttpResponseMessage(HttpStatusCode.BadGateway));
