@@ -43,7 +43,12 @@ public static class Program
 
     internal static IHost BuildHost(string[] args)
     {
-        HostApplicationBuilder builder = Host.CreateApplicationBuilder(args);
+        HostApplicationBuilderSettings settings = new()
+        {
+            Args = args,
+            ContentRootPath = AppContext.BaseDirectory
+        };
+        HostApplicationBuilder builder = Host.CreateApplicationBuilder(settings);
 
         builder.Services
             .AddOptions<CnbOptions>()
