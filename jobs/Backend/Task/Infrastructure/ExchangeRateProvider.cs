@@ -1,0 +1,129 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net.Http;
+using System.Threading;
+using ExchangeRateUpdater.Application;
+using ExchangeRateUpdater.Domain;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+
+namespace ExchangeRateUpdater.Infrastructure;
+
+public sealed class ExchangeRateProvider : IExchangeRateProvider
+{
+    private static readonly TimeSpan ZeroTtl = TimeSpan.Zero;
+
+    private readonly IHttpClientFactory _httpClientFactory;
+    private readonly CnbOptions _options;
+    private readonly ILogger<ExchangeRateProvider> _logger;
+    private readonly SemaphoreSlim _refreshSemaphore = new(1, 1);
+    private CacheSnapshot _snapshot;
+
+    public ExchangeRateProvider(
+        IHttpClientFactory httpClientFactory,
+        IOptions<CnbOptions> options,
+        ILogger<ExchangeRateProvider> logger)
+    {
+        _httpClientFactory = httpClientFactory ?? throw new ArgumentNullException(nameof(httpClientFactory));
+        _options = options?.Value ?? throw new ArgumentNullException(nameof(options));
+        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+    }
+
+    public IEnumerable<ExchangeRate> GetExchangeRates(IEnumerable<Currency> currencies)
+    {
+        ArgumentNullException.ThrowIfNull(currencies);
+
+        HashSet<string> requestedCodes = NormalizeRequestedCodes(currencies);
+        if (requestedCodes.Count == 0)
+        {
+            return [];
+        }
+
+        CacheSnapshot snapshot = Volatile.Read(ref _snapshot);
+        if (snapshot is not null && IsFresh(snapshot))
+        {
+            return FilterRates(snapshot.Rates, requestedCodes);
+        }
+
+        _refreshSemaphore.Wait();
+        try
+        {
+            snapshot = Volatile.Read(ref _snapshot);
+            if (snapshot is not null && IsFresh(snapshot))
+            {
+                return FilterRates(snapshot.Rates, requestedCodes);
+            }
+
+            CacheSnapshot refreshedSnapshot = FetchSnapshot();
+            Volatile.Write(ref _snapshot, refreshedSnapshot);
+            return FilterRates(refreshedSnapshot.Rates, requestedCodes);
+        }
+        finally
+        {
+            _refreshSemaphore.Release();
+        }
+    }
+
+    private CacheSnapshot FetchSnapshot()
+    {
+        HttpClient client = _httpClientFactory.CreateClient("cnb");
+        using HttpRequestMessage request = new(HttpMethod.Get, _options.Url);
+        using HttpResponseMessage response = client.Send(request);
+
+        if (!response.IsSuccessStatusCode)
+        {
+            throw new HttpRequestException(
+                $"CNB request failed with status code {(int)response.StatusCode} ({response.StatusCode}).",
+                inner: null,
+                response.StatusCode);
+        }
+
+        string rawContent = response.Content.ReadAsStringAsync().ConfigureAwait(false).GetAwaiter().GetResult();
+        ExchangeRate[] rates = CnbDailyTxtParser.Parse(rawContent).ToArray();
+        DateTimeOffset now = DateTimeOffset.UtcNow;
+        DateTimeOffset? lastModified = response.Content.Headers.LastModified;
+
+        _logger.LogDebug("Fetched {RatesCount} rates from CNB.", rates.Length);
+        return new CacheSnapshot(rates, now, lastModified);
+    }
+
+    private HashSet<string> NormalizeRequestedCodes(IEnumerable<Currency> currencies)
+    {
+        HashSet<string> requestedCodes = new(StringComparer.Ordinal);
+        foreach (Currency currency in currencies)
+        {
+            if (currency is null || string.IsNullOrWhiteSpace(currency.Code))
+            {
+                continue;
+            }
+
+            string normalizedCode = currency.Code.Trim().ToUpperInvariant();
+            if (normalizedCode == "CZK")
+            {
+                continue;
+            }
+
+            requestedCodes.Add(normalizedCode);
+        }
+
+        return requestedCodes;
+    }
+
+    private bool IsFresh(CacheSnapshot snapshot)
+    {
+        TimeSpan ttl = TimeSpan.FromSeconds(_options.CacheTtlSeconds);
+        if (ttl <= ZeroTtl)
+        {
+            return false;
+        }
+
+        DateTimeOffset now = DateTimeOffset.UtcNow;
+        return now - snapshot.CachedAt < ttl;
+    }
+
+    private static ExchangeRate[] FilterRates(IEnumerable<ExchangeRate> rates, HashSet<string> requestedCodes)
+    {
+        return rates.Where(rate => requestedCodes.Contains(rate.SourceCurrency.Code)).ToArray();
+    }
+}
