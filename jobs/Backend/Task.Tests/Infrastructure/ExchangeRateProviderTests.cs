@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading;
@@ -93,29 +94,184 @@ public sealed class ExchangeRateProviderTests
         Assert.Equal("USD", rate.SourceCurrency.Code);
     }
 
+    [Fact]
+    public void GetExchangeRates_http_error_throws()
+    {
+        ExchangeRateProvider provider = CreateProvider(_ => new HttpResponseMessage(HttpStatusCode.BadGateway));
+
+        HttpRequestException ex = Assert.Throws<HttpRequestException>(
+            () => provider.GetExchangeRates([new Currency("USD")]).ToArray());
+
+        Assert.Equal(HttpStatusCode.BadGateway, ex.StatusCode);
+    }
+
+    [Fact]
+    public void GetExchangeRates_304_with_cache_returns_cached()
+    {
+        DateTimeOffset expectedLastModified = new(2026, 04, 22, 10, 0, 0, TimeSpan.Zero);
+        int requestCount = 0;
+        List<DateTimeOffset?> ifModifiedSinceValues = [];
+        ExchangeRateProvider provider = CreateProvider(
+            request =>
+            {
+                requestCount++;
+                ifModifiedSinceValues.Add(request.Headers.IfModifiedSince);
+                return requestCount switch
+                {
+                    1 => CreateOkResponse(DefaultPayload, expectedLastModified),
+                    2 => CreateNotModifiedResponse(),
+                    _ => throw new InvalidOperationException("Unexpected request count.")
+                };
+            },
+            cacheTtlSeconds: 0);
+
+        _ = provider.GetExchangeRates([new Currency("USD")]).ToArray();
+        ExchangeRate[] refreshedRates = provider.GetExchangeRates([new Currency("EUR")]).ToArray();
+
+        ExchangeRate rate = Assert.Single(refreshedRates);
+        Assert.Equal("EUR", rate.SourceCurrency.Code);
+        Assert.Equal(2, requestCount);
+        Assert.Null(ifModifiedSinceValues[0]);
+        Assert.Equal(expectedLastModified, ifModifiedSinceValues[1]);
+    }
+
+    [Fact]
+    public void GetExchangeRates_304_without_cache_fallback_to_full_get()
+    {
+        int requestCount = 0;
+        List<DateTimeOffset?> ifModifiedSinceValues = [];
+        ExchangeRateProvider provider = CreateProvider(
+            request =>
+            {
+                requestCount++;
+                ifModifiedSinceValues.Add(request.Headers.IfModifiedSince);
+                return requestCount switch
+                {
+                    1 => CreateNotModifiedResponse(),
+                    2 => CreateOkResponse(DefaultPayload),
+                    _ => throw new InvalidOperationException("Unexpected request count.")
+                };
+            },
+            cacheTtlSeconds: 0);
+
+        ExchangeRate[] rates = provider.GetExchangeRates([new Currency("USD")]).ToArray();
+
+        ExchangeRate rate = Assert.Single(rates);
+        Assert.Equal("USD", rate.SourceCurrency.Code);
+        Assert.Equal(2, requestCount);
+        Assert.Null(ifModifiedSinceValues[0]);
+        Assert.Null(ifModifiedSinceValues[1]);
+    }
+
+    [Fact]
+    public async global::System.Threading.Tasks.Task GetExchangeRates_concurrent_calls_only_one_http_request()
+    {
+        int requestCount = 0;
+        ExchangeRateProvider provider = CreateProvider(
+            _ =>
+            {
+                Interlocked.Increment(ref requestCount);
+                Thread.Sleep(100);
+                return CreateOkResponse(DefaultPayload);
+            });
+
+        global::System.Threading.Tasks.Task<ExchangeRate[]> task1 =
+            global::System.Threading.Tasks.Task.Run(() => provider.GetExchangeRates([new Currency("USD")]).ToArray());
+        global::System.Threading.Tasks.Task<ExchangeRate[]> task2 =
+            global::System.Threading.Tasks.Task.Run(() => provider.GetExchangeRates([new Currency("EUR")]).ToArray());
+
+        await global::System.Threading.Tasks.Task.WhenAll(task1, task2);
+
+        Assert.Equal(1, requestCount);
+    }
+
+    [Fact]
+    public void GetExchangeRates_returns_defensive_copy_not_internal_reference()
+    {
+        ExchangeRateProvider provider = CreateProvider(_ => CreateOkResponse(DefaultPayload));
+
+        ExchangeRate[] firstResult = provider.GetExchangeRates([new Currency("USD")]).ToArray();
+        firstResult[0] = new ExchangeRate(new Currency("BROKEN"), new Currency("CZK"), 0.01m);
+
+        ExchangeRate[] secondResult = provider.GetExchangeRates([new Currency("USD")]).ToArray();
+
+        ExchangeRate rate = Assert.Single(secondResult);
+        Assert.Equal("USD", rate.SourceCurrency.Code);
+    }
+
+    [Fact]
+    public void GetExchangeRates_trims_currency_codes()
+    {
+        ExchangeRateProvider provider = CreateProvider(_ => CreateOkResponse(DefaultPayload));
+
+        ExchangeRate[] rates = provider.GetExchangeRates([new Currency(" usd "), new Currency(" eur\t")]).ToArray();
+
+        Assert.Equal(2, rates.Length);
+        Assert.Contains(rates, rate => rate.SourceCurrency.Code == "USD");
+        Assert.Contains(rates, rate => rate.SourceCurrency.Code == "EUR");
+    }
+
+    [Fact]
+    public void GetExchangeRates_duplicate_requested_codes_are_deduplicated()
+    {
+        ExchangeRateProvider provider = CreateProvider(_ => CreateOkResponse(DefaultPayload));
+
+        ExchangeRate[] rates = provider.GetExchangeRates(
+            [new Currency("USD"), new Currency(" usd "), new Currency("USD")]).ToArray();
+
+        ExchangeRate rate = Assert.Single(rates);
+        Assert.Equal("USD", rate.SourceCurrency.Code);
+    }
+
     private static ExchangeRateProvider CreateProvider(Func<HttpRequestMessage, HttpResponseMessage> onSend)
     {
-        return CreateProvider(new FakeHttpClientFactory(new HttpClient(new DelegateHttpMessageHandler(onSend))));
+        return CreateProvider(onSend, cacheTtlSeconds: 3600);
+    }
+
+    private static ExchangeRateProvider CreateProvider(
+        Func<HttpRequestMessage, HttpResponseMessage> onSend,
+        int cacheTtlSeconds)
+    {
+        return CreateProvider(
+            new FakeHttpClientFactory(new HttpClient(new DelegateHttpMessageHandler(onSend))),
+            cacheTtlSeconds);
     }
 
     private static ExchangeRateProvider CreateProvider(FakeHttpClientFactory factory)
+    {
+        return CreateProvider(factory, cacheTtlSeconds: 3600);
+    }
+
+    private static ExchangeRateProvider CreateProvider(FakeHttpClientFactory factory, int cacheTtlSeconds)
     {
         return new ExchangeRateProvider(
             factory,
             Options.Create(new CnbOptions
             {
                 Url = "https://example.test/cnb.txt",
-                CacheTtlSeconds = 3600
+                CacheTtlSeconds = cacheTtlSeconds
             }),
             NullLogger<ExchangeRateProvider>.Instance);
     }
 
-    private static HttpResponseMessage CreateOkResponse(string content)
+    private static HttpResponseMessage CreateOkResponse(string content, DateTimeOffset? lastModified = null)
     {
-        return new HttpResponseMessage(HttpStatusCode.OK)
+        HttpResponseMessage response = new(HttpStatusCode.OK)
         {
             Content = new StringContent(content)
         };
+
+        if (lastModified is not null)
+        {
+            response.Content.Headers.LastModified = lastModified;
+        }
+
+        return response;
+    }
+
+    private static HttpResponseMessage CreateNotModifiedResponse()
+    {
+        return new HttpResponseMessage(HttpStatusCode.NotModified);
     }
 
     private const string DefaultPayload = """

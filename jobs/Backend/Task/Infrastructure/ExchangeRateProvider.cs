@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Threading;
 using ExchangeRateUpdater.Application;
@@ -55,7 +56,7 @@ public sealed class ExchangeRateProvider : IExchangeRateProvider
                 return FilterRates(snapshot.Rates, requestedCodes);
             }
 
-            CacheSnapshot refreshedSnapshot = FetchSnapshot();
+            CacheSnapshot refreshedSnapshot = FetchSnapshot(snapshot);
             Volatile.Write(ref _snapshot, refreshedSnapshot);
             return FilterRates(refreshedSnapshot.Rates, requestedCodes);
         }
@@ -65,12 +66,28 @@ public sealed class ExchangeRateProvider : IExchangeRateProvider
         }
     }
 
-    private CacheSnapshot FetchSnapshot()
+    private CacheSnapshot FetchSnapshot(CacheSnapshot currentSnapshot)
     {
         HttpClient client = _httpClientFactory.CreateClient("cnb");
-        using HttpRequestMessage request = new(HttpMethod.Get, _options.Url);
-        using HttpResponseMessage response = client.Send(request);
+        using HttpResponseMessage response = SendRequest(client, ifModifiedSince: currentSnapshot?.LastModified);
+        if (response.StatusCode == HttpStatusCode.NotModified)
+        {
+            if (currentSnapshot is not null)
+            {
+                _logger.LogDebug("CNB returned 304 Not Modified. Reusing cached snapshot.");
+                return currentSnapshot with { CachedAt = DateTimeOffset.UtcNow };
+            }
 
+            _logger.LogWarning("CNB returned 304 without an existing snapshot. Retrying with a full GET.");
+            using HttpResponseMessage fallbackResponse = SendRequest(client, ifModifiedSince: null);
+            return BuildSnapshotFromSuccessResponse(fallbackResponse);
+        }
+
+        return BuildSnapshotFromSuccessResponse(response);
+    }
+
+    private CacheSnapshot BuildSnapshotFromSuccessResponse(HttpResponseMessage response)
+    {
         if (!response.IsSuccessStatusCode)
         {
             throw new HttpRequestException(
@@ -86,6 +103,17 @@ public sealed class ExchangeRateProvider : IExchangeRateProvider
 
         _logger.LogDebug("Fetched {RatesCount} rates from CNB.", rates.Length);
         return new CacheSnapshot(rates, now, lastModified);
+    }
+
+    private HttpResponseMessage SendRequest(HttpClient client, DateTimeOffset? ifModifiedSince)
+    {
+        using HttpRequestMessage request = new(HttpMethod.Get, _options.Url);
+        if (ifModifiedSince is not null)
+        {
+            request.Headers.IfModifiedSince = ifModifiedSince;
+        }
+
+        return client.Send(request);
     }
 
     private HashSet<string> NormalizeRequestedCodes(IEnumerable<Currency> currencies)
