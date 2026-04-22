@@ -18,17 +18,20 @@ public sealed class ExchangeRateProvider : IExchangeRateProvider
     private readonly IHttpClientFactory _httpClientFactory;
     private readonly CnbOptions _options;
     private readonly ILogger<ExchangeRateProvider> _logger;
+    private readonly TimeProvider _timeProvider;
     private readonly SemaphoreSlim _refreshSemaphore = new(1, 1);
     private CacheSnapshot _snapshot;
 
     public ExchangeRateProvider(
         IHttpClientFactory httpClientFactory,
         IOptions<CnbOptions> options,
-        ILogger<ExchangeRateProvider> logger)
+        ILogger<ExchangeRateProvider> logger,
+        TimeProvider timeProvider = null)
     {
         _httpClientFactory = httpClientFactory ?? throw new ArgumentNullException(nameof(httpClientFactory));
         _options = options?.Value ?? throw new ArgumentNullException(nameof(options));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        _timeProvider = timeProvider ?? TimeProvider.System;
     }
 
     public IEnumerable<ExchangeRate> GetExchangeRates(IEnumerable<Currency> currencies)
@@ -75,7 +78,7 @@ public sealed class ExchangeRateProvider : IExchangeRateProvider
             if (currentSnapshot is not null)
             {
                 _logger.LogDebug("CNB returned 304 Not Modified. Reusing cached snapshot.");
-                return currentSnapshot with { CachedAt = DateTimeOffset.UtcNow };
+                return currentSnapshot with { CachedAt = _timeProvider.GetUtcNow() };
             }
 
             _logger.LogWarning("CNB returned 304 without an existing snapshot. Retrying with a full GET.");
@@ -98,7 +101,7 @@ public sealed class ExchangeRateProvider : IExchangeRateProvider
 
         string rawContent = response.Content.ReadAsStringAsync().ConfigureAwait(false).GetAwaiter().GetResult();
         ExchangeRate[] rates = CnbDailyTxtParser.Parse(rawContent).ToArray();
-        DateTimeOffset now = DateTimeOffset.UtcNow;
+        DateTimeOffset now = _timeProvider.GetUtcNow();
         DateTimeOffset? lastModified = response.Content.Headers.LastModified;
 
         _logger.LogDebug("Fetched {RatesCount} rates from CNB.", rates.Length);
@@ -146,7 +149,7 @@ public sealed class ExchangeRateProvider : IExchangeRateProvider
             return false;
         }
 
-        DateTimeOffset now = DateTimeOffset.UtcNow;
+        DateTimeOffset now = _timeProvider.GetUtcNow();
         return now - snapshot.CachedAt < ttl;
     }
 
