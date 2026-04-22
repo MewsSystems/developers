@@ -57,4 +57,78 @@ public sealed class CnbDailyTxtParserTests
         Assert.Equal("CZK", rate.TargetCurrency.Code);
         Assert.Equal(2.078m, rate.Value);
     }
+
+    [Fact]
+    public void Parse_malformed_line_throws_with_line_number()
+    {
+        string payload = """
+            22.04.2026 #78
+            Country|Currency|Amount|Code|Rate
+            Australia|dollar|1|AUD
+            """;
+
+        FormatException ex = Assert.Throws<FormatException>(() => CnbDailyTxtParser.Parse(payload).ToArray());
+
+        Assert.Contains("Malformed CNB line.", ex.Message);
+        Assert.Contains("Line 3", ex.Message);
+    }
+
+    [Fact]
+    public void Parse_invalid_decimal_throws()
+    {
+        string payload = """
+            22.04.2026 #78
+            Country|Currency|Amount|Code|Rate
+            Australia|dollar|oops|AUD|14,123
+            """;
+
+        FormatException ex = Assert.Throws<FormatException>(() => CnbDailyTxtParser.Parse(payload).ToArray());
+
+        Assert.Contains("Invalid amount in CNB line.", ex.Message);
+        Assert.Contains("Line 3", ex.Message);
+    }
+
+    [Fact]
+    public void Parse_missing_header_throws()
+    {
+        string payload = """
+            22.04.2026 #78
+            Metadata line
+            Australia|dollar|1|AUD|14,123
+            """;
+
+        FormatException ex = Assert.Throws<FormatException>(() => CnbDailyTxtParser.Parse(payload).ToArray());
+
+        Assert.Contains("Missing CNB header line.", ex.Message);
+    }
+
+    [Fact]
+    public void Parse_rejects_zero_or_negative_amount()
+    {
+        string payload = """
+            22.04.2026 #78
+            Country|Currency|Amount|Code|Rate
+            Australia|dollar|0|AUD|14,123
+            """;
+
+        FormatException ex = Assert.Throws<FormatException>(() => CnbDailyTxtParser.Parse(payload).ToArray());
+
+        Assert.Contains("Amount must be greater than zero.", ex.Message);
+        Assert.Contains("Line 3", ex.Message);
+    }
+
+    [Fact]
+    public void Parse_rejects_zero_or_negative_rate()
+    {
+        string payload = """
+            22.04.2026 #78
+            Country|Currency|Amount|Code|Rate
+            Australia|dollar|1|AUD|0
+            """;
+
+        FormatException ex = Assert.Throws<FormatException>(() => CnbDailyTxtParser.Parse(payload).ToArray());
+
+        Assert.Contains("Rate must be greater than zero.", ex.Message);
+        Assert.Contains("Line 3", ex.Message);
+    }
 }
