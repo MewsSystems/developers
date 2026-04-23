@@ -21,3 +21,6 @@
 node_modules
 bower_components
 npm-debug.log
+
+# .Net Backend Task
+jobs/Backend/Task/.vs/*
