@@ -1,0 +1,11 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Application/ExchangeRateUpdater.Application.csproj" />
+    <Project Path="src/Domain/ExchangeRateUpdater.Domain.csproj" />
+    <Project Path="src/Infrastructure/Providers/CzechNationalBank/ExchangeRateUpdater.Providers.CzechNationalBank.csproj" />
+  </Folder>
+  
+  <Folder Name="/tests/">
+    <Project Path="tests/UnitTests/ExchangeRateUpdater.UnitTests.csproj" />
+  </Folder>
+</Solution>
