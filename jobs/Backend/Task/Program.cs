@@ -1,6 +1,12 @@
-﻿using System;
+﻿using ExchangeRateUpdater.Contracts;
+using ExchangeRateUpdater.Providers.CNB;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace ExchangeRateUpdater
 {
@@ -19,12 +25,15 @@ namespace ExchangeRateUpdater
             new Currency("XYZ")
         };
 
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
+            var serviceProvider = ServiceProviderConfiguration();
+
             try
             {
-                var provider = new ExchangeRateProvider();
-                var rates = provider.GetExchangeRates(currencies);
+                var provider = serviceProvider.GetRequiredKeyedService<IExchangeRateProvider>(Constants.CNBExchangeRateProviderName);
+
+                var rates = await provider.GetExchangeRatesAsync(currencies);
 
                 Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
                 foreach (var rate in rates)
@@ -38,6 +47,22 @@ namespace ExchangeRateUpdater
             }
 
             Console.ReadLine();
+        }
+
+        private static ServiceProvider ServiceProviderConfiguration()
+        {
+            var configuration = new ConfigurationBuilder()
+                                                .SetBasePath(Directory.GetCurrentDirectory())
+                                                .AddJsonFile("appsettings.json", optional: false)
+                                                .Build();
+
+            var services = new ServiceCollection();
+
+            services.AddSingleton<IConfiguration>(configuration);
+
+            services.AddCNBExchangeRateProvider(configuration);
+
+            return services.BuildServiceProvider();
         }
     }
 }
