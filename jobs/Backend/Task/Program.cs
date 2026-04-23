@@ -1,40 +1,32 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using ExchangeService;
+using Logger;
+using Microsoft.Extensions.Logging;
 
 namespace ExchangeRateUpdater
 {
-    public static class Program
+    public class Program
     {
-        private static IEnumerable<Currency> currencies = new[]
+        public static async Task Main()
         {
-            new Currency("USD"),
-            new Currency("EUR"),
-            new Currency("CZK"),
-            new Currency("JPY"),
-            new Currency("KES"),
-            new Currency("RUB"),
-            new Currency("THB"),
-            new Currency("TRY"),
-            new Currency("XYZ")
-        };
+            ILogger logger = new LoggerService().logger;
+            ExchangeRateService exchangeRateService = new ExchangeRateService(logger);
 
-        public static void Main(string[] args)
-        {
             try
             {
-                var provider = new ExchangeRateProvider();
-                var rates = provider.GetExchangeRates(currencies);
-
-                Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
-                foreach (var rate in rates)
-                {
-                    Console.WriteLine(rate.ToString());
-                }
+                // App entry point should not care about business logic.
+                // Using an Execute service, we can swap out BL and APIs etc
+                await exchangeRateService.Execute();
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                Console.WriteLine($"Could not retrieve exchange rates: '{e.Message}'.");
+                logger.LogError($"Program encountered an unhandled exception: {ex.Message}");
+
+                // Don't advertise our stack trace and error to the front end user
+                Console.WriteLine($"Failed to retrieve Exchange Rates. Please try again.");
             }
 
             Console.ReadLine();
