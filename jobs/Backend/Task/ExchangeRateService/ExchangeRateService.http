@@ -1,0 +1,14 @@
+@hostname=localhost
+@port=5029
+@host={{hostname}}:{{port}}
+@api = https://{{host}}/api/
+
+GET {{api}}/exchangeRate
+Accept: application/json
+
+###
+
+GET {{api}}/exchangeRate?currencyCode=USD&currencyCode=EUR&currencyCode=CZK&currencyCode=JPY&currencyCode=KES&currencyCode=RUB&currencyCode=THB&currencyCode=TRY&currencyCode=XYZ
+Accept: application/json
+
+###
