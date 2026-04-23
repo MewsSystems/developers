@@ -1,43 +1,62 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
 
 namespace ExchangeRateUpdater
 {
-    public static class Program
-    {
-        private static IEnumerable<Currency> currencies = new[]
-        {
-            new Currency("USD"),
-            new Currency("EUR"),
-            new Currency("CZK"),
-            new Currency("JPY"),
-            new Currency("KES"),
-            new Currency("RUB"),
-            new Currency("THB"),
-            new Currency("TRY"),
-            new Currency("XYZ")
-        };
+	public static class Program
+	{
+		private static IEnumerable<Currency> currencies = new[]
+		{
+			new Currency("USD"),
+			new Currency("EUR"),
+			new Currency("CZK"),
+			new Currency("JPY"),
+			new Currency("KES"),
+			new Currency("RUB"),
+			new Currency("THB"),
+			new Currency("TRY"),
+			new Currency("XYZ")
+		};
 
-        public static void Main(string[] args)
-        {
-            try
-            {
-                var provider = new ExchangeRateProvider();
-                var rates = provider.GetExchangeRates(currencies);
+		public static async Task Main()
+		{
+			string commonCurrenciesUrl;
+			string otherCurrenciesUrl;
 
-                Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
-                foreach (var rate in rates)
-                {
-                    Console.WriteLine(rate.ToString());
-                }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine($"Could not retrieve exchange rates: '{e.Message}'.");
-            }
+			// Get the exchange rate source URLs from the configuration file
+			try
+			{
+				var configuration = new ConfigurationBuilder()
+					.AddJsonFile("appsettings.json")
+					.Build();
 
-            Console.ReadLine();
-        }
-    }
+				commonCurrenciesUrl = configuration["ExchangeRateSources:CommonCurrencies"];
+				otherCurrenciesUrl = configuration["ExchangeRateSources:OtherCurrencies"];
+			}
+			catch (Exception e)
+			{
+				Console.WriteLine($"Could not read configuration: '{e.Message}'.");
+				return;
+			}
+
+			// Execute the exchange rate provider and retrieve the exchange rates
+			try
+			{
+				var provider = new ExchangeRateProvider(commonCurrenciesUrl, otherCurrenciesUrl);
+				var rates = await provider.GetExchangeRates(currencies);
+
+				Console.WriteLine($"Successfully retrieved {rates.Count} exchange rates:");
+				foreach (var rate in rates)
+				{
+					Console.WriteLine(rate.ToString());
+				}
+			}
+			catch (Exception e)
+			{
+				Console.WriteLine($"Could not retrieve exchange rates: '{e.Message}'.");
+			}
+		}
+	}
 }
