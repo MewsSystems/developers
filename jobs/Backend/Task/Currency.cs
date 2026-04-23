@@ -16,5 +16,10 @@
         {
             return Code;
         }
+
+        public static Currency DefaultCZK()
+        {
+            return new Currency("CZK");
+        }
     }
 }
