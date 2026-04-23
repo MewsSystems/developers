@@ -1,0 +1,4 @@
+﻿{
+  Value: Invalid currency codes found. Input:'USD;EUR;CZK;JPY;KES;RUB;THB;TRY;XYZ' Currency codes should follow ISO 4217 standard (e.g., 'USD', 'EUR').,
+  StatusCode: 400
+}
