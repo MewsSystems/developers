@@ -1,6 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using CzechNationalBankApi;
+using ExchangeRateUpdater.Application;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 
 namespace ExchangeRateUpdater
 {
@@ -19,25 +21,62 @@ namespace ExchangeRateUpdater
             new Currency("XYZ")
         };
 
-        public static void Main(string[] args)
+        public async static Task Main(string[] args)
         {
+            //Build a default host, letting .net do the heavy lifting by registring a ILoggerFactory for ILogger<T>,
+            //appsettings loading and a container etc :-)
+            var host = Host.CreateDefaultBuilder();
+
+            //Register services
+            host.ConfigureServices((context, services) => {
+
+                services.AddCzechBankApiService(context.Configuration);
+                services.AddTransient<IExchangeRateProvider, ExchangeRateProvider>();
+
+            });
+
+            var builtHost = host.Build();
+
+            using var serviceScope = builtHost.Services.CreateScope();
+
+            var serviceProvider = serviceScope.ServiceProvider;
+
+            var loggerFactory = serviceProvider.GetService<ILoggerFactory>();
+
+            var logger = loggerFactory!.CreateLogger(nameof(Program));
+
+            var exchangeRateProvider = serviceProvider.GetRequiredService<IExchangeRateProvider>();
+
             try
             {
-                var provider = new ExchangeRateProvider();
-                var rates = provider.GetExchangeRates(currencies);
+                logger.LogInformation($"Running GetExchangeRates()....");
 
-                Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
+                var rates = await exchangeRateProvider.GetExchangeRatesAsync(currencies);
+
+                logger.LogInformation($"Successfully retrieved {rates.Count()} exchange rates:");
+
                 foreach (var rate in rates)
                 {
-                    Console.WriteLine(rate.ToString());
+                    logger.LogInformation(rate.ToString());
                 }
+
+                logger.LogInformation("Awaiting built host.....");
+
+                //We could omit this for this program, as it doesn't register any HostedServices, but leaving this here :-)
+                await builtHost.RunAsync();
+
+                logger.LogInformation("Termination triggered");
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                Console.WriteLine($"Could not retrieve exchange rates: '{e.Message}'.");
+                logger.LogError(ex, $"Could not retrieve exchange rates: '{ex.Message}'.");
+
+                Environment.Exit(-1);
             }
 
-            Console.ReadLine();
+            //0 for success, anything else means error!
+            //This means if we are running this in an orchestrator container (like Azure Kubernetes) it can recover from a bad run because it knows!!
+            Environment.Exit(0);
         }
     }
 }
