@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "ExchangeRateProvider.ConsoleApp": {
+      "commandName": "Project"
+    },
+    "Container (Dockerfile)": {
+      "commandName": "Docker"
+    }
+  }
+}
