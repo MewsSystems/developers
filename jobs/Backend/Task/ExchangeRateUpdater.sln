@@ -1,9 +1,20 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25123.0
+# Visual Studio Version 17
+VisualStudioVersion = 17.9.34714.143
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeRateUpdater", "ExchangeRateUpdater.csproj", "{7B2695D6-D24C-4460-A58E-A10F08550CE0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExchangeRateProvider", "ExchangeRateProvider\ExchangeRateProvider.csproj", "{6FA1100E-C0F1-4A5A-B52F-65EBB3AB407C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExchangeRateProvider.Contract", "ExchangeRateProvider.Contract\ExchangeRateProvider.Contract.csproj", "{D36D8D2E-9C29-4496-A88C-06BE008D7887}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExchangeRateUpdater", "ExchangeRateUpdater\ExchangeRateUpdater.csproj", "{6F71BB54-53E1-4FE5-9110-335C85E48DB5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Notes", "Notes", "{73CEC326-487F-4A69-BFC7-4C139DF41699}"
+	ProjectSection(SolutionItems) = preProject
+		notes.txt = notes.txt
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeRateProvider.Contract.Tests", "ExchangeRateProvider.Contract.Tests\ExchangeRateProvider.Contract.Tests.csproj", "{3F04CEF1-9503-44BF-88FD-B6A0D7557D7B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,12 +22,27 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{7B2695D6-D24C-4460-A58E-A10F08550CE0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7B2695D6-D24C-4460-A58E-A10F08550CE0}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7B2695D6-D24C-4460-A58E-A10F08550CE0}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7B2695D6-D24C-4460-A58E-A10F08550CE0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6FA1100E-C0F1-4A5A-B52F-65EBB3AB407C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6FA1100E-C0F1-4A5A-B52F-65EBB3AB407C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6FA1100E-C0F1-4A5A-B52F-65EBB3AB407C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6FA1100E-C0F1-4A5A-B52F-65EBB3AB407C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D36D8D2E-9C29-4496-A88C-06BE008D7887}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D36D8D2E-9C29-4496-A88C-06BE008D7887}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D36D8D2E-9C29-4496-A88C-06BE008D7887}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D36D8D2E-9C29-4496-A88C-06BE008D7887}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6F71BB54-53E1-4FE5-9110-335C85E48DB5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6F71BB54-53E1-4FE5-9110-335C85E48DB5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6F71BB54-53E1-4FE5-9110-335C85E48DB5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6F71BB54-53E1-4FE5-9110-335C85E48DB5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3F04CEF1-9503-44BF-88FD-B6A0D7557D7B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3F04CEF1-9503-44BF-88FD-B6A0D7557D7B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3F04CEF1-9503-44BF-88FD-B6A0D7557D7B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3F04CEF1-9503-44BF-88FD-B6A0D7557D7B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {8C9536BB-4A58-47A1-A0FC-758B766C00A2}
 	EndGlobalSection
 EndGlobal
