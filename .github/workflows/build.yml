@@ -1,0 +1,31 @@
+name: build
+
+on:
+  push:
+    branches:
+      - "**"
+      - "!master"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Restore
+        working-directory: jobs/Backend/Task/
+        run: dotnet restore ExchangeRateUpdater.sln
+
+      - name: Build
+        working-directory: jobs/Backend/Task/
+        run: dotnet build --no-restore src/ExchangeRateUpdater/ExchangeRateUpdater.csproj -c Release
+
+      - name: Test
+        working-directory: jobs/Backend/Task/
+        run: dotnet test --no-restore jobs/Backend/Task -c Release
