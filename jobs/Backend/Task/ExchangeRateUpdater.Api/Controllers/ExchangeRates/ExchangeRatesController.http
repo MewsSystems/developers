@@ -1,0 +1,12 @@
+@ExchangeRatesAddress = {{ExchangeRatesUpdaterBaseUrl}}/exchangerates
+
+POST {{ExchangeRatesAddress}}
+Content-Type: application/json
+
+{
+  "CurrencyCodes": [
+    "EUR",
+    "USD"
+  ],
+  "Date": "2024-08-25"
+}
