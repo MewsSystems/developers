@@ -1,0 +1,55 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\1_task\\ExchangeRateUpdater\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{F718280A-7459-4E33-B42A-E19CB8ACE541}|ExchangeRateUpdater\\ExchangeRateUpdater.csproj|c:\\1_task\\exchangerateupdater\\exchangerateupdater\\exchangerateprovider.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F718280A-7459-4E33-B42A-E19CB8ACE541}|ExchangeRateUpdater\\ExchangeRateUpdater.csproj|solutionrelative:exchangerateupdater\\exchangerateprovider.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4A3E62F0-B85E-4261-BBFD-354692E70DD6}|Demo\\Demo.csproj|c:\\1_task\\exchangerateupdater\\demo\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4A3E62F0-B85E-4261-BBFD-354692E70DD6}|Demo\\Demo.csproj|solutionrelative:demo\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "ExchangeRateProvider.cs",
+              "DocumentMoniker": "C:\\1_task\\ExchangeRateUpdater\\ExchangeRateUpdater\\ExchangeRateProvider.cs",
+              "RelativeDocumentMoniker": "ExchangeRateUpdater\\ExchangeRateProvider.cs",
+              "ToolTip": "C:\\1_task\\ExchangeRateUpdater\\ExchangeRateUpdater\\ExchangeRateProvider.cs",
+              "RelativeToolTip": "ExchangeRateUpdater\\ExchangeRateProvider.cs",
+              "ViewState": "AgIAALcAAAAAAAAAAAAIwNUAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-29T16:03:14.636Z",
+              "IsPinned": true,
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\1_task\\ExchangeRateUpdater\\Demo\\Program.cs",
+              "RelativeDocumentMoniker": "Demo\\Program.cs",
+              "ToolTip": "C:\\1_task\\ExchangeRateUpdater\\Demo\\Program.cs",
+              "RelativeToolTip": "Demo\\Program.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAADsAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-29T16:05:37.307Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
