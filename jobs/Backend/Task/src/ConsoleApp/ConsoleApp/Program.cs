@@ -1,13 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using API.Models;
+using ConsoleClient;
 
-namespace ExchangeRateUpdater
+namespace ConsoleApp
 {
     public static class Program
     {
-        private static IEnumerable<Currency> currencies = new[]
-        {
+        private static readonly IEnumerable<Currency> currencies =
+        [
             new Currency("USD"),
             new Currency("EUR"),
             new Currency("CZK"),
@@ -17,16 +16,16 @@ namespace ExchangeRateUpdater
             new Currency("THB"),
             new Currency("TRY"),
             new Currency("XYZ")
-        };
+        ];
 
-        public static void Main(string[] args)
+        public static async Task Main()
         {
             try
             {
-                var provider = new ExchangeRateProvider();
-                var rates = provider.GetExchangeRates(currencies);
+                var callLocalAPI = new APIClient(HttpClientFactory.Create());
+                var rates = await callLocalAPI.GetExchangeRates(currencies);
 
-                Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
+                Console.WriteLine($"Successfully retrieved {rates.Count} exchange rates:");
                 foreach (var rate in rates)
                 {
                     Console.WriteLine(rate.ToString());
@@ -34,7 +33,7 @@ namespace ExchangeRateUpdater
             }
             catch (Exception e)
             {
-                Console.WriteLine($"Could not retrieve exchange rates: '{e.Message}'.");
+                Console.WriteLine("An error occurred while retrieving exchange rates: " + e.Message);
             }
 
             Console.ReadLine();
