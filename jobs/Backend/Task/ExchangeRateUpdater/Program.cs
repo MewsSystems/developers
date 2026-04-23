@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
 namespace ExchangeRateUpdater
 {
@@ -19,12 +22,17 @@ namespace ExchangeRateUpdater
             new Currency("XYZ")
         };
 
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             try
             {
-                var provider = new ExchangeRateProvider();
-                var rates = provider.GetExchangeRates(currencies);
+                using ILoggerFactory factory = LoggerFactory.Create(builder => builder.AddConsole());
+                var provider = new ExchangeRateProvider(
+                        new System.Net.Http.HttpClient(),
+                        factory.CreateLogger<ExchangeRateProvider>(),
+                        Options.Create(new ExchangeRateProviderOptions{ ApiRequestUri="https://api.cnb.cz/cnbapi/exrates/daily?lang=EN" })
+                    );
+                var rates = await provider.GetExchangeRates(currencies);
 
                 Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
                 foreach (var rate in rates)
