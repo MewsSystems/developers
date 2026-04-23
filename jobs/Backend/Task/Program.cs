@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace ExchangeRateUpdater
 {
@@ -19,14 +21,17 @@ namespace ExchangeRateUpdater
             new Currency("XYZ")
         };
 
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             try
             {
-                var provider = new ExchangeRateProvider();
-                var rates = provider.GetExchangeRates(currencies);
+                var provider = CreateExchangeRateProvider();
 
-                Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
+                var cancellationToken = default(CancellationToken);
+
+                var rates = await provider.GetExchangeRatesAsync(currencies, cancellationToken).ToListAsync(cancellationToken);
+
+                Console.WriteLine($"Successfully retrieved {rates.Count} exchange rates:");
                 foreach (var rate in rates)
                 {
                     Console.WriteLine(rate.ToString());
@@ -38,6 +43,14 @@ namespace ExchangeRateUpdater
             }
 
             Console.ReadLine();
+        }
+
+        private static ExchangeRateProvider CreateExchangeRateProvider()
+        {
+            // DI and configuration setup would be here
+            const bool shouldIncludeOtherCurrencies = true;
+            var currencyRateProvider = new CnbCurrencyRateProvider(shouldIncludeOtherCurrencies);
+            return new ExchangeRateProvider(currencyRateProvider);
         }
     }
 }
