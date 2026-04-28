@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Microsoft.Extensions.Configuration;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 namespace ExchangeRateUpdater
@@ -23,7 +25,17 @@ namespace ExchangeRateUpdater
         {
             try
             {
-                var provider = new ExchangeRateProvider();
+                var config = new ConfigurationBuilder()
+                .AddJsonFile(Path.Combine(AppContext.BaseDirectory, "appSettings.json"))
+                .Build();
+
+                var configurationReader = new ConfigurationReader(config);
+
+                var settings = configurationReader.ReadSettings();
+
+                var client = new CnbClient(settings);
+
+                var provider = new ExchangeRateProvider(settings, client);
                 var rates = provider.GetExchangeRates(currencies);
 
                 Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
