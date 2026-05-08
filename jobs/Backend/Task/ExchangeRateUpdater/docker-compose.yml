@@ -1,0 +1,15 @@
+version: '3.8'
+services:
+  api:
+    build: ./ExchangeRateUpdater
+    ports:
+      - "5000:80"
+    depends_on:
+      - redis
+    environment:
+      - DOTNET_ENVIRONMENT=Development
+
+  redis:
+    image: redis:7
+    ports:
+      - "6379:6379"
