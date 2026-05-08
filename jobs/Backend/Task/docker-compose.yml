@@ -1,0 +1,52 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: src/ExchangeRateUpdater.Api/Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - Redis__Configuration=redis:6379,connectTimeout=3000,syncTimeout=3000
+      - OpenTelemetry__Endpoint=http://otel-collector:4317
+      - Serilog__LokiUrl=http://otel-collector:3100
+    depends_on:
+      redis:
+        condition: service_healthy
+      otel-collector:
+        condition: service_started
+    networks:
+      - exchange-rate-network
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 5s
+      timeout: 2s
+      retries: 5
+    networks:
+      - exchange-rate-network
+
+  otel-collector:
+    image: grafana/otel-lgtm:latest
+    ports:
+      - "3000:3000"  # Grafana UI
+      - "4317:4317"  # OTLP gRPC
+      - "4318:4318"  # OTLP HTTP
+      - "3100:3100"  # Loki
+    environment:
+      - LOKI_AUTH_ENABLED=false  # Disable authentication for local development
+    networks:
+      - exchange-rate-network
+
+networks:
+  exchange-rate-network:
+    driver: bridge
+
+volumes:
+  redis-data: 
