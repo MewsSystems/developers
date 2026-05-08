@@ -1,0 +1,15 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/ExchangeRateProvider.Api/ExchangeRateProvider.Api.csproj" Id="3dc61bde-b5c0-4f6c-9fdb-65c3f6aeaefe" />
+    <Project Path="src/ExchangeRateProvider.Application/ExchangeRateProvider.Application.csproj" />
+    <Project Path="src/ExchangeRateProvider.Domain/ExchangeRateProvider.Domain.csproj" />
+    <Project Path="src/ExchangeRateProvider.Infrastructure/ExchangeRateProvider.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/ExchangeRateProvider.Api.Tests.Integration/ExchangeRateProvider.Api.Tests.Integration.csproj" Id="2cbacfea-04c1-43a5-99ad-92cf11a52338" />
+    <Project Path="tests/ExchangeRateProvider.Api.Tests.Unit/ExchangeRateProvider.Api.Tests.Unit.csproj" Id="9826e788-8ef0-4f9b-980c-cf88a4ea982f" />
+    <Project Path="tests/ExchangeRateProvider.Application.Tests.Unit/ExchangeRateProvider.Application.Tests.Unit.csproj" Id="3a177543-1c5a-492d-8518-77cdae1f9d6f" />
+    <Project Path="tests/ExchangeRateProvider.Domain.Tests.Unit/ExchangeRateProvider.Domain.Tests.Unit.csproj" Id="da27cc0d-dd68-405d-8eb7-8e6203c6cc99" />
+    <Project Path="tests/ExchangeRateProvider.Infrastructure.Tests.Unit/ExchangeRateProvider.Infrastructure.Tests.Unit.csproj" Id="49b818ee-fd17-49ff-bbfa-cb9ead1b4fd0" />
+  </Folder>
+</Solution>
