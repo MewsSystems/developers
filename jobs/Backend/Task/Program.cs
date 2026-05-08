@@ -1,4 +1,7 @@
-﻿using System;
+﻿using ExchangeRateProvider.Models;
+using ExchangeRateUpdater.Interfaces;
+using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -23,7 +26,20 @@ namespace ExchangeRateUpdater
         {
             try
             {
-                var provider = new ExchangeRateProvider();
+                var serviceCollection = new ServiceCollection();
+
+                serviceCollection.AddTransient<IExchangeDataSourceFactory, ExchangeDataSourceFactory>();
+                serviceCollection.AddTransient<IExchangeRateProvider>(provider =>
+                {
+                    var factory = provider.GetRequiredService<IExchangeDataSourceFactory>();
+                    return new ExchangeRateProvider(factory.CreateDataSource(ExchangeRateDataSourceType.Cnb));
+
+                });
+
+                var serviceProvider = serviceCollection.BuildServiceProvider();
+
+                var provider = serviceProvider.GetRequiredService<IExchangeRateProvider>();
+
                 var rates = provider.GetExchangeRates(currencies);
 
                 Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
@@ -31,6 +47,10 @@ namespace ExchangeRateUpdater
                 {
                     Console.WriteLine(rate.ToString());
                 }
+            }
+            catch (NotSupportedException e)
+            {
+                Console.WriteLine($"Could not create data source: '{e.Message}'.");
             }
             catch (Exception e)
             {
