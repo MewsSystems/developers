@@ -1,0 +1,76 @@
+@import "tailwindcss";
+
+:root {
+    color-scheme: dark;
+}
+
+html,
+body,
+#root {
+    height: 100%;
+}
+
+body {
+    @apply bg-[#111111] text-neutral-100 antialiased;
+}
+
+.container {
+    @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8;
+}
+
+:focus-visible {
+    outline: 2px solid rgba(255, 255, 255, 0.6);
+    outline-offset: 2px;
+}
+
+.line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+.line-clamp-5 {
+    display: -webkit-box;
+    -webkit-line-clamp: 5;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+.line-clamp-6 {
+    display: -webkit-box;
+    -webkit-line-clamp: 6;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+button {
+    cursor: pointer;
+}
+
+:focus-visible {
+    outline: 0px;
+}
+
+/* Firefox */
+* {
+    scrollbar-color: #00ad99 #111111;
+}
+
+/* WebKit (Chrome, Edge, Safari) */
+::-webkit-scrollbar {
+    width: 12px;
+    height: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: #111111;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #00ad99;
+    border-radius: 8px;
+    border: 2px solid #111111;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: #00c9b3; /* lighter shade on hover */
+}

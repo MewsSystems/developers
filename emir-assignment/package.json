@@ -1,0 +1,46 @@
+{
+    "name": "emir-assignment",
+    "private": true,
+    "version": "0.0.0",
+    "type": "module",
+    "scripts": {
+        "dev": "vite",
+        "build": "tsc -b && vite build",
+        "lint": "eslint .",
+        "preview": "vite preview",
+        "test": "vitest --config vitest.config.ts",
+        "test:watch": "vitest --config vitest.config.ts --watch",
+        "test:ui": "vitest --config vitest.config.ts --ui",
+        "coverage": "vitest run --config vitest.config.ts --coverage",
+        "e2e": "playwright test",
+        "e2e:headed": "playwright test --headed",
+        "e2e:open": "playwright test --ui"
+    },
+    "dependencies": {
+        "lucide-react": "^0.541.0",
+        "react": "^19.1.1",
+        "react-dom": "^19.1.1",
+        "react-router-dom": "^7.8.2"
+    },
+    "devDependencies": {
+        "@eslint/js": "^9.33.0",
+        "@playwright/test": "^1.55.0",
+        "@tailwindcss/vite": "^4.1.12",
+        "@testing-library/jest-dom": "^6.8.0",
+        "@testing-library/react": "^16.3.0",
+        "@testing-library/user-event": "^14.6.1",
+        "@types/react": "^19.1.10",
+        "@types/react-dom": "^19.1.7",
+        "@vitejs/plugin-react": "^5.0.0",
+        "eslint": "^9.33.0",
+        "eslint-plugin-react-hooks": "^5.2.0",
+        "eslint-plugin-react-refresh": "^0.4.20",
+        "globals": "^16.3.0",
+        "jsdom": "^26.1.0",
+        "tailwindcss": "^4.1.12",
+        "typescript": "~5.8.3",
+        "typescript-eslint": "^8.39.1",
+        "vite": "^7.1.2",
+        "vitest": "^3.2.4"
+    }
+}
