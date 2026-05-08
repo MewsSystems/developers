@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
+using ExchangeRateUpdater.Chain_of_Responsibility;
 
 namespace ExchangeRateUpdater
 {
@@ -11,9 +11,32 @@ namespace ExchangeRateUpdater
         /// do not return exchange rate "USD/CZK" with value calculated as 1 / "CZK/USD". If the source does not provide
         /// some of the currencies, ignore them.
         /// </summary>
+
+        private Handler handler;
+        private List<ExchangeRate> _exchangeRates;
+
+        public ExchangeRateProvider()
+        {
+            _exchangeRates = new();
+
+            handler = new Redis();
+            Chain_of_Responsibility.CNB cnb = new();
+            handler.SetNext(cnb);
+        }
+
         public IEnumerable<ExchangeRate> GetExchangeRates(IEnumerable<Currency> currencies)
         {
-            return Enumerable.Empty<ExchangeRate>();
+            foreach (Currency currency in currencies)
+            {
+                ExchangeRate exchangeRate = handler.GetExchangeRate(currency);
+
+                if(exchangeRate is not null)
+                { 
+                    _exchangeRates.Add(exchangeRate);
+                }
+            }
+
+            return _exchangeRates;
         }
     }
 }
