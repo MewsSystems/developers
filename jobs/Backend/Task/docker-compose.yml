@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  exchange-rate-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: exchange-rate-api
+    ports:
+      - "5000:8080"  # Map host port 5000 to container port 8080
+    environment:
+      - DOTNET_ENVIRONMENT=Production
+      - ASPNETCORE_URLS=http://+:8080
+      - CnbExchangeRate__TimeoutSeconds=30
+      - CnbExchangeRate__RetryCount=3
+      - CnbExchangeRate__EnableCache=true
+      - CnbExchangeRate__CacheDurationMinutes=60
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 10s
+    networks:
+      - exchange-rate-network
+
+networks:
+  exchange-rate-network:
+    driver: bridge

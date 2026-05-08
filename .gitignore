@@ -1,23 +1,60 @@
+## .NET gitignore for Mews Backend Task
+
+# Keep these files
 !.gitkeep
 !.gitignore
 !*.dll
-[Oo]bj
-[Bb]in
+
+# Build results
+[Dd]ebug/
+[Rr]elease/
+[Bb]in/
+[Oo]bj/
+
+# Visual Studio
+.vs/
 *.user
 *.suo
+*.userosscache
 *.[Cc]ache
 *.bak
 *.ncb
-*.DS_Store
-*.userprefs
-*.iml
+[Tt]humbs.db
+
+# NuGet
+*.nupkg
+*.nuget.props
+*.nuget.targets
+
+# Test Results
+TestResults/
+*.trx
+
+# NCrunch
 *.ncrunch*
 .*crunch*.local.xml
-.idea
-[Tt]humbs.db
-*.tgz
+
+# VS Code
+.vscode/
+*.code-workspace
 *.sublime-*
 
-node_modules
-bower_components
+# JetBrains Rider
+.idea/
+*.sln.iml
+*.iml
+*.userprefs
+
+# macOS
+.DS_Store
+
+# Logs
+*.log
+
+# Node.js (if used for tooling)
+node_modules/
+bower_components/
 npm-debug.log
+
+# Archives
+*.tgz
