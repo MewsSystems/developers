@@ -1,5 +1,11 @@
-﻿using System;
+﻿using ExchangeRateUpdater.Extensions;
+using ExchangeRateUpdater.Models;
+using ExchangeRateUpdater.Services;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 namespace ExchangeRateUpdater
@@ -21,9 +27,19 @@ namespace ExchangeRateUpdater
 
         public static void Main(string[] args)
         {
+            var configuration = new ConfigurationBuilder()
+               .SetBasePath(Directory.GetCurrentDirectory())
+               .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+               .Build();
+
+            using var serviceProvider = new ServiceCollection()
+                .AddSingleton<IConfiguration>(configuration)
+                .AddExchangeRateServices(configuration)
+                .BuildServiceProvider();
+
             try
             {
-                var provider = new ExchangeRateProvider();
+                var provider = serviceProvider.GetRequiredService<ExchangeRateProvider>();
                 var rates = provider.GetExchangeRates(currencies);
 
                 Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
