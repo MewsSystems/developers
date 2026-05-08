@@ -1,4 +1,4 @@
-﻿namespace ExchangeRateUpdater
+﻿namespace ExchangeRateUpdater.Models
 {
     public class ExchangeRate
     {
@@ -17,7 +17,7 @@
 
         public override string ToString()
         {
-            return $"{SourceCurrency}/{TargetCurrency}={Value}";
+            return $"{SourceCurrency}/{TargetCurrency}={Value.ToString(System.Globalization.CultureInfo.InvariantCulture)}";
         }
     }
 }
