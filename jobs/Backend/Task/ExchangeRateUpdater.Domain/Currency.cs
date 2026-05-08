@@ -1,10 +1,17 @@
-﻿namespace ExchangeRateUpdater
+﻿using ExchangeRateUpdater.Domain.Base;
+
+namespace ExchangeRateUpdater.Domain
 {
-    public class Currency
+    public class Currency : ValueObject
     {
-        public Currency(string code)
+        private Currency(string code)
         {
             Code = code;
+        }
+
+        public static Currency Create(string code)
+        {
+            return new Currency(code);
         }
 
         /// <summary>
