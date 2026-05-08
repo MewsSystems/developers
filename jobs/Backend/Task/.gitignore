@@ -1,0 +1,17 @@
+bin/
+obj/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+[Dd]ebug/
+[Rr]elease/
+bld/
+
+.idea/
+*.iml
+.DS_Store
+
+*.swp
+*.swo
