@@ -1,0 +1,16 @@
+@ExchangeRateUpdater.Host_HostAddress = http://localhost:5295
+
+GET {{ExchangeRateUpdater.Host_HostAddress}}/ExchangeRates/USD
+Accept: application/json
+
+###
+GET {{ExchangeRateUpdater.Host_HostAddress}}/ExchangeRates?codes=TRY&codes=TRU
+Accept: application/json
+
+###
+
+GET {{ExchangeRateUpdater.Host_HostAddress}}/ExchangeRates?codes=USD&codes=EUR&codes=CZK&codes=JPY&codes=KES&codes=RUB&
+    codes=THB&codes=TRY&codes=XYZ
+Accept: application/json
+
+###
