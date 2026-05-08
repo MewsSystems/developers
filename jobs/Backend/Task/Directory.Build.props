@@ -1,0 +1,13 @@
+<Project>
+	<PropertyGroup>
+		<NetTargetVersion>net8.0</NetTargetVersion>
+		<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+		<LangVersion>latest</LangVersion>
+		<ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<Company>David</Company>
+		<Copyright>David 2024</Copyright>
+		<Version>0.0.0</Version>
+	</PropertyGroup>
+</Project>
