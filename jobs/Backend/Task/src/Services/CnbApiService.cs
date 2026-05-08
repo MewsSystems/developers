@@ -1,0 +1,46 @@
+using ExchangeRateUpdater.Models;
+using ExchangeRateUpdater.Options;
+using Newtonsoft.Json;
+using Microsoft.Extensions.Options;
+
+namespace ExchangeRateUpdater.Services
+{
+    public class CnbApiService : ICnbApiService
+    {
+        private readonly string GET_RATES_ENDPOINT = "/cnbapi/exrates/daily";
+
+        private readonly HttpClient _client;
+
+        public CnbApiService(IHttpClientFactory clientFactory)
+        {
+            _client = clientFactory.CreateClient(CnbApiOptions.ClientName);
+        }
+
+        public async Task<CnbRateDailyResponse> GetExchangeRate(CancellationToken cancellationToken)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+
+            var httpRequest = new HttpRequestMessage
+            {
+                Method = HttpMethod.Get,
+                RequestUri = new Uri(GET_RATES_ENDPOINT, UriKind.Relative)
+            };
+
+            var httpResponse = await _client.SendAsync(httpRequest, cancellationToken);
+
+            if (!httpResponse.IsSuccessStatusCode)
+            {
+                return new CnbRateDailyResponse
+                {
+                    Rates = new List<CnbRate>()
+                };
+            }
+
+            var response = await httpResponse.Content.ReadAsStringAsync(cancellationToken);
+
+            var cnbRates = JsonConvert.DeserializeObject<CnbRateDailyResponse>(response);
+
+            return cnbRates;
+        }
+    }
+}
