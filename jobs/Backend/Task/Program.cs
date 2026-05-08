@@ -1,43 +1,86 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using ExchangeRateUpdater.Models;
+using ExchangeRateUpdater.Providers;
+using ExchangeRateUpdater.Services;
+using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using System;
 using System.Linq;
 
-namespace ExchangeRateUpdater
-{
-    public static class Program
+var host = new HostBuilder()
+    .ConfigureServices(services =>
     {
-        private static IEnumerable<Currency> currencies = new[]
-        {
-            new Currency("USD"),
-            new Currency("EUR"),
-            new Currency("CZK"),
-            new Currency("JPY"),
-            new Currency("KES"),
-            new Currency("RUB"),
-            new Currency("THB"),
-            new Currency("TRY"),
-            new Currency("XYZ")
-        };
-
-        public static void Main(string[] args)
-        {
-            try
+        services.AddHttpClient<IExchangeRateService, ExchangeRateService>(
+            client => 
             {
-                var provider = new ExchangeRateProvider();
-                var rates = provider.GetExchangeRates(currencies);
+                client.BaseAddress = new Uri("https://api.cnb.cz/cnbapi/");
+            })
+            .AddStandardResilienceHandler();
+        services.AddTransient<IExchangeRateProvider, ExchangeRateProvider>();
+        services.AddSingleton(TimeProvider.System);
+        services.AddSingleton<IMemoryCache, MemoryCache>();
+        services.AddLogging();
+    })
+    .ConfigureLogging(logging =>
+    {
+        logging.AddConsole();
+    })
+    .Build();
 
-                Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
-                foreach (var rate in rates)
-                {
-                    Console.WriteLine(rate.ToString());
-                }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine($"Could not retrieve exchange rates: '{e.Message}'.");
-            }
+var exchangeRateProvider = host.Services.GetRequiredService<IExchangeRateProvider>();
 
-            Console.ReadLine();
+IEnumerable<Currency> currencies = new[]
+{
+    new Currency("USD"),
+    new Currency("EUR"),
+    new Currency("CZK"),
+    new Currency("JPY"),
+    new Currency("KES"),
+    new Currency("RUB"),
+    new Currency("THB"),
+    new Currency("TRY"),
+    new Currency("XYZ")
+};
+
+while (true)
+{
+    try
+    {
+        var rates = await exchangeRateProvider.GetExchangeRates(currencies);
+
+        if (!rates.Any())
+        {
+            Console.WriteLine(string.Empty);
+            Console.WriteLine("No exchange rates found for the chosen currencies.");
+            Console.WriteLine(string.Empty);
+            Console.WriteLine("Press any key to retry...");
+            Console.ReadKey();
+            Console.Clear();
+            continue;
         }
+
+        Console.WriteLine(string.Empty);
+        Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
+        Console.WriteLine(string.Empty);
+
+        foreach (var rate in rates)
+        {
+            Console.WriteLine(rate.ToString());
+            Console.WriteLine(string.Empty);
+        }
+
+        Console.WriteLine("Press any key to refresh...");
+        Console.ReadKey();
+        Console.Clear();
+    }
+    catch (Exception e)
+    {
+        Console.WriteLine(string.Empty);
+        Console.WriteLine($"Could not retrieve exchange rates: '{e.Message}'.");
+        Console.WriteLine(string.Empty);
+        Console.WriteLine("Press any key to retry...");
+        Console.ReadKey();
+        Console.Clear();
     }
 }
