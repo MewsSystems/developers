@@ -1,43 +1,35 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Threading.Tasks;
+using ExchangeRateUpdater.Interfaces;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Serilog;
 
 namespace ExchangeRateUpdater
 {
     public static class Program
     {
-        private static IEnumerable<Currency> currencies = new[]
+        public static async Task Main(string[] args)
         {
-            new Currency("USD"),
-            new Currency("EUR"),
-            new Currency("CZK"),
-            new Currency("JPY"),
-            new Currency("KES"),
-            new Currency("RUB"),
-            new Currency("THB"),
-            new Currency("TRY"),
-            new Currency("XYZ")
-        };
-
-        public static void Main(string[] args)
-        {
-            try
-            {
-                var provider = new ExchangeRateProvider();
-                var rates = provider.GetExchangeRates(currencies);
-
-                Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
-                foreach (var rate in rates)
+            using IHost host = Host.CreateDefaultBuilder(args).ConfigureServices((host, services) =>
                 {
-                    Console.WriteLine(rate.ToString());
-                }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine($"Could not retrieve exchange rates: '{e.Message}'.");
-            }
+                    Log.Logger = new LoggerConfiguration()
+                        .CreateBootstrapLogger();
+                    
+                    // Console wrapper for testing
+                    services.AddSingleton<IConsoleManager, ConsoleManager>();
+                    
+                    services
+                        .AddExchangeOptions(host.Configuration)
+                        .AddCnbHttpClient()
+                        .AddServices();
 
-            Console.ReadLine();
+                    services.AddHostedService<HostedProcessingService>();
+                })
+                .UseSerilog((context, logConfig) =>
+                    logConfig.ReadFrom.Configuration(context.Configuration))
+                .Build();
+
+            await host.RunAsync();
         }
     }
 }
