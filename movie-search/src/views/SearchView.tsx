@@ -1,0 +1,210 @@
+import {useNavigate, useSearchParams} from "react-router-dom"
+import styled from "styled-components"
+import {useMovies} from "../api/useMovies.ts";
+import {getPosterSrc} from "../utils/getPosterSrc.ts";
+import {useDebouncedValue} from "../hooks/useDebouncedValue.tsx";
+
+
+export const SearchView = () => {
+    const navigate = useNavigate();
+    const [searchParams, setSearchParams] = useSearchParams("");
+    const query = searchParams.get("query") || ""
+    const debouncedQuery = useDebouncedValue(query)
+
+    const {data, fetchNextPage, hasNextPage, isError, error, isFetching} = useMovies(debouncedQuery);
+
+    const movies = data?.pages.flatMap((page) => page?.results) || [];
+    const isQuery = debouncedQuery !== ""
+    const noResults = isQuery && !isFetching && movies.length === 0;
+
+    return (
+        <Container role="region" aria-labelledby="movie-search-heading">
+            <h2 id="movie-search-heading" className="sr-only">Search and browse movies</h2>
+
+            <label htmlFor="movie-search" className="sr-only">Search movies</label>
+            <SearchInput
+                id="movie-search"
+                type="text"
+                placeholder="Search movies..."
+                value={query}
+                onChange={(e) => {
+                    const value = e.target.value
+                    setSearchParams({query: value})
+                }}
+            />
+            {isError && <ErrorMessage id="error-message" role="alert">
+                <span role="img" aria-label="Error">❌</span> Error: {error.message}
+            </ErrorMessage>}
+            {noResults && <NoResultsText id="no-results-message" role="status">
+                <span role="img" aria-label="Sad face">😞</span> No movies found for "{query}".</NoResultsText>}
+            <MovieList role="list" aria-label="Search results">
+                {movies.map((movie) => (
+                    <MovieItem key={movie.id} onClick={() => navigate(`/movie/${movie.id}`)} tabIndex={0}
+                               aria-label={`View details for ${movie.title}`}
+                               onKeyDown={(e) => {
+                                   if (e.key === 'Enter' || e.key === ' ') {
+                                       navigate(`/movie/${movie.id}`);
+                                   }
+                               }}>
+                        <picture>
+                            <source srcSet={getPosterSrc(movie.poster_path, "webp")} type="image/webp"/>
+                            <source srcSet={getPosterSrc(movie.poster_path, "jpg")} type="image/jpeg"/>
+                            <MoviePoster src={getPosterSrc(movie.poster_path)}
+                                         alt={movie.title || "Placeholder Poster"}/>
+                        </picture>
+
+                        <MovieTitleWrapper>
+                            <MovieTitle>{movie.title}</MovieTitle>
+                            {movie.release_date !== '' &&
+                                <MovieYear>({movie.release_date?.split("-")[0]})</MovieYear>
+                            }
+                        </MovieTitleWrapper>
+                    </MovieItem>
+                ))}
+            </MovieList>
+            {hasNextPage &&
+                <ButtonWrapper>
+                    <LoadMoreButton onClick={() => fetchNextPage()} aria-label="Load more movies">
+                        Load more
+                    </LoadMoreButton>
+                </ButtonWrapper>}
+        </Container>
+    )
+}
+
+const Container = styled.div`
+    margin: 0 auto;
+    padding: ${({ theme }) => theme.spacing.xl};
+
+    max-width: ${({ theme }) => theme.layout.containerWidth};
+`
+
+const SearchInput = styled.input`
+    padding: ${({ theme }) => theme.spacing.sm} ${({ theme }) => theme.spacing.md};
+    width: 100%;
+
+    color: ${({ theme }) => theme.colors.text};
+    font-size: ${({ theme }) => theme.fontSizes.base};
+
+    border: 2px solid ${({ theme }) => theme.colors.border};
+    border-radius: ${({ theme }) => theme.radii.md};
+    background: ${({ theme }) => theme.colors.background};
+    outline: none;
+    box-shadow: ${({ theme }) => theme.shadows.input};
+    transition: border 0.2s ease, box-shadow 0.2s ease;
+
+    margin: 0 auto ${({ theme }) => theme.spacing.xl};
+
+    &:focus {
+        border-color: ${({ theme }) => theme.colors.primary};
+        box-shadow: ${({ theme }) => theme.shadows.focus};
+    }
+
+    &::placeholder {
+        color: ${({ theme }) => theme.colors.textLight};
+        font-style: italic;
+    }
+`
+
+const ErrorMessage = styled.p`
+    color: ${({ theme }) => theme.colors.error};
+    font-weight: 600;
+    font-size: ${({ theme }) => theme.fontSizes.sm};
+    text-align: center;
+    margin-top: ${({ theme }) => theme.spacing.sm};
+`
+
+const NoResultsText = styled.p`
+    font-size: ${({ theme }) => theme.fontSizes.lg};
+    color: ${({ theme }) => theme.colors.textMuted};
+    text-align: center;
+    margin: ${({ theme }) => theme.spacing.lg} 0;
+`
+
+const MovieList = styled.div`
+    margin-bottom: ${({ theme }) => theme.spacing.lg};
+
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 240px));
+    gap: ${({ theme }) => theme.spacing.lg};
+    justify-content: center;
+
+    @media (max-width: 768px) {
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    }
+`
+
+const MovieItem = styled.div`
+    padding: ${({ theme }) => theme.spacing.sm};
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    border: 1px solid ${({ theme }) => theme.colors.borderDark};
+    border-radius: ${({ theme }) => theme.radii.md};
+    background: ${({ theme }) => theme.colors.background};
+    cursor: pointer;
+    transition: background 0.2s ease;
+
+    &:hover {
+        background: ${({ theme }) => theme.colors.backgroundAlt};
+    }
+`
+
+const MoviePoster = styled.img`
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+    border-radius: ${({ theme }) => theme.radii.sm};
+`
+
+const MovieTitleWrapper = styled.div`
+    margin-top: ${({ theme }) => theme.spacing.sm};
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+`
+
+const MovieTitle = styled.p`
+    font-size: ${({ theme }) => theme.fontSizes.base};
+    font-weight: 600;
+
+    text-align: center;
+`
+
+const MovieYear = styled.span`
+    font-size: ${({ theme }) => theme.fontSizes.sm};
+    color: ${({ theme }) => theme.colors.textLight};
+`
+
+const ButtonWrapper = styled.div`
+    margin-top: ${({ theme }) => theme.spacing.xl};
+
+    display: flex;
+    justify-content: center;
+`
+
+const LoadMoreButton = styled.button`
+    padding: ${({ theme }) => theme.spacing.sm} ${({ theme }) => theme.spacing['2xl']};
+
+    color: ${({ theme }) => theme.colors.background};
+    font-weight: 600;
+
+    border-radius: ${({ theme }) => theme.radii.sm};
+    background: ${({ theme }) => theme.colors.primary};
+
+    cursor: pointer;
+    transition: box-shadow 0.2s ease;
+
+    &:hover {
+        box-shadow: ${({ theme }) => theme.shadows.hover};
+    }
+
+    &:focus {
+        outline: none;
+        box-shadow: ${({ theme }) => theme.shadows.focus};
+    }
+`
