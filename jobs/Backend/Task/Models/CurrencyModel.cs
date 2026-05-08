@@ -1,8 +1,8 @@
-﻿namespace ExchangeRateUpdater
+﻿namespace ExchangeRateUpdater.Models
 {
-    public class Currency
+    public class CurrencyModel
     {
-        public Currency(string code)
+        public CurrencyModel(string code)
         {
             Code = code;
         }
