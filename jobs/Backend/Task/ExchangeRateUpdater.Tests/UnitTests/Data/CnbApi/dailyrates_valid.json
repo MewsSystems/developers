@@ -1,0 +1,26 @@
+{
+  "rates":
+  [
+    {
+      "country": "Austrálie",
+      "currency": "dolar",
+      "amount": 1,
+      "code": "AUD",
+      "rate": 15.123
+    },
+    {
+      "country": "Eurozóna",
+      "currency": "euro",
+      "amount": 1,
+      "code": "EUR",
+      "rate": 24.567
+    },
+    {
+      "country": "Spojené státy americké",
+      "currency": "dolar",
+      "amount": 1,
+      "code": "USD",
+      "rate": 22.345
+    }
+  ]
+}
