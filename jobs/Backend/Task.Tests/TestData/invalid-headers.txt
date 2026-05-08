@@ -1,0 +1,3 @@
+07 Jan 2026 #4
+Wrong|Headers|Here
+USA|dollar|1|USD|20.774

@@ -1,0 +1,3 @@
+07 Jan 2026 #4
+Country|Currency|Amount|Code|Rate
+Japan|yen|100|JPY|13.278

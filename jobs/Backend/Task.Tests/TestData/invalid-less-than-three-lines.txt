@@ -1,0 +1,2 @@
+07 Jan 2026 #4
+Country|Currency|Amount|Code|Rate

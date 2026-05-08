@@ -1,0 +1,11 @@
+07 Jan 2026 #4
+Country|Currency|Amount|Code|Rate
+Australia|dollar|1|AUD|13.986
+Brazil|real|1|BRL|3.858
+Canada|dollar|1|CAD|15.053
+Switzerland|franc|1|CHF|25.035
+China|renminbi|1|CNY|2.863
+EMU|euro|1|EUR|24.280
+United Kingdom|pound|1|GBP|28.022
+Japan|yen|100|JPY|13.278
+USA|dollar|1|USD|20.774
