@@ -1,8 +1,8 @@
-﻿namespace ExchangeRateUpdater
+namespace ExchangeRate.Application.DTOs
 {
-    public class Currency
+    public class CurrencyDTO
     {
-        public Currency(string code)
+        public CurrencyDTO(string code)
         {
             Code = code;
         }
