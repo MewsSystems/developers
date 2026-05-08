@@ -1,6 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using ExchangeRateUpdater.Configuration;
+using ExchangeRateUpdater.Models;
+using ExchangeRateUpdater.Services;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 
 namespace ExchangeRateUpdater
 {
@@ -21,10 +27,20 @@ namespace ExchangeRateUpdater
 
         public static void Main(string[] args)
         {
+            var startup = new Startup();
+
+            using IHost host = Host.CreateDefaultBuilder(args)
+                .ConfigureServices(startup.ConfigureServices)
+                .Build();
+
+            // Get services
+            var logger = host.Services.GetRequiredService<ILoggerFactory>()
+                             .CreateLogger("Main");
+
             try
             {
-                var provider = new ExchangeRateProvider();
-                var rates = provider.GetExchangeRates(currencies);
+                var provider = host.Services.GetRequiredService<ExchangeRateProvider>();
+                var rates = provider.GetExchangeRatesAsync(currencies).Result;
 
                 Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
                 foreach (var rate in rates)
