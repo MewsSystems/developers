@@ -1,0 +1,46 @@
+services:
+  mews.exchangeratemonitor.host:
+    image: ${DOCKER_REGISTRY-}mewsexchangeratemonitorhost
+    build:
+      context: .
+      dockerfile: Mews.ExchangeRateMonitor.Host/Dockerfile
+    ports:
+      - "5000:8080"
+      - "5001:8081"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://jaeger:4318
+      - OTEL_EXPORTER_OTLP_PROTOCOL=http/protobuf
+      - OTEL_EXPORTER_OTLP_HEADERS=X-Seq-ApiKey=abcde12345
+    restart: always
+    networks:
+      - docker-web
+    
+  seq:
+    image: datalust/seq:2024.3
+    container_name: seq
+    restart: always
+    environment:
+      - ACCEPT_EULA=Y
+    volumes:
+      - ./docker_data/seq:/data
+    ports:
+      - "5341:5341"
+      - "8081:80"
+    networks:
+      - docker-web
+
+  jaeger:
+    image: jaegertracing/all-in-one:latest
+    container_name: jaeger
+    restart: always
+    ports:
+      - 4317:4317
+      - 4318:4318
+      - 16686:16686
+    networks:
+        - docker-web
+
+networks:
+  docker-web:
+    driver: bridge
