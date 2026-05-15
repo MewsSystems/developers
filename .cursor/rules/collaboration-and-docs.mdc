@@ -1,0 +1,21 @@
+---
+description: Collaboration style, planning docs, and engineering decision log for this project
+alwaysApply: true
+---
+
+# Collaboration and documentation
+
+## How to work with the maintainer
+
+- **Step by step:** Discuss and implement **one step at a time** unless the user explicitly asks to batch or skip ahead.
+- **No surprise decisions:** Do **not** choose libraries, frameworks, or structural changes (e.g. new classes, folders, or public APIs) on the maintainer’s behalf. Present **options and tradeoffs** and wait for an explicit choice when it matters.
+- **No unsolicited code:** Do **not** write or edit application code unless the maintainer **explicitly asks** you to. It is fine to explain approaches, sketch snippets in chat when helpful, and review or suggest changes in prose—but avoid applying patches or creating/editing source files until asked.
+- **`Program.cs` (current):** The maintainer is wiring [`jobs/Backend/Task/Program.cs`](jobs/Backend/Task/Program.cs) themselves (composition root, `IExchangeRateSource` + `ExchangeRateProvider`). Do **not** change that file unless they explicitly request it.
+
+## Where documentation lives
+
+- **Task / implementation plan:** The versioned plan for this backend task is [`jobs/Backend/docs/PLAN.md`](jobs/Backend/docs/PLAN.md). When the plan changes, **update that file** so it stays the single source of truth in the repo.
+- **Engineering decisions:** Record substantive choices (libraries, patterns, whether to add a type or folder, sync vs async, etc.) in [`jobs/Backend/docs/DECISIONS.md`](jobs/Backend/docs/DECISIONS.md), using the same lightweight sections as existing entries (Context / Decision / Why / Consequences).
+- **Test case matrix:** When adding, renaming, removing, or materially changing a test method, update [`jobs/Backend/docs/TEST_CASES.md`](jobs/Backend/docs/TEST_CASES.md) so the documented test matrices stay aligned with the test suite.
+
+Cursor may also store a generated plan under `.cursor/plans/`; treat **`PLAN.md` in the repo** as the authoritative plan for git and reviews unless the user says otherwise.
