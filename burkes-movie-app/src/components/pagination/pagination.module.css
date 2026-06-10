@@ -1,0 +1,9 @@
+.container {
+  display: flex;
+  gap: 10px;
+
+  .button {
+    list-style: none;
+    cursor: pointer;
+  }
+}
