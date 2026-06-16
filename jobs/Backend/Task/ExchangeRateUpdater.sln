@@ -3,7 +3,19 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeRateUpdater", "ExchangeRateUpdater.csproj", "{7B2695D6-D24C-4460-A58E-A10F08550CE0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeRateUpdaterApi", "src\ExchangeRateUpdaterApi\ExchangeRateUpdaterApi.csproj", "{7B2695D6-D24C-4460-A58E-A10F08550CE0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain", "src\Domain\Domain.csproj", "{DFDA9B6E-11DE-4FBB-ADE7-E895EEF08892}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{DCD38A71-2A03-464B-8A5E-8EF3DE63352B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeRateUpdaterApi.Tests.Unit", "Tests\ExchangeRateUpdaterApi.Tests.Unit\ExchangeRateUpdaterApi.Tests.Unit.csproj", "{1540F3D8-4814-4D51-A852-CF4FDA25142D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Adapter.InMemory", "src\Adapter.InMemory\Adapter.InMemory.csproj", "{26A2C888-E2CB-460A-9396-12CEA7A2F051}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Adapter.Http.CNB", "src\Adapter.Http.CNB\Adapter.Http.CNB.csproj", "{0D74A7AC-5353-4765-A748-B544DA2714CA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Adapter.Http.CNB.Tests.Integration", "Tests\Adapter.Http.CNB.Tests.Integration\Adapter.Http.CNB.Tests.Integration.csproj", "{92E1FA4B-16CE-42F9-AA83-C788AECED2C1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,8 +27,32 @@ Global
 		{7B2695D6-D24C-4460-A58E-A10F08550CE0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7B2695D6-D24C-4460-A58E-A10F08550CE0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7B2695D6-D24C-4460-A58E-A10F08550CE0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DFDA9B6E-11DE-4FBB-ADE7-E895EEF08892}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DFDA9B6E-11DE-4FBB-ADE7-E895EEF08892}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DFDA9B6E-11DE-4FBB-ADE7-E895EEF08892}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DFDA9B6E-11DE-4FBB-ADE7-E895EEF08892}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1540F3D8-4814-4D51-A852-CF4FDA25142D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1540F3D8-4814-4D51-A852-CF4FDA25142D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1540F3D8-4814-4D51-A852-CF4FDA25142D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1540F3D8-4814-4D51-A852-CF4FDA25142D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{26A2C888-E2CB-460A-9396-12CEA7A2F051}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{26A2C888-E2CB-460A-9396-12CEA7A2F051}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{26A2C888-E2CB-460A-9396-12CEA7A2F051}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{26A2C888-E2CB-460A-9396-12CEA7A2F051}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0D74A7AC-5353-4765-A748-B544DA2714CA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0D74A7AC-5353-4765-A748-B544DA2714CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0D74A7AC-5353-4765-A748-B544DA2714CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0D74A7AC-5353-4765-A748-B544DA2714CA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{92E1FA4B-16CE-42F9-AA83-C788AECED2C1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{92E1FA4B-16CE-42F9-AA83-C788AECED2C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{92E1FA4B-16CE-42F9-AA83-C788AECED2C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{92E1FA4B-16CE-42F9-AA83-C788AECED2C1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{1540F3D8-4814-4D51-A852-CF4FDA25142D} = {DCD38A71-2A03-464B-8A5E-8EF3DE63352B}
+		{92E1FA4B-16CE-42F9-AA83-C788AECED2C1} = {DCD38A71-2A03-464B-8A5E-8EF3DE63352B}
 	EndGlobalSection
 EndGlobal
