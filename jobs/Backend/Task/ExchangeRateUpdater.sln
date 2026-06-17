@@ -3,7 +3,19 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeRateUpdater", "ExchangeRateUpdater.csproj", "{7B2695D6-D24C-4460-A58E-A10F08550CE0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeRateUpdater", "ExchangeRateUpdater\ExchangeRateUpdater.csproj", "{7B2695D6-D24C-4460-A58E-A10F08550CE0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeRateUpdater.Tests", "ExchangeRateUpdater.Tests\ExchangeRateUpdater.Tests.csproj", "{184053D6-4515-4BE5-A96E-C17BD3FEB40F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeRateUpdater.Benchmarks", "ExchangeRateUpdater.Benchmarks\ExchangeRateUpdater.Benchmarks.csproj", "{AEA3B724-A275-4ABF-A9BF-97BF0EB2F8A2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution", "Solution", "{4318176B-C1A7-40D5-A7CD-3D7F0A9D5CF5}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+		Directory.Build.props = Directory.Build.props
+		README.md = README.md
+		.gitignore = .gitignore
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +27,14 @@ Global
 		{7B2695D6-D24C-4460-A58E-A10F08550CE0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7B2695D6-D24C-4460-A58E-A10F08550CE0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7B2695D6-D24C-4460-A58E-A10F08550CE0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{184053D6-4515-4BE5-A96E-C17BD3FEB40F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{184053D6-4515-4BE5-A96E-C17BD3FEB40F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{184053D6-4515-4BE5-A96E-C17BD3FEB40F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{184053D6-4515-4BE5-A96E-C17BD3FEB40F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AEA3B724-A275-4ABF-A9BF-97BF0EB2F8A2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AEA3B724-A275-4ABF-A9BF-97BF0EB2F8A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AEA3B724-A275-4ABF-A9BF-97BF0EB2F8A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AEA3B724-A275-4ABF-A9BF-97BF0EB2F8A2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
