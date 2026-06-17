@@ -1,43 +1,50 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using ExchangeRateUpdater.Helpers;
+using Microsoft.Extensions.Logging;
 
-namespace ExchangeRateUpdater
+namespace ExchangeRateUpdater;
+
+public class Program
 {
-    public static class Program
+    private static readonly IEnumerable<Currency> currencies = new[]
     {
-        private static IEnumerable<Currency> currencies = new[]
-        {
-            new Currency("USD"),
-            new Currency("EUR"),
-            new Currency("CZK"),
-            new Currency("JPY"),
-            new Currency("KES"),
-            new Currency("RUB"),
-            new Currency("THB"),
-            new Currency("TRY"),
-            new Currency("XYZ")
-        };
+        new Currency("USD"),
+        new Currency("EUR"),
+        new Currency("CZK"),
+        new Currency("JPY"),
+        new Currency("KES"),
+        new Currency("RUB"),
+        new Currency("THB"),
+        new Currency("TRY"),
+        new Currency("XYZ")
+    };
 
-        public static void Main(string[] args)
-        {
-            try
-            {
-                var provider = new ExchangeRateProvider();
-                var rates = provider.GetExchangeRates(currencies);
+    public static void Main(string[] args)
+    {
+        var logger = new Logger().logger;
 
-                Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
-                foreach (var rate in rates)
-                {
-                    Console.WriteLine(rate.ToString());
-                }
-            }
-            catch (Exception e)
+        try
+        {
+            // get exchange rates
+            var provider = new ExchangeRateProvider(logger, new ApiFetcher(logger));
+            var rates = provider.GetExchangeRates(currencies);
+
+            if (rates == null)
             {
-                Console.WriteLine($"Could not retrieve exchange rates: '{e.Message}'.");
+                logger.LogInformation("No exchange rates were retrieved.");
+                return;
             }
 
-            Console.ReadLine();
+            logger.LogInformation($"Successfully retrieved {rates.Count()} exchange rates:");
+            foreach (var rate in rates) logger.LogInformation(rate.ToString());
         }
+        catch (Exception e)
+        {
+            logger.LogError($"Could not retrieve exchange rates: '{e.Message}'.");
+        }
+
+        Console.ReadLine();
     }
 }
