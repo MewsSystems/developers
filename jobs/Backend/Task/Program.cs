@@ -1,43 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
+using ExchangeRateUpdater;
+using ExchangeRateUpdater.Application.Components.Consumers;
+using ExchangeRateUpdater.Domain.Types;
+using MassTransit;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Serilog;
 
-namespace ExchangeRateUpdater
-{
-    public static class Program
+var configuration = new ConfigurationBuilder()
+    .AddJsonFile("appsettings.json", optional: false)
+    .Build();
+
+var host = Host.CreateDefaultBuilder(args)
+    .ConfigureServices(services =>
     {
-        private static IEnumerable<Currency> currencies = new[]
-        {
-            new Currency("USD"),
-            new Currency("EUR"),
-            new Currency("CZK"),
-            new Currency("JPY"),
-            new Currency("KES"),
-            new Currency("RUB"),
-            new Currency("THB"),
-            new Currency("TRY"),
-            new Currency("XYZ")
-        };
+        services.Configure<List<Currency>>(configuration.GetSection("Currencies"));
+        services.Configure<ConsoleLifetimeOptions>(options => options.SuppressStatusMessages = true);
 
-        public static void Main(string[] args)
-        {
-            try
-            {
-                var provider = new ExchangeRateProvider();
-                var rates = provider.GetExchangeRates(currencies);
+        services.AddExchangeRatesProvider(configuration);
+        services.AddHostedService<ConsoleApplication>();
+        services.AddMediator(cfg => { cfg.AddConsumersFromNamespaceContaining<GetExchangeRatesForCurrenciesQueryConsumer>(); });
+    })
+    .UseSerilog((_, logging) => { logging.WriteTo.File("log.txt").MinimumLevel.Error(); })
+    .Build();
 
-                Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
-                foreach (var rate in rates)
-                {
-                    Console.WriteLine(rate.ToString());
-                }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine($"Could not retrieve exchange rates: '{e.Message}'.");
-            }
-
-            Console.ReadLine();
-        }
-    }
-}
+await host.RunAsync();
