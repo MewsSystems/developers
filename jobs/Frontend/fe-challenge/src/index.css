@@ -1,0 +1,14 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --color-primary: #1f2937;
+    --border-radius: 0.7rem;
+  }
+
+  body {
+    @apply text-primary text-base;
+  }
+}
