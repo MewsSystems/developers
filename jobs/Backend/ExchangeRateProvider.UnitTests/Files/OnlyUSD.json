@@ -1,0 +1,13 @@
+{
+  "rates": [
+    {
+      "validFor": "2024-04-23",
+      "order": 79,
+      "country": "USA",
+      "currency": "dollar",
+      "amount": 1,
+      "currencyCode": "USD",
+      "rate": 23.672
+    }
+  ]
+}

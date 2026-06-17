@@ -1,0 +1,15 @@
+﻿global using ExchangeRateProvider.Infrastructure;
+global using ExchangeRateProvider.Infrastructure.Interfaces;
+global using ExchangeRateProvider.Infrastructure.Model;
+global using ExchangeRateUpdate.Core.Classes;
+global using ExchangeRateUpdate.Core.Interfaces;
+global using ExchangeRateUpdate.Core.Models;
+global using ExchangeRateUpdater.Core;
+global using Microsoft.Extensions.Configuration;
+global using Microsoft.Extensions.Logging;
+global using Moq;
+global using Moq.Protected;
+global using Newtonsoft.Json;
+global using Polly;
+global using System.Net;
+global using System.Text;
