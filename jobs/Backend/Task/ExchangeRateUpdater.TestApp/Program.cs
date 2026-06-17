@@ -1,8 +1,11 @@
-﻿using System;
+﻿using ExchangeRateUpdater.Common;
+using ExchangeRateUpdater.Cnb;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 
-namespace ExchangeRateUpdater
+namespace ExchangeRateUpdater.TestApp
 {
     public static class Program
     {
@@ -23,7 +26,12 @@ namespace ExchangeRateUpdater
         {
             try
             {
-                var provider = new ExchangeRateProvider();
+                var httpClient = new HttpClient()
+                {
+                    BaseAddress = new Uri("https://www.cnb.cz/")
+                };
+
+                var provider = new CnbRateProvider(httpClient);
                 var rates = provider.GetExchangeRates(currencies);
 
                 Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
@@ -36,8 +44,6 @@ namespace ExchangeRateUpdater
             {
                 Console.WriteLine($"Could not retrieve exchange rates: '{e.Message}'.");
             }
-
-            Console.ReadLine();
         }
     }
 }
