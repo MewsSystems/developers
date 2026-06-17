@@ -1,0 +1,21 @@
+.wrapper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo {
+  flex: 0 0 80px;
+}
+
+.input {
+  flex: 1 1 auto;
+  width: 0;
+  color: #efefef;
+  background: #4f0f6b;
+  border: none;
+  height: 28px;
+  font-size: 16px;
+  padding: 0 8px;
+  outline: none;
+}

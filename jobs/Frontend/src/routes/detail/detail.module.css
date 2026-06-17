@@ -1,0 +1,31 @@
+.wrapper {
+  height: 100%;
+  display: flex;
+  flex-flow: column nowrap;
+}
+
+.nav {
+  background: #2f0f4b;
+  flex: 0 0 42px;
+  padding: 6px 10px;
+}
+
+.nav a {
+  color: white;
+  text-decoration: none;
+  font-size: 24px;
+  line-height: 24px;
+}
+
+.detail {
+  background: #eff2f7;
+  min-height: 0;
+  flex: 1 1 auto;
+  overflow-x: hidden;
+  overflow-y: scroll;
+}
+
+.inner {
+  max-width: 1100px;
+  margin: 0 auto;
+}

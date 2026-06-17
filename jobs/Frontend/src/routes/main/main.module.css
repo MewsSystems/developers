@@ -1,0 +1,33 @@
+.wrapper {
+  height: 100%;
+  display: flex;
+  flex-flow: column nowrap;
+}
+
+.search {
+  background: #2f0f4b;
+  flex: 0 0 42px;
+  padding: 6px 0;
+}
+
+.movies {
+  background: #eff2f7;
+  min-height: 0;
+  flex: 1 1 auto;
+  overflow-x: hidden;
+  overflow-y: scroll;
+}
+
+.inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 10px;
+}
+
+.detail {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
